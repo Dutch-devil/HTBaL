@@ -25,6 +25,7 @@ void HouseRenderer::initialize() {
     Camera* camera = Camera::createPerspective(45, 1, 0.25, 100);
     Node* cameraNode = scene->addNode();
     cameraNode->setCamera(camera);
+	scene->setActiveCamera(camera);
 
     createHouse(house);
 }
@@ -38,10 +39,10 @@ void HouseRenderer::createHouse(House house) {
 
     for (int x = 0; x < house.getWidth(); x++) {
         for (int y = 0; y < house.getHeight(); y++) {
-            Mesh* tileMesh = Mesh::createQuad(Vector3(-50, 0, -50),
-                                               Vector3(-50, 0, 50),
-                                               Vector3(50, 0, -50),
-                                               Vector3(50, 0, 50));
+            Mesh* tileMesh = Mesh::createQuad(Vector3(-tileWidth / 2, -tileHeight / 2, 0),
+                                               Vector3(tileWidth / 2, -tileHeight / 2, 0),
+                                               Vector3(-tileWidth / 2, tileHeight / 2, 0),
+                                               Vector3(tileWidth / 2, tileHeight / 2, 0));
 
             Model* tileModel = Model::create(tileMesh);
 
@@ -49,7 +50,11 @@ void HouseRenderer::createHouse(House house) {
             tileModel->setMaterial("res/grid.material")->setStateBlock(stateBlock);
 
 			Node* tileNode = scene->addNode();
+			tileNode->translateZ(-100 + .1);
+			tileNode->translateX((x - (float)house.getWidth() / 2) * tileWidth + tileWidth / 2);
+			tileNode->translateY((y - (float)house.getHeight() / 2) * tileHeight + tileHeight / 2);
 			tileNode->setModel(tileModel);
+			tileModels.push_back(tileModel);
         }
     };
 }

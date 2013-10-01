@@ -11,7 +11,8 @@ HTBaL::HTBaL() : scene(NULL) {
 
 void HTBaL::initialize() {
 	scene = Scene::create("Main");
-	activeRenderer = new MenuMainRenderer(scene);
+	activeRenderer = new HouseRenderer(scene);
+	scene->getActiveCamera()->setAspectRatio(getAspectRatio());
 }
 
 void HTBaL::finalize() {
