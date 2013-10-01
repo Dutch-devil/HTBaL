@@ -1,6 +1,8 @@
 #include "HouseRenderer.h"
 #include <cmath>
 
+//#define PERSPECTIVE
+
 HouseRenderer::HouseRenderer(Scene* scene, Rectangle viewport, float aspectRatio) {
 	this->scene = scene;
 	this->viewport = viewport;
@@ -22,29 +24,36 @@ void HouseRenderer::initialize() {
     stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
-    //Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100);
-	float screenHeight = 100;
-	Camera* camera = Camera::createOrthographic(aspectRatio * screenHeight, screenHeight, aspectRatio, 0.25, 600);
-    Node* cameraNode = scene->addNode();
+#ifdef PERSPECTIVE
+		Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
+		Node* cameraNode = scene->addNode();
+#else
+		float screenHeight = 100;
+		Camera* camera = Camera::createOrthographic(aspectRatio * screenHeight, screenHeight, aspectRatio, 0.25, 600);
+		Node* cameraNode = scene->addNode();
+		cameraNode->rotateZ(3.14 / 4);
+		cameraNode->rotateX(3.14 / 4);
+#endif
 
     cameraNode->setCamera(camera);
 	scene->setActiveCamera(camera);
-
+	
+	cameraNode->translateForward(-100);
     createHouse();
 	createRoom();
-	cameraNode->rotateZ(-3.14 / 4);
-	cameraNode->rotateX(3.14 / 4);
-	cameraNode->translateForward(-300);
 }
 
 void HouseRenderer::createHouse() {
-	//Vector3* destination = new Vector3();
-	//scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
+#ifdef PERSPECTIVE
+	Vector3* destination = new Vector3();
+	scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
 
-    //float screenWidth = -2 * destination->x;
-    //float screenHeight = 2 * destination->y;
+    float screenWidth = -2 * destination->x;
+    float screenHeight = 2 * destination->y;
+	float screenSize = (screenWidth > screenHeight)?screenHeight:screenWidth;
+#else
 	float screenSize = 100;
-	//float screenSize = (screenWidth > screenHeight)?screenHeight:screenWidth;
+#endif
 
     tileWidth = screenSize / house->getWidth();
     tileHeight = screenSize / house->getHeight();
@@ -109,7 +118,6 @@ void HouseRenderer::createRoom() {
             wallMaterial->setStateBlock(stateBlock);
 
 			Node* wallNode = scene->addNode();
-			wallNode->translateZ(-scene->getActiveCamera()->getFarPlane() + .1);
 			wallNode->setModel(wallModel);
 			wallModels.push_back(wallModel);
 
@@ -119,19 +127,20 @@ void HouseRenderer::createRoom() {
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+#ifdef PERSPECTIVE
+	Vector3* destination = new Vector3();
+	scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
+#else
 	Vector2* destination = new Vector2();
 	destination->x = (float)x / viewport.width * 100 / sqrt(2) * aspectRatio - 50 / sqrt(2) * aspectRatio;
 	destination->y = (float)y / viewport.height * 100 - 50;
 
-	print("%f, %f, %f\n", destination->x, destination->y);
-
 	Vector2* rotated = new Vector2();
-	rotated->x = (destination->x - destination->y);
-	rotated->y = -(destination->x + destination->y);
-
-	print("%f, %f, %f\n", rotated->x, rotated->y);
+	rotated->x = (destination->x + destination->y);
+	rotated->y = (destination->x - destination->y);
 
 	destination = rotated;
+#endif
 
 	int i = 0;
     for (Model* tileModel : tileModels) {
@@ -156,6 +165,6 @@ void HouseRenderer::render(float elapsedTime) {
         tileModel->draw();
     }
     for (Model* wallModel : wallModels) {
-        wallModel->draw();
+        wallModel->draw(false);
     }
 }
