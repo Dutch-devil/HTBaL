@@ -11,7 +11,6 @@ using namespace std;
 
 class HouseRenderer: public Renderer {
 public:
-	HouseRenderer();
 	HouseRenderer(Scene* scene);
 	~HouseRenderer();
 
@@ -23,11 +22,7 @@ public:
 
 protected:
 	RenderState::StateBlock* stateBlock;
-	Matrix projectionMatrix;
-	Matrix viewMatrix;
-	Matrix viewProjectionMatrix;
-
-	Model* houseModel;
+	list<Model*> tileModels;
 };
 
 

@@ -8,11 +8,13 @@ using namespace std;
 
 class House {
 public:
-    House(void);
 	House(int, int);
 	House(int, int, list<Room>);
     ~House(void);
 	void addRoom(Room room);
+
+	int getWidth();
+	int getHeight();
 
 protected:
 	int height;
