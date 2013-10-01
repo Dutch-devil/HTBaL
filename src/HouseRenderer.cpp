@@ -46,10 +46,10 @@ void HouseRenderer::createHouse(House house) {
             Model* tileModel = Model::create(tileMesh);
 
             // Create the ground material
-            Material* houseMaterial = tileModel->setMaterial("res/shaders/textured-unlit.vert", "res/shaders/textured-unlit.frag", "TEXTURE_REPEAT;TEXTURE_OFFSET");
-            // Set render state block
-            houseMaterial->setStateBlock(stateBlock);
+            tileModel->setMaterial("res/grid.material")->setStateBlock(stateBlock);
 
+			Node* tileNode = scene->addNode();
+			tileNode->setModel(tileModel);
         }
     };
 }
