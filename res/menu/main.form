@@ -1,0 +1,18 @@
+form main {
+    // Form properties.
+    theme                  = res/menu/default.theme
+    autoWidth              = true
+    autoHeight             = true
+    style                  = title
+	layout = LAYOUT_VERTICAL
+	
+
+    // All the Controls within this Form.
+    button houseButton {
+		style = buttonHover
+		text = View house editor and generator
+		group = formSelection
+		size = 480, 60
+		alignment              = ALIGN_HCENTER
+	}
+}

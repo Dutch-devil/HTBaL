@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="res">
+    </Filter>
+    <Filter Include="src">
+    </Filter>
+    <Filter Include="src\House">
+      <UniqueIdentifier>{3bd47eda-c920-484a-a9d0-07f48407d503}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.config" />
+    <None Include="icon.png" />
+    <None Include="bar-descriptor.xml" />
+    <None Include="res\box.fbx">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.gpb">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\box.material">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.frag">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\colored.vert">
+      <Filter>res</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\HouseRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HTBaL.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MapRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuMainRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\House.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Room.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\HouseRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HTBaL.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MapRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MenuMainRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\House.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Room.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
