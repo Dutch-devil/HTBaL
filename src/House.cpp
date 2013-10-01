@@ -28,3 +28,7 @@ int House::getWidth() {
 int House::getHeight() {
 	return height;
 }
+
+list<Room> House::getRooms() {
+	return rooms;
+}

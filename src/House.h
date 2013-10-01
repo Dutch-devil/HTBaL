@@ -16,6 +16,8 @@ public:
 	int getWidth();
 	int getHeight();
 
+	list<Room> getRooms();
+
 protected:
 	int height;
 	int width;

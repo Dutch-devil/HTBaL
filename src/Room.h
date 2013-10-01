@@ -10,13 +10,15 @@ using namespace gameplay;
 class Room {
 public:
     Room(void);
-	Room(int, int, list<Vector2>);
+	Room(int, int, list<Vector2*>);
     ~Room(void);
+
+	list<Vector2*> getWalls();
 
 protected:
 	int x;
 	int y;
-	list<Vector2> walls;
+	list<Vector2*> walls;
 };
 
 #endif

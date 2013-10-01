@@ -15,7 +15,8 @@ public:
 	~HouseRenderer();
 
 	void initialize();
-	void createHouse(House);
+	void createHouse();
+	void createRoom();
 	
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
@@ -23,8 +24,10 @@ public:
 	void render(float elapsedTime);
 
 protected:
+	House* house;
 	RenderState::StateBlock* stateBlock;
 	list<Model*> tileModels;
+	list<Model*> wallModels;
 	Rectangle viewport;
 	float aspectRatio;
 
