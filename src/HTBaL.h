@@ -21,11 +21,15 @@ protected:
 
     void finalize();
 
+	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
     void update(float elapsedTime);
 
     void render(float elapsedTime);
 
 	void setActiveRenderer(Renderers renderer);
+
+	void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
 private:
 

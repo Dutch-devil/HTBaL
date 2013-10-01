@@ -45,9 +45,6 @@ void HouseRenderer::createHouse(House house) {
 	// Set render state block	
 	houseMaterial->setStateBlock(stateBlock);
 
-	Texture::Sampler* houseSampler = houseMaterial->getParameter("u_diffuseTexture")->setValue("res/asphalt.png", true);
-	houseSampler->setWrapMode(Texture::REPEAT, Texture::REPEAT);
-
     // Release objects that are owned by mesh instances
     SAFE_RELEASE(houseMesh);
 }

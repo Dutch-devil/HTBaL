@@ -16,6 +16,9 @@ class Renderer {
 public:
 	Renderer();
 	~Renderer();
+
+	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+
     virtual Renderers update(float elapsedTime) = 0;
 
     virtual void render(float elapsedTime) = 0;
