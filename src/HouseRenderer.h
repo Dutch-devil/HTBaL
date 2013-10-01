@@ -16,6 +16,8 @@ public:
 
 	void initialize();
 	void createHouse(House);
+	
+	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
 	Renderers update(float elapsedTime);
 	void render(float elapsedTime);
@@ -25,6 +27,8 @@ protected:
 	list<Model*> tileModels;
 	Rectangle viewport;
 	float aspectRatio;
+
+	float tileWidth, tileHeight;
 };
 
 

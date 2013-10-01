@@ -35,14 +35,13 @@ void HouseRenderer::initialize() {
 void HouseRenderer::createHouse(House house) {
 	Vector3* destination = new Vector3();
 	scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
-	print("%f, %f, %f\n", destination->x, destination->y, destination->z);
 
     float screenWidth = -2 * destination->x;
     float screenHeight = 2 * destination->y;
 	float screenSize = (screenWidth > screenHeight)?screenHeight:screenWidth;
 
-    float tileWidth = screenSize / house.getWidth();
-    float tileHeight = screenSize / house.getHeight();
+    tileWidth = screenSize / house.getWidth();
+    tileHeight = screenSize / house.getHeight();
 
     for (int x = 0; x < house.getWidth(); x++) {
         for (int y = 0; y < house.getHeight(); y++) {
@@ -64,6 +63,23 @@ void HouseRenderer::createHouse(House house) {
 			tileModels.push_back(tileModel);
         }
     };
+}
+
+void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+	Vector3* destination = new Vector3();
+	scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
+
+	int i = 0;
+    for (Model* tileModel : tileModels) {
+        Node* tileNode = tileModel->getNode();
+		if (tileNode->getTranslationX() - tileWidth / 2 < destination->x && tileNode->getTranslationX() + tileWidth / 2 > destination->x &&
+				tileNode->getTranslationY() - tileHeight / 2 < -destination->y && tileNode->getTranslationY() + tileHeight / 2 > -destination->y) {
+			// clicked this model
+			print("%d, %d\n", i % 5, i / 5);
+			break;
+		}
+		i++;
+    }
 }
 
 Renderers HouseRenderer::update(float elapsedTime) {
