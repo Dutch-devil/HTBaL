@@ -53,7 +53,8 @@ void HouseRenderer::createHouse(House house) {
             Model* tileModel = Model::create(tileMesh);
 
             // Create the ground material
-            tileModel->setMaterial("res/grid.material")->setStateBlock(stateBlock);
+			Material* tileMaterial = tileModel->setMaterial("res/grid.material");
+            tileMaterial->setStateBlock(stateBlock);
 
 			Node* tileNode = scene->addNode();
 			tileNode->translateZ(-scene->getActiveCamera()->getFarPlane() + .1);
@@ -73,9 +74,12 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     for (Model* tileModel : tileModels) {
         Node* tileNode = tileModel->getNode();
 		if (tileNode->getTranslationX() - tileWidth / 2 < destination->x && tileNode->getTranslationX() + tileWidth / 2 > destination->x &&
-				tileNode->getTranslationY() - tileHeight / 2 < -destination->y && tileNode->getTranslationY() + tileHeight / 2 > -destination->y) {
+				tileNode->getTranslationY() - tileHeight / 2 < destination->y && tileNode->getTranslationY() + tileHeight / 2 > destination->y) {
 			// clicked this model
-			print("%d, %d\n", i % 5, i / 5);
+			tileModel->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(Vector3(1, 0, 0));
+			int x = i % 5;
+			int y = i / 5;
+			print("%d, %d\n", x, y);
 			break;
 		}
 		i++;
