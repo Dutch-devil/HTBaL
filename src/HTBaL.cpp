@@ -11,8 +11,7 @@ HTBaL::HTBaL() : scene(NULL) {
 
 void HTBaL::initialize() {
 	scene = Scene::create("Main");
-	activeRenderer = new HouseRenderer(scene);
-	scene->getActiveCamera()->setAspectRatio(getAspectRatio());
+	activeRenderer = new HouseRenderer(scene, getViewport(), getAspectRatio());
 }
 
 void HTBaL::finalize() {
@@ -58,7 +57,7 @@ void HTBaL::setActiveRenderer(Renderers renderer) {
 			activeRenderer = new MenuMainRenderer(scene);
 			break;
 		case HOUSE:
-			activeRenderer = new HouseRenderer(scene);
+			activeRenderer = new HouseRenderer(scene, getViewport(), getAspectRatio());
 			break;
 		case MAP:
 			activeRenderer = new MapRenderer(scene);

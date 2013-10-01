@@ -11,7 +11,7 @@ using namespace std;
 
 class HouseRenderer: public Renderer {
 public:
-	HouseRenderer(Scene* scene);
+	HouseRenderer(Scene* scene, Rectangle viewport, float aspectRatio);
 	~HouseRenderer();
 
 	void initialize();
@@ -23,6 +23,8 @@ public:
 protected:
 	RenderState::StateBlock* stateBlock;
 	list<Model*> tileModels;
+	Rectangle viewport;
+	float aspectRatio;
 };
 
 

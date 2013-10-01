@@ -1,7 +1,9 @@
 #include "HouseRenderer.h"
 
-HouseRenderer::HouseRenderer(Scene* scene) {
+HouseRenderer::HouseRenderer(Scene* scene, Rectangle viewport, float aspectRatio) {
 	this->scene = scene;
+	this->viewport = viewport;
+	this->aspectRatio = aspectRatio;
     initialize();
 }
 
@@ -22,7 +24,7 @@ void HouseRenderer::initialize() {
     stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 
-    Camera* camera = Camera::createPerspective(45, 1, 0.25, 100);
+    Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100);
     Node* cameraNode = scene->addNode();
     cameraNode->setCamera(camera);
 	scene->setActiveCamera(camera);
@@ -31,11 +33,16 @@ void HouseRenderer::initialize() {
 }
 
 void HouseRenderer::createHouse(House house) {
-    float screenWidth = 100;
-    float screenHeight = 100;
+	Vector3* destination = new Vector3();
+	scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
+	print("%f, %f, %f\n", destination->x, destination->y, destination->z);
 
-    float tileWidth = screenWidth / house.getWidth();
-    float tileHeight = screenHeight / house.getHeight();
+    float screenWidth = -2 * destination->x;
+    float screenHeight = 2 * destination->y;
+	float screenSize = (screenWidth > screenHeight)?screenHeight:screenWidth;
+
+    float tileWidth = screenSize / house.getWidth();
+    float tileHeight = screenSize / house.getHeight();
 
     for (int x = 0; x < house.getWidth(); x++) {
         for (int y = 0; y < house.getHeight(); y++) {
@@ -50,7 +57,7 @@ void HouseRenderer::createHouse(House house) {
             tileModel->setMaterial("res/grid.material")->setStateBlock(stateBlock);
 
 			Node* tileNode = scene->addNode();
-			tileNode->translateZ(-100 + .1);
+			tileNode->translateZ(-scene->getActiveCamera()->getFarPlane() + .1);
 			tileNode->translateX((x - (float)house.getWidth() / 2) * tileWidth + tileWidth / 2);
 			tileNode->translateY((y - (float)house.getHeight() / 2) * tileHeight + tileHeight / 2);
 			tileNode->setModel(tileModel);
