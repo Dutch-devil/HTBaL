@@ -1,6 +1,8 @@
 #ifndef HTBaL_H_
 #define HTBaL_H_
 
+class HTBaL;
+
 #include "gameplay.h"
 #include "Renderer.h"
 

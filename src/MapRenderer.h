@@ -1,6 +1,8 @@
 #ifndef MapRenderer_H_
 #define MapRenderer_H_
 
+class MapRenderer;
+
 #include "gameplay.h"
 #include "Renderer.h"
 

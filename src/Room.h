@@ -1,15 +1,16 @@
 #ifndef Room_H_
 #define Room_H_
 
+class Room;
+
 #include <list>
-
-using namespace std;
 #include "gameplay.h"
-using namespace gameplay;
-
 #include "Floor.h"
 #include "Wall.h"
 #include "House.h"
+
+using namespace std;
+using namespace gameplay;
 
 class Room {
 public:

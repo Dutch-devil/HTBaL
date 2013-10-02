@@ -1,6 +1,8 @@
 #ifndef MenuMainRenderer_H_
 #define MenuMainRenderer_H_
 
+class MenuMainRenderer;
+
 #include "gameplay.h"
 #include "Renderer.h"
 

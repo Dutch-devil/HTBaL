@@ -1,9 +1,7 @@
 #ifndef Renderer_H_
 #define Renderer_H_
 
-#include "gameplay.h"
-
-using namespace gameplay;
+class Renderer;
 
 enum Renderers {
 	KEEP,
@@ -11,6 +9,10 @@ enum Renderers {
 	HOUSE,
 	MAP
 };
+
+#include "gameplay.h"
+
+using namespace gameplay;
 
 class Renderer {
 public:

@@ -10,7 +10,7 @@
 #define FLOOR_UNSELECTED FLOOR_WHITE
 #define FLOOR_SELECTED FLOOR_RED
 
-
+class Floor;
 
 #include <list>
 #include "gameplay.h"

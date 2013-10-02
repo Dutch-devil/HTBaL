@@ -1,10 +1,12 @@
 #ifndef House_H_
 #define House_H_
 
+class House;
+
 #include <list>
+#include "Room.h"
 
 using namespace std;
-#include "Room.h"
 
 class House {
 public:
