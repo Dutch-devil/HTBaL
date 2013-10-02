@@ -83,7 +83,7 @@ protected:
 	  * @param y The y position the framerate will be drawn at.
 	  * @param fps The actual framerate to draw.
 	  *
-	  * @see gameplay::Game:getFrameRate()
+	  * @see gameplay::Game::getFrameRate()
 	  */
 	void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
