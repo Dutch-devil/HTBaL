@@ -18,6 +18,7 @@ public:
 	Model* getModel();
 
 protected:
+	RenderState::StateBlock* stateBlock;
 	Vector2* start;
 	Vector2* end;
 	Model* model;

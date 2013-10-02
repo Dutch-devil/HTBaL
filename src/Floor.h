@@ -37,6 +37,7 @@ public:
 	void toggleColor(Vector3* first, Vector3* second);
 	Vector3 blendColors(Vector3* color1, Vector3* color2);
 	
+	bool getSelected();
 	void toggleSelect();
 
 protected:

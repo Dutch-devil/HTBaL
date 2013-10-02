@@ -43,6 +43,9 @@ protected:
      */
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
+	
+	void keyEvent(Keyboard::KeyEvent evt, int key);
+
     /**
      * Update callback for handling update routines.
      *

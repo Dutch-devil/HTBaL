@@ -24,6 +24,8 @@ public:
 	void createRoom();
 	
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+	
+	void keyEvent(Keyboard::KeyEvent evt, int key);
 
 	Renderers update(float elapsedTime);
 	void render(float elapsedTime);

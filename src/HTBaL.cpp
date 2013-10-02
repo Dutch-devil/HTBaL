@@ -20,6 +20,10 @@ void HTBaL::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contact
 	activeRenderer->touchEvent(evt, x, y, contactIndex);
 }
 
+void HTBaL::keyEvent(Keyboard::KeyEvent evt, int key) {
+	activeRenderer->keyEvent(evt, key);
+}
+
 void HTBaL::update(float elapsedTime) {
 	setActiveRenderer(activeRenderer->update(elapsedTime));
 }

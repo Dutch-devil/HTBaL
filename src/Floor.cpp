@@ -53,6 +53,10 @@ Vector3 Floor::blendColors(Vector3* color1, Vector3* color2) {
     return .5 * (*color1) + .5 * (*color2);
 }
 
+bool Floor::getSelected() {
+	return selected;
+}
+
 void Floor::toggleColor(Vector3* first, Vector3* second) {
     // toggle the color
     if (!this->isColor(first)) {

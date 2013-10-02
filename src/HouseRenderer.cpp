@@ -14,7 +14,7 @@ HouseRenderer::~HouseRenderer() {
 
 void HouseRenderer::initialize() {
 	scene = Scene::create("HouseScene");
-    house = new House(5, 5);
+    house = new House(10, 10);
     floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 
     // Create our render state block that will be reused
@@ -115,6 +115,25 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         // reset last floor on release
         prevFloor = NULL;
     }
+}
+
+void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
+	if (key == 'r') {
+		list<Floor*> roomTiles;
+		for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
+			if (floorTiles[i]->getSelected()) {
+				floorTiles[i]->toggleSelect();
+				roomTiles.push_back(floorTiles[i]);
+			}
+		}
+		Floor** roomArray = new Floor*[roomTiles.size()];
+		int i = 0;
+		for (Floor* floor : roomTiles) {
+			roomArray[i] = floor;
+			i++;
+		}
+		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomArray, roomTiles.size()));
+	}
 }
 
 Renderers HouseRenderer::update(float elapsedTime) {

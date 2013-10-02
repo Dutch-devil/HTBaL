@@ -20,6 +20,8 @@ public:
 	~Renderer();
 
 	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
+	
+	virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 
     virtual Renderers update(float elapsedTime) = 0;
 
