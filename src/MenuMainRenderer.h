@@ -8,8 +8,7 @@ using namespace gameplay;
 
 class MenuMainRenderer: public Renderer, Control::Listener {
 public:
-	MenuMainRenderer();
-	MenuMainRenderer(Scene* scene);
+	MenuMainRenderer(Rectangle viewport);
 	~MenuMainRenderer();
 	Renderers update(float elapsedTime);
 	void render(float elapsedTime);

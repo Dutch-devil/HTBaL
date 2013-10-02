@@ -6,16 +6,14 @@
 // Declare our game instance
 HTBaL game;
 
-HTBaL::HTBaL() : scene(NULL) {
+HTBaL::HTBaL() {
 }
 
 void HTBaL::initialize() {
-	scene = Scene::create("Main");
-	activeRenderer = new HouseRenderer(scene, getViewport(), getAspectRatio());
+	activeRenderer = new HouseRenderer(getViewport());
 }
 
 void HTBaL::finalize() {
-    SAFE_RELEASE(scene);
 }
 
 void HTBaL::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
@@ -54,13 +52,13 @@ void HTBaL::setActiveRenderer(Renderers renderer) {
 	activeRenderer = NULL;
 	switch (renderer) {
 		case MAIN_MENU:
-			activeRenderer = new MenuMainRenderer(scene);
+			activeRenderer = new MenuMainRenderer(getViewport());
 			break;
 		case HOUSE:
-			activeRenderer = new HouseRenderer(scene, getViewport(), getAspectRatio());
+			activeRenderer = new HouseRenderer(getViewport());
 			break;
 		case MAP:
-			activeRenderer = new MapRenderer(scene);
+			activeRenderer = new MapRenderer(getViewport());
 			break;
 		default:
 			throw "This renderer is not implemented yet";

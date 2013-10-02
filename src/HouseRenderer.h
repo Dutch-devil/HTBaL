@@ -12,7 +12,7 @@ using namespace std;
 
 class HouseRenderer: public Renderer {
 public:
-	HouseRenderer(Scene* scene, Rectangle viewport, float aspectRatio);
+	HouseRenderer(Rectangle viewport);
 	~HouseRenderer();
 
 	void initialize();
@@ -25,11 +25,11 @@ public:
 	void render(float elapsedTime);
 
 protected:
+	Scene* scene;
 	House* house;
 	RenderState::StateBlock* stateBlock;
 	Floor** floorTiles;
 	list<Model*> wallModels;
-	Rectangle viewport;
 	float aspectRatio;
 
 	Floor* prevFloor;

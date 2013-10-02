@@ -14,7 +14,7 @@ enum Renderers {
 
 class Renderer {
 public:
-	Renderer();
+	Renderer(Rectangle viewport);
 	~Renderer();
 
 	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
@@ -24,7 +24,7 @@ public:
     virtual void render(float elapsedTime) = 0;
 
 protected:
-	Scene* scene;
+	Rectangle viewport;
 };
 
 
