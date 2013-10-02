@@ -14,7 +14,7 @@ HouseRenderer::~HouseRenderer() {
 
 void HouseRenderer::initialize() {
 	scene = Scene::create("HouseScene");
-    house = new House(10, 10);
+    house = new House(5, 10);
     floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 
     // Create our render state block that will be reused
@@ -41,7 +41,7 @@ void HouseRenderer::initialize() {
 
     cameraNode->translateForward(-100);
     createHouse();
-    createRoom();
+    //createRoom();
 }
 
 void HouseRenderer::createHouse() {
@@ -74,9 +74,22 @@ void HouseRenderer::createHouse() {
 }
 
 void HouseRenderer::createRoom() {
-	Floor* roomTiles[] = {floorTiles[0], floorTiles[1], floorTiles[5], floorTiles[6], floorTiles[7]};
+	Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
+	for(int i = 0; i < house->getWidth()*house->getHeight(); i++) {
+		switch(i) {
+		case 0:
+		case 1:
+		case 5:
+		case 6:
+		case 7:
+			roomTiles[i] = floorTiles[i];
+			break;
+		default:
+			roomTiles[i] = NULL;
+		}
+	}
 
-	house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, 5));
+	house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
@@ -119,20 +132,17 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 	if (key == 'r') {
-		list<Floor*> roomTiles;
+		Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
+		
 		for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
 			if (floorTiles[i]->getSelected()) {
 				floorTiles[i]->toggleSelect();
-				roomTiles.push_back(floorTiles[i]);
+				roomTiles[i] = floorTiles[i];
+			} else {
+				roomTiles[i] = NULL;
 			}
 		}
-		Floor** roomArray = new Floor*[roomTiles.size()];
-		int i = 0;
-		for (Floor* floor : roomTiles) {
-			roomArray[i] = floor;
-			i++;
-		}
-		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomArray, roomTiles.size()));
+		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
 	}
 }
 

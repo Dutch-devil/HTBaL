@@ -17,65 +17,41 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBl
     float startY = -(float)house->getHeight() / 2 * Floor::height;
     list<Wall*> walls;
 
-	for (; tileCount > 0; tileCount--) {
-		Floor* floorTile = *floorTiles;
-		floorTile->setColor(FLOOR_BLUE);
-		floorTiles++;
+	for (int i = 0; i < tileCount; i++) {
+		if(floorTiles[i] != NULL) {
+			Floor* floorTile = floorTiles[i];
+			floorTile->setColor(FLOOR_BLUE);
 
-		walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2), 
-											 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+			int nextTile = house->getIdByXY(house->getXById(i)-1,house->getYById(i));
+			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2), 
+													 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+			}
 
-		walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2), 
-											 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+			nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)+1);
+			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2), 
+													 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+			}
 
-		walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2), 
-											 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2)));
+			nextTile = house->getIdByXY(house->getXById(i)+1,house->getYById(i));
+			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2), 
+													 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2)));
+			}
 
-		walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2), 
-											 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2)));
-	}
-
-
-    for (list<Wall*>::iterator itr = walls.begin(); itr != walls.end();) {
-		Wall* duplicate = getDuplicateWall(*itr, walls);
-		if (duplicate == NULL) {
-			itr++;
-			continue;
+			nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)-1);
+			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2), 
+													 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2)));
+			}
 		}
-		walls.remove(duplicate);
-		itr = walls.erase(itr);
-    }
+	}
 
 	for (Wall* wall : walls) {
 		Node* wallNode = scene->addNode();
 		wallNode->setModel(wall->getModel());
 	}
-
-   /* house->addRoom(Room(0, 0, walls));
-
-    walls = list<Vector2*>();
-
-    for (int x = 0; x < house->getWidth() + 1 ; x++) {
-        walls.push_back(new Vector2(startX + Floor::width * x, -startY - Floor::height));
-    }
-    house->addRoom(Room(0, 0, walls));
-
-    for (Room room : house->getRooms()) {
-        Vector2* prevWall = NULL;
-        for (Vector2* wall : room.getWalls()) {
-            if (prevWall == NULL) {
-                prevWall = wall;
-                continue;
-            }
-			
-            Node* wallNode = scene->addNode();
-            wallNode->setModel(wallModel);
-            wallModels.push_back(wallModel);
-
-            prevWall = wall;
-        }
-    }*/
-
 
 	return new Room(0, 0, walls);
 }
