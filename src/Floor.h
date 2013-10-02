@@ -1,7 +1,6 @@
 #ifndef Floor_H_
 #define Floor_H_
 
-
 // all different colors
 #define FLOOR_WHITE new Vector3(1, 1, 1)
 #define FLOOR_RED new Vector3(1, 0, 0)
@@ -15,17 +14,21 @@
 
 #include <list>
 #include "Room.h"
+#include "gameplay.h"
 
 using namespace std;
+using namespace gameplay;
  
 class Floor {
 public:
 	static int width, height;
 
-	Floor(RenderState::StateBlock* stateBlock);
+	Floor(RenderState::StateBlock* stateBlock, float x, float y);
     ~Floor();
 	
 	Mesh* getMesh();
+	float getX();
+	float getY();
 	Model* getModel();
 
 	Vector3* getColor();
@@ -37,6 +40,7 @@ public:
 	void toggleSelect();
 
 protected:
+	float x, y;
 	Model* model;
 	Vector3* color;
 	Vector3* realColor;
