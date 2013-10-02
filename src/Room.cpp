@@ -36,15 +36,15 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBl
 	}
 
 
-  //  for (list<Wall*>::iterator itr = walls.begin(); itr != walls.end();) {
-		//Wall* duplicate = getDuplicateWall(*itr, walls);
-		//if (duplicate == NULL) {
-		//	itr++;
-		//	continue;
-		//}
-		//walls.remove(duplicate);
-		//itr = walls.erase(itr);
-  //  }
+    for (list<Wall*>::iterator itr = walls.begin(); itr != walls.end();) {
+		Wall* duplicate = getDuplicateWall(*itr, walls);
+		if (duplicate == NULL) {
+			itr++;
+			continue;
+		}
+		walls.remove(duplicate);
+		itr = walls.erase(itr);
+    }
 
 	for (Wall* wall : walls) {
 		Node* wallNode = scene->addNode();

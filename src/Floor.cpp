@@ -41,7 +41,11 @@ bool Floor::isColor(Vector3* other) {
 }
 
 void Floor::setColor(Vector3* color) {
-    this->color = color;
+    this->realColor = color;
+	updateColor();
+}
+
+void Floor::updateColor() {
     model->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(blendColors(color, realColor));
 }
 
@@ -61,8 +65,9 @@ void Floor::toggleColor(Vector3* first, Vector3* second) {
 void Floor::toggleSelect() {
     selected = !selected;
     if (selected) {
-        setColor(FLOOR_SELECTED);
+        color = FLOOR_SELECTED;
     } else {
-        setColor(realColor);
+        color = FLOOR_UNSELECTED;
     }
+	updateColor();
 }

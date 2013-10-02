@@ -1,5 +1,4 @@
 #include "House.h"
-#include "Room.h"
 
 
 House::House(int w, int h): width(w), height(h) {
@@ -11,7 +10,7 @@ House::House(int w, int h): width(w), height(h) {
 House::~House(void) {
 }
 
-void House::addRoom(Room room) {
+void House::addRoom(Room* room) {
 	rooms.push_back(room);
 }
 
@@ -23,6 +22,6 @@ int House::getHeight() {
 	return height;
 }
 
-list<Room> House::getRooms() {
+list<Room*> House::getRooms() {
 	return rooms;
 }
