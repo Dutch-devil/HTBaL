@@ -3,17 +3,17 @@
 
 //#define PERSPECTIVE
 
-HouseRenderer::HouseRenderer(Scene* scene, Rectangle viewport, float aspectRatio) {
-    this->scene = scene;
-    this->viewport = viewport;
-    this->aspectRatio = aspectRatio;
+HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
+    this->aspectRatio = viewport.width/viewport.height;
     initialize();
 }
 
 HouseRenderer::~HouseRenderer() {
+	SAFE_RELEASE(scene);
 }
 
 void HouseRenderer::initialize() {
+	scene = Scene::create("HouseScene");
     house = new House(5, 5);
     floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 

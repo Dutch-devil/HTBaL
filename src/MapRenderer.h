@@ -8,8 +8,7 @@ using namespace gameplay;
 
 class MapRenderer: public Renderer {
 public:
-	MapRenderer();
-	MapRenderer(Scene* scene);
+	MapRenderer(Rectangle viewport);
 	~MapRenderer();
 	Renderers update(float elapsedTime);
 	void render(float elapsedTime);

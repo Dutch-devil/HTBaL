@@ -1,8 +1,6 @@
 #include "MapRenderer.h"
 
-
-MapRenderer::MapRenderer() {}
-MapRenderer::MapRenderer(Scene* scene) {
+MapRenderer::MapRenderer(Rectangle viewport) : Renderer(viewport) {
 }
 
 MapRenderer::~MapRenderer() {

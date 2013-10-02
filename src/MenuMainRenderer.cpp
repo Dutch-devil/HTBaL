@@ -1,8 +1,6 @@
 #include "MenuMainRenderer.h"
 
-
-MenuMainRenderer::MenuMainRenderer() {}
-MenuMainRenderer::MenuMainRenderer(Scene* scene) {
+MenuMainRenderer::MenuMainRenderer(Rectangle viewport) : Renderer(viewport) {
 	initialize();
 }
 	
