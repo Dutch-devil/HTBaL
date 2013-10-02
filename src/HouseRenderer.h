@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "House.h"
 #include "Floor.h"
+#include "Wall.h"
 #include <list>
 
 using namespace gameplay;
@@ -28,7 +29,6 @@ protected:
 	House* house;
 	RenderState::StateBlock* stateBlock;
 	Floor** floorTiles;
-	list<Model*> wallModels;
 	Rectangle viewport;
 	float aspectRatio;
 

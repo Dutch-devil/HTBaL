@@ -49,10 +49,13 @@
     <ClCompile Include="src\House.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
-    <ClCompile Include="src\Room.cpp">
+    <ClCompile Include="src\Floor.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
-    <ClCompile Include="src\Floor.cpp">
+    <ClCompile Include="src\Wall.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Room.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,10 +78,13 @@
     <ClInclude Include="src\House.h">
       <Filter>src\House</Filter>
     </ClInclude>
-    <ClInclude Include="src\Room.h">
+    <ClInclude Include="src\Floor.h">
       <Filter>src\House</Filter>
     </ClInclude>
-    <ClInclude Include="src\Floor.h">
+    <ClInclude Include="src\Wall.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Room.h">
       <Filter>src\House</Filter>
     </ClInclude>
   </ItemGroup>
