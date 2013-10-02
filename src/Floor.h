@@ -15,8 +15,10 @@
 
 #include <list>
 #include "Room.h"
+#include "gameplay.h"
 
 using namespace std;
+using namespace gameplay;
  
 class Floor {
 public:
