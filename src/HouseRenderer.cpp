@@ -62,11 +62,11 @@ void HouseRenderer::createHouse() {
     for (int x = 0; x < house->getWidth(); x++) {
         for (int y = 0; y < house->getHeight(); y++) {
             // Make a new floor tile
-            Floor* floor = new Floor(stateBlock);
+            Floor* floor = new Floor(stateBlock, (x - (float)house->getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)house->getHeight() / 2) * Floor::height + Floor::height / 2);
 
             Node* tileNode = scene->addNode();
-            tileNode->translateX((x - (float)house->getWidth() / 2) * Floor::width + Floor::width / 2);
-            tileNode->translateY((y - (float)house->getHeight() / 2) * Floor::height + Floor::height / 2);
+            tileNode->translateX(floor->getX());
+            tileNode->translateY(floor->getY());
             tileNode->setModel(floor->getModel());
             floorTiles[x + y * house->getWidth()] = floor;
         }
@@ -74,53 +74,12 @@ void HouseRenderer::createHouse() {
 }
 
 void HouseRenderer::createRoom() {
-    float startX = -(float)house->getWidth() / 2 * Floor::width;
-    float startY = -(float)house->getHeight() / 2 * Floor::height;
-    list<Vector2*> walls;
+	Floor* roomTiles[] = {floorTiles[0], floorTiles[1], floorTiles[5], floorTiles[6], floorTiles[7]};
 
-    for (int y = house->getHeight(); y >= 0 ; y--) {
-        walls.push_back(new Vector2(startX + Floor::width, startY + Floor::height * y));
-    }
-    house->addRoom(Room(0, 0, walls));
-
-    walls = list<Vector2*>();
-
-    for (int x = 0; x < house->getWidth() + 1 ; x++) {
-        walls.push_back(new Vector2(startX + Floor::width * x, -startY - Floor::height));
-    }
-    house->addRoom(Room(0, 0, walls));
-
-    for (Room room : house->getRooms()) {
-        Vector2* prevWall = NULL;
-        for (Vector2* wall : room.getWalls()) {
-            if (prevWall == NULL) {
-                prevWall = wall;
-                continue;
-            }
-            Mesh* wallMesh = Mesh::createQuad(Vector3(prevWall->x, prevWall->y, 0),
-                                              Vector3(wall->x, wall->y, 0),
-                                              Vector3(prevWall->x, prevWall->y, (Floor::width + Floor::height) / 2),
-                                              Vector3(wall->x, wall->y, (Floor::width + Floor::height) / 2));
-
-            Model* wallModel = Model::create(wallMesh);
-
-            // Create the ground material
-            Material* wallMaterial = wallModel->setMaterial("res/grid.material");
-            wallMaterial->setStateBlock(stateBlock);
-
-            Node* wallNode = scene->addNode();
-            wallNode->setModel(wallModel);
-            wallModels.push_back(wallModel);
-
-            prevWall = wall;
-        }
-    }
+	house->addRoom(*Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, 5));
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
-    if (evt == Touch::TouchEvent::TOUCH_PRESS) {
-        return;
-    }
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
@@ -169,7 +128,9 @@ void HouseRenderer::render(float elapsedTime) {
 		(*curFloor)->getModel()->draw();
 		curFloor++;
     }
-    for (Model* wallModel : wallModels) {
-        wallModel->draw(false);
-    }
+	for (Room room : house->getRooms()) {
+		for (Wall* wall : room.getWalls()) {
+			wall->getModel()->draw();
+		}
+	}
 }

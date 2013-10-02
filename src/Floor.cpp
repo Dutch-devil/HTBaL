@@ -1,17 +1,13 @@
 
 #include "Floor.h"
-#include <stdlib.h>
 
 
 int Floor::width, Floor::height;
 
-Floor::Floor(RenderState::StateBlock* stateBlock) {
+Floor::Floor(RenderState::StateBlock* stateBlock, float x, float y): x(x), y(y) {
     this->model = Model::create(getMesh());
 
     realColor = color = FLOOR_UNSELECTED;
-    if (rand() % 2) {
-        realColor = color = FLOOR_GREEN;
-    }
     selected = false;
 
     model->setMaterial("res/grid.material")->setStateBlock(stateBlock);
@@ -23,6 +19,13 @@ Mesh* Floor::getMesh() {
                             Vector3(Floor::width / 2, -Floor::height / 2, 0),
                             Vector3(-Floor::width / 2, Floor::height / 2, 0),
                             Vector3(Floor::width / 2, Floor::height / 2, 0));
+}
+
+float Floor::getX() {
+	return x;
+}
+float Floor::getY() {
+	return y;
 }
 
 Model* Floor::getModel() {
@@ -62,5 +65,4 @@ void Floor::toggleSelect() {
     } else {
         setColor(realColor);
     }
-
 }

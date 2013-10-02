@@ -2,13 +2,14 @@
 #define HouseRenderer_H_
 
 #include "gameplay.h"
+using namespace gameplay;
+#include <list>
+using namespace std;
+#include "Room.h"
 #include "Renderer.h"
 #include "House.h"
 #include "Floor.h"
-#include <list>
-
-using namespace gameplay;
-using namespace std;
+#include "Wall.h"
 
 class HouseRenderer: public Renderer {
 public:

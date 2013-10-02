@@ -2,14 +2,13 @@
 #define House_H_
 
 #include <list>
-#include "Room.h"
 
 using namespace std;
+#include "Room.h"
 
 class House {
 public:
 	House(int, int);
-	House(int, int, list<Room>);
     ~House(void);
 	void addRoom(Room room);
 

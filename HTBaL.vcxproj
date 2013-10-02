@@ -339,6 +339,7 @@
     <ClCompile Include="src\MenuMainRenderer.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Room.cpp" />
+    <ClCompile Include="src\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Floor.h" />
@@ -349,6 +350,7 @@
     <ClInclude Include="src\MenuMainRenderer.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Room.h" />
+    <ClInclude Include="src\Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
