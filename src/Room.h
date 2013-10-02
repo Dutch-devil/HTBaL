@@ -9,7 +9,6 @@ using namespace gameplay;
 
 class Room {
 public:
-    Room(void);
 	Room(int, int, list<Vector2*>);
     ~Room(void);
 
