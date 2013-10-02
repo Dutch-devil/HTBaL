@@ -52,6 +52,9 @@
     <ClCompile Include="src\Room.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
+    <ClCompile Include="src\Floor.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\HouseRenderer.h">
@@ -73,6 +76,9 @@
       <Filter>src\House</Filter>
     </ClInclude>
     <ClInclude Include="src\Room.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Floor.h">
       <Filter>src\House</Filter>
     </ClInclude>
   </ItemGroup>

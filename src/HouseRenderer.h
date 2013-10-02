@@ -4,6 +4,7 @@
 #include "gameplay.h"
 #include "Renderer.h"
 #include "House.h"
+#include "Floor.h"
 #include <list>
 
 using namespace gameplay;
@@ -26,12 +27,12 @@ public:
 protected:
 	House* house;
 	RenderState::StateBlock* stateBlock;
-	list<Model*> tileModels;
+	Floor** floorTiles;
 	list<Model*> wallModels;
 	Rectangle viewport;
 	float aspectRatio;
 
-	float tileWidth, tileHeight;
+	Floor* prevFloor;
 };
 
 
