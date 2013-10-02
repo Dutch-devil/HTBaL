@@ -65,5 +65,4 @@ void Floor::toggleSelect() {
     } else {
         setColor(realColor);
     }
-
 }

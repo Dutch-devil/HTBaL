@@ -1,31 +1,30 @@
 #ifndef Room_H_
 #define Room_H_
 
-#include "House.h"
-#include "Floor.h"
-#include "Wall.h"
-
 #include <list>
-#include "gameplay.h"
 
 using namespace std;
+#include "gameplay.h"
 using namespace gameplay;
+
+#include "Floor.h"
+#include "Wall.h"
+#include "House.h"
 
 class Room {
 public:
-	House* mock;
-	Room(int, int, list<Vector2*>);
+	Room(int, int, list<Wall*>);
     ~Room(void);
 
-	list<Vector2*> getWalls();
+	list<Wall*> getWalls();
 
-	//Room* createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, Floor** floorTiles, int tileCount);
-	Wall* getDuplicateWall(Wall* wall, list<Wall*> walls);
+	static Room* createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, Floor** floorTiles, int tileCount);
+	static Wall* getDuplicateWall(Wall* wall, list<Wall*> walls);
 
 protected:
 	int x;
 	int y;
-	list<Vector2*> walls;
+	list<Wall*> walls;
 };
 
 #endif

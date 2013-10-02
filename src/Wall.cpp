@@ -1,12 +1,10 @@
 #include "Wall.h"
 
-using namespace std;
-
 Wall::Wall(RenderState::StateBlock* stateBlock, Vector2* start, Vector2* end): start(start), end(end) {
-	wallModel = Model::create(getMesh());
+	model = Model::create(getMesh());
 
     // Create the ground material
-    Material* wallMaterial = wallModel->setMaterial("res/grid.material");
+    Material* wallMaterial = model->setMaterial("res/grid.material");
     wallMaterial->setStateBlock(stateBlock);
 }
 
@@ -23,9 +21,12 @@ Vector2* Wall::getEnd() {
 }
 
 Mesh* Wall::getMesh() {
-	return NULL;
-	//return Mesh::createQuad(Vector3(prevWall->x, prevWall->y, 0),
- //                                             Vector3(wall->x, wall->y, 0),
- //                                             Vector3(prevWall->x, prevWall->y, (Floor::width + Floor::height) / 2),
- //                                             Vector3(wall->x, wall->y, (Floor::width + Floor::height) / 2));
+	return Mesh::createQuad(Vector3(start->x, start->y, 0),
+                            Vector3(end->x, end->y, 0),
+                            Vector3(start->x, start->y, (Floor::width + Floor::height) / 2),
+                            Vector3(end->x, end->y, (Floor::width + Floor::height) / 2));
+}
+
+Model* Wall::getModel() {
+	return model;
 }

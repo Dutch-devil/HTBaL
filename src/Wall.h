@@ -3,8 +3,8 @@
 
 #include "gameplay.h"
 
-using namespace std;
 using namespace gameplay;
+#include "Floor.h"
 
 class Wall {
 public:
@@ -15,11 +15,12 @@ public:
 	Vector2* getEnd();
 
 	Mesh* getMesh();
+	Model* getModel();
 
 protected:
 	Vector2* start;
 	Vector2* end;
-	Model* wallModel;
+	Model* model;
 };
 
 #endif
