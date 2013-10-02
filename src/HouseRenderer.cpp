@@ -76,7 +76,7 @@ void HouseRenderer::createHouse() {
 void HouseRenderer::createRoom() {
 	Floor* roomTiles[] = {floorTiles[0], floorTiles[1], floorTiles[5], floorTiles[6], floorTiles[7]};
 
-	house->addRoom(*Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, 5));
+	house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, 5));
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
@@ -128,8 +128,8 @@ void HouseRenderer::render(float elapsedTime) {
 		(*curFloor)->getModel()->draw();
 		curFloor++;
     }
-	for (Room room : house->getRooms()) {
-		for (Wall* wall : room.getWalls()) {
+	for (Room* room : house->getRooms()) {
+		for (Wall* wall : room->getWalls()) {
 			wall->getModel()->draw();
 		}
 	}

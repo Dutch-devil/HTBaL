@@ -1,6 +1,8 @@
 #ifndef Room_H_
 #define Room_H_
 
+class Room;
+
 #include <list>
 
 using namespace std;
