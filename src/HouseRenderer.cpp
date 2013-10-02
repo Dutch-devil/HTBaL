@@ -4,7 +4,9 @@
 //#define PERSPECTIVE
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
-    this->aspectRatio = viewport.width/viewport.height;
+    this->aspectRatio = viewport.width / viewport.height;
+	menuWidth = 200;
+	viewport.width -= menuWidth;
     initialize();
 }
 
@@ -14,8 +16,6 @@ HouseRenderer::~HouseRenderer() {
 
 void HouseRenderer::initialize() {
 	scene = Scene::create("HouseScene");
-    house = new House(10, 10);
-    floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 
     // Create our render state block that will be reused
     // across all materials
@@ -24,27 +24,43 @@ void HouseRenderer::initialize() {
     stateBlock->setBlend(true);
     stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
-
+	
+    renderHeight = 100;	// 100 for full height
+	//renderHeight = max(renderHeight, renderHeight * aspectRatio - menuWidth / viewport.width * renderHeight * aspectRatio);
+	//menuWidth = (aspectRatio - sqrt(2)) * viewport.width;
 #ifdef PERSPECTIVE
     Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
     Node* cameraNode = scene->addNode();
 #else
-    float screenHeight = 100;
-    Camera* camera = Camera::createOrthographic(aspectRatio * screenHeight, screenHeight, aspectRatio, 0.25, 600);
+    Camera* camera = Camera::createOrthographic(aspectRatio * renderHeight, renderHeight, aspectRatio, 0.25, 600);
     Node* cameraNode = scene->addNode();
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
 #endif
-
+	cameraNode->translateX(menuWidth / viewport.width * renderHeight * aspectRatio / sqrt(2));
+	cameraNode->translateY(menuWidth / viewport.width * renderHeight * aspectRatio / sqrt(2));
+	 
     cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
 
     cameraNode->translateForward(-100);
-    createHouse();
+
+	createMenu(menuWidth);
+    createHouse(renderHeight);
     createRoom();
 }
 
-void HouseRenderer::createHouse() {
+void HouseRenderer::createMenu(float menuWidth) {
+	nextRenderer = KEEP;
+	houseRendererForm = Form::create("res/menu/houseRenderer.form");
+	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
+	mainMenuButton->addListener(this, Control::Listener::CLICK);
+	mainMenuButton->setWidth(menuWidth);
+}
+
+void HouseRenderer::createHouse(float renderHeight) {
+    house = new House(7, 7);
+    floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
@@ -80,13 +96,14 @@ void HouseRenderer::createRoom() {
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+	x += menuWidth;
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
 #else
     Vector2* destination = new Vector2();
-    destination->x = (float)x / viewport.width * 100 / sqrt(2) * aspectRatio - 50 / sqrt(2) * aspectRatio;
-    destination->y = (float)y / viewport.height * 100 - 50;
+    destination->x = (float)x / viewport.width * renderHeight / sqrt(2) * aspectRatio - renderHeight / 2 / sqrt(2) * aspectRatio;
+    destination->y = (float)y / viewport.height * renderHeight - renderHeight / 2;
 
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
@@ -137,11 +154,13 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 }
 
 Renderers HouseRenderer::update(float elapsedTime) {
-    return KEEP;
+	houseRendererForm->update(elapsedTime);
+    return nextRenderer;
 }
 
 void HouseRenderer::render(float elapsedTime) {
     // Draw the scene
+	houseRendererForm->draw();
 	Floor** curFloor = floorTiles;
 	while (curFloor - floorTiles < house->getWidth() * house->getHeight()) {
 		(*curFloor)->getModel()->draw();
@@ -151,5 +170,11 @@ void HouseRenderer::render(float elapsedTime) {
 		for (Wall* wall : room->getWalls()) {
 			wall->getModel()->draw();
 		}
+	}
+}
+
+void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType evt) {
+	if (!strcmp("mainMenuButton", control->getId())) {
+		nextRenderer = MAIN_MENU;
 	}
 }

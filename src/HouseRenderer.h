@@ -14,13 +14,14 @@ class HouseRenderer;
 using namespace gameplay;
 using namespace std;
 
-class HouseRenderer: public Renderer {
+class HouseRenderer: public Renderer, Control::Listener {
 public:
 	HouseRenderer(Rectangle viewport);
 	~HouseRenderer();
 
-	void initialize();
-	void createHouse();
+
+	void createMenu(float menuWidth);
+	void createHouse(float renderHeight);
 	void createRoom();
 	
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
@@ -30,15 +31,23 @@ public:
 	Renderers update(float elapsedTime);
 	void render(float elapsedTime);
 
+	void controlEvent(Control* control, Control::Listener::EventType evt);
+
 protected:
+	void initialize();
 	Scene* scene;
 	House* house;
 	RenderState::StateBlock* stateBlock;
 	Floor** floorTiles;
 	list<Model*> wallModels;
 	float aspectRatio;
+	float menuWidth;
+	float renderHeight;
 
 	Floor* prevFloor;
+
+	Form* houseRendererForm;
+	Renderers nextRenderer;
 };
 
 

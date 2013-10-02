@@ -31,9 +31,6 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\HouseRenderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\HTBaL.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -57,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="src\Room.cpp">
       <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HouseRenderer.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

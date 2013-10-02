@@ -1,4 +1,4 @@
-form main {
+form houseRenderer {
     // Form properties.
     theme                  = res/menu/default.theme
     autoWidth              = true
@@ -8,11 +8,11 @@ form main {
 	
 
     // All the Controls within this Form.
-    button roomButton {
+    button mainMenuButton {
 		style = buttonHover
-		text = View house editor and generator
+		text = Main Menu
 		group = formSelection
 		size = 480, 60
-		alignment              = ALIGN_HCENTER
+		alignment              = ALIGN_RIGHT
 	}
 }

@@ -3,16 +3,16 @@
 MenuMainRenderer::MenuMainRenderer(Rectangle viewport) : Renderer(viewport) {
 	initialize();
 }
-	
+
 void MenuMainRenderer::initialize() {
 	nextRenderer = KEEP;
 	mainMenuForm = Form::create("res/menu/main.form");
-	Control* roomButton = mainMenuForm->getControl("houseButton");
+	Control* roomButton = mainMenuForm->getControl("roomButton");
 	roomButton->addListener(this, Control::Listener::CLICK);
 }
 
 MenuMainRenderer::~MenuMainRenderer() {
-	Control* roomButton = mainMenuForm->getControl("houseButton");
+	Control* roomButton = mainMenuForm->getControl("roomButton");
 	roomButton->removeListener(this);
 	SAFE_RELEASE(mainMenuForm);
 }
@@ -27,7 +27,7 @@ void MenuMainRenderer::render(float elapsedTime) {
 }
 
 void MenuMainRenderer::controlEvent(Control* control, Control::Listener::EventType evt) {
-	if (!strncmp("houseButton", control->getId(), 11)) {
+	if (!strcmp("roomButton", control->getId())) {
 		nextRenderer = HOUSE;
 	}
 }
