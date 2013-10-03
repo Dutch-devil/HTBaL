@@ -203,7 +203,7 @@ House* House::addRandomRooms(Scene* scene) {
 		gap->setColor(FLOOR_HALL);
 	}
 	roomTiles.merge(gaps);
-    addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
+    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
 
 
     // and add rooms to the house
@@ -237,7 +237,7 @@ House* House::addRandomRooms(Scene* scene) {
             for (Floor* roomTile : roomTiles) {
                 roomTile->setColor(FLOOR_ROOM);
             }
-            addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
+            addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
         }
     }
 }
