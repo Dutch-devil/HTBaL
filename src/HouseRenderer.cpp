@@ -111,17 +111,17 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
 #else
     Vector2* destination = new Vector2();
-    destination->x = (float)x * renderHeight / viewport.height / sqrt(2) - renderHeight / 2;
-    destination->y = (float)y * renderHeight / viewport.height - renderHeight / 2;
+	destination->x = (x - renderViewPort.width/2) / viewport.height * renderHeight;
+	destination->y = (y - renderViewPort.height/2) / viewport.height * renderHeight;
 
+	destination->x = destination->x / sqrt(2);
+
+	print("%f %f\n", destination->x, destination->y);
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
     rotated->y = (destination->x - destination->y);
 
     destination = rotated;
-
-	destination->x /= 2;
-	destination->y /= 2;
 #endif
 
 	if (house->getWidth() < house->getHeight()) {

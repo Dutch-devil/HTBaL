@@ -20,7 +20,7 @@ using namespace std;
  
 class Floor {
 public:
-	static int width, height;
+	static float width, height;
 
 	Floor(RenderState::StateBlock* stateBlock, float x, float y);
     ~Floor();
