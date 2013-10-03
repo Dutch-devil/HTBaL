@@ -10,6 +10,10 @@ HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
 HouseRenderer::~HouseRenderer() {
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
 	mainMenuButton->removeListener(this);
+	Control* refreshButton = houseRendererForm->getControl("refreshButton");
+	refreshButton->removeListener(this);
+	Control* clearButton = houseRendererForm->getControl("clearButton");
+	clearButton->removeListener(this);
 	SAFE_RELEASE(houseRendererForm);
 	SAFE_RELEASE(scene);
 }
@@ -74,6 +78,12 @@ void HouseRenderer::resize() {
     cameraNode->translateForward(-100);
 	
 	houseRendererForm = Form::create("res/menu/houseRenderer.form");
+	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
+	mainMenuButton->addListener(this, Control::Listener::CLICK);
+	Control* refreshButton = houseRendererForm->getControl("refreshButton");
+	refreshButton->addListener(this, Control::Listener::CLICK);
+	Control* clearButton = houseRendererForm->getControl("clearButton");
+	clearButton->addListener(this, Control::Listener::CLICK);
 	createMenu(menuWidth);
 }
 
@@ -81,12 +91,11 @@ void HouseRenderer::createMenu(float menuWidth) {
 	nextRenderer = KEEP;
 
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
-	mainMenuButton->addListener(this, Control::Listener::CLICK);
 	mainMenuButton->setWidth(menuWidth);
-	
 	Control* refreshButton = houseRendererForm->getControl("refreshButton");
-	refreshButton->addListener(this, Control::Listener::CLICK);
 	refreshButton->setWidth(menuWidth);
+	Control* clearButton = houseRendererForm->getControl("clearButton");
+	clearButton->setWidth(menuWidth);
 }
 
 void HouseRenderer::createHouse(bool random) {
@@ -216,5 +225,7 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
 	}else if (!strcmp("refreshButton", control->getId())) {
 		createHouse(true);
 		createRoom();
+	}else if (!strcmp("clearButton", control->getId())) {
+		createHouse(true);
 	}
 }

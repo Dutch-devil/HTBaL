@@ -24,7 +24,6 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBl
 
     for (Floor* floorTile : roomTiles) {
 		int i = floorTile->getId();
-        floorTile->setColor(FLOOR_BLUE);
 
         int nextTile = house->getIdByXY(house->getXById(i)-1,house->getYById(i));
         if (nextTile == -1 || floorTiles[nextTile] == NULL) {

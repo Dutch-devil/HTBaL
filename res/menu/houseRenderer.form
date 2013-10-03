@@ -21,4 +21,7 @@ form houseRenderer {
     button refreshButton : mainMenuButton {
 		text = Refresh
 	}
+    button clearButton : mainMenuButton {
+		text = Clear
+	}
 }
