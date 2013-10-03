@@ -64,7 +64,7 @@ void HouseRenderer::createMenu(float menuWidth) {
 }
 
 void HouseRenderer::createHouse(float renderHeight) {
-    house = new House(7, 7);
+    house = new House(10, 10);
     floorTiles = new Floor*[house->getWidth() * house->getHeight()];
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
@@ -121,14 +121,18 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
 #else
     Vector2* destination = new Vector2();
-    destination->x = (float)x / renderViewPort.width * renderHeight / sqrt(2) * aspectRatio - renderHeight / 2 / sqrt(2) * aspectRatio;
-    destination->y = (float)y / renderViewPort.height * renderHeight - renderHeight / 2;
+	destination->x = (x - renderViewPort.width/2) / viewport.height * renderHeight;
+	destination->y = (y - renderViewPort.height/2) / viewport.height * renderHeight;
 
+	destination->x = destination->x / sqrt(2);
+
+	print("%f %f\n", destination->x, destination->y);
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
     rotated->y = (destination->x - destination->y);
 
     destination = rotated;
+	print("%f %f\n", destination->x, destination->y);
 #endif
 	if (destination->x < -50 || destination->x > 50 || destination->y < -50 || destination->y > 50) {
 		prevFloor = NULL;

@@ -2,7 +2,7 @@
 #include "Floor.h"
 
 
-int Floor::width, Floor::height;
+float Floor::width, Floor::height;
 
 Floor::Floor(RenderState::StateBlock* stateBlock, float x, float y): x(x), y(y) {
     this->model = Model::create(getMesh());
