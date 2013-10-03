@@ -10,7 +10,7 @@ Floor::Floor(RenderState::StateBlock* stateBlock, float x, float y): x(x), y(y) 
     realColor = color = FLOOR_UNSELECTED;
     selected = false;
 
-    model->setMaterial("res/grid.material")->setStateBlock(stateBlock);
+    model->setMaterial("res/house/floor.material")->setStateBlock(stateBlock);
     setColor(color);
 }
  

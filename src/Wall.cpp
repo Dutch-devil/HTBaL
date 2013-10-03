@@ -28,7 +28,7 @@ Model* Wall::getModel() {
         model = Model::create(getMesh());
 
         // Create the ground material
-        Material* wallMaterial = model->setMaterial("res/grid.material");
+        Material* wallMaterial = model->setMaterial("res/house/wall.material");
         wallMaterial->setStateBlock(stateBlock);
     }
     return model;
