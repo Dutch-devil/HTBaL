@@ -45,9 +45,10 @@ bool Floor::isColor(Vector3* other) {
     return color->x == other->x && color->y == other->y && color->z == other->z;
 }
 
-void Floor::setColor(Vector3* color) {
+Floor* Floor::setColor(Vector3* color) {
     this->realColor = color;
 	updateColor();
+	return this;
 }
 
 void Floor::updateColor() {
