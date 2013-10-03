@@ -5,9 +5,10 @@
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
     this->aspectRatio = viewport.width / viewport.height;
-	menuWidth = 00;
+	menuWidth = 100;
 	renderViewPort.width = viewport.width - menuWidth;
-	renderViewPort.height = viewport.height - 200;
+	renderViewPort.height = viewport.height - 100;
+	renderViewPort.y = 100;
     initialize();
 }
 
@@ -28,9 +29,6 @@ void HouseRenderer::initialize() {
 	
 	float maxPixels = min((renderViewPort.width / (float)sqrt(2)), renderViewPort.height);
 	renderHeight = 100 * viewport.height / maxPixels;
-
-    //renderHeight = 100;	// 100 for full height
-	//renderHeight = max(renderHeight, aspectRatio - menuWidth / (viewport.width + menuWidth) * renderHeight * aspectRatio * (float)sqrt(2));
 #ifdef PERSPECTIVE
     Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
     Node* cameraNode = scene->addNode();
@@ -40,9 +38,8 @@ void HouseRenderer::initialize() {
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
 #endif
-	// menuWidth / 2 * 
-	cameraNode->translateX(renderHeight * menuWidth / (viewport.height * 2 * sqrt(2)));
-	cameraNode->translateY(renderHeight * menuWidth / (viewport.height * 2 * sqrt(2)));
+	cameraNode->translateLeft(-renderHeight * ((viewport.width - renderViewPort.width) / 2 - renderViewPort.x) / (viewport.height));
+	cameraNode->translateUp(-renderHeight * ((viewport.height - renderViewPort.height) / 2 - renderViewPort.y) / (viewport.height));
 	 
     cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
@@ -113,14 +110,15 @@ void HouseRenderer::createRoom() {
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
-	x += menuWidth;
+	x -= renderViewPort.x;
+	y -= renderViewPort.y;
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
 #else
     Vector2* destination = new Vector2();
-    destination->x = (float)x / viewport.width * renderHeight / sqrt(2) * aspectRatio - renderHeight / 2 / sqrt(2) * aspectRatio;
-    destination->y = (float)y / viewport.height * renderHeight - renderHeight / 2;
+    destination->x = (float)x / renderViewPort.width * renderHeight / sqrt(2) * aspectRatio - renderHeight / 2 / sqrt(2) * aspectRatio;
+    destination->y = (float)y / renderViewPort.height * renderHeight - renderHeight / 2;
 
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
