@@ -35,6 +35,8 @@ public:
 
 protected:
 	void initialize();
+	Rectangle renderViewPort;
+
 	Scene* scene;
 	House* house;
 	RenderState::StateBlock* stateBlock;

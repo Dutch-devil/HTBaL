@@ -5,8 +5,9 @@
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
     this->aspectRatio = viewport.width / viewport.height;
-	menuWidth = 200;
-	viewport.width -= menuWidth;
+	menuWidth = 00;
+	renderViewPort.width = viewport.width - menuWidth;
+	renderViewPort.height = viewport.height - 200;
     initialize();
 }
 
@@ -25,9 +26,11 @@ void HouseRenderer::initialize() {
     stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 	
-    renderHeight = 100;	// 100 for full height
-	//renderHeight = max(renderHeight, renderHeight * aspectRatio - menuWidth / viewport.width * renderHeight * aspectRatio);
-	//menuWidth = (aspectRatio - sqrt(2)) * viewport.width;
+	float maxPixels = min((renderViewPort.width / (float)sqrt(2)), renderViewPort.height);
+	renderHeight = 100 * viewport.height / maxPixels;
+
+    //renderHeight = 100;	// 100 for full height
+	//renderHeight = max(renderHeight, aspectRatio - menuWidth / (viewport.width + menuWidth) * renderHeight * aspectRatio * (float)sqrt(2));
 #ifdef PERSPECTIVE
     Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
     Node* cameraNode = scene->addNode();
@@ -37,8 +40,9 @@ void HouseRenderer::initialize() {
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
 #endif
-	cameraNode->translateX(menuWidth / viewport.width * renderHeight * aspectRatio / sqrt(2));
-	cameraNode->translateY(menuWidth / viewport.width * renderHeight * aspectRatio / sqrt(2));
+	// menuWidth / 2 * 
+	cameraNode->translateX(renderHeight * menuWidth / (viewport.height * 2 * sqrt(2)));
+	cameraNode->translateY(renderHeight * menuWidth / (viewport.height * 2 * sqrt(2)));
 	 
     cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
