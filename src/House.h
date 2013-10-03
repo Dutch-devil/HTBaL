@@ -30,7 +30,9 @@ public:
 
 	list<Room*> getRooms();
 	House* addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock);
+	void clearAllAround(vector<int>* ids, int x, int y);
 	void pushAllHallAround(vector<int>* ids, int x, int y);
+	bool canBeHallway(int x, int y);
 	bool floorTouchesSide(int x, int y);
 	bool floorHasNeighbours(int x, int y);
 
