@@ -17,6 +17,10 @@ public:
 	int getWidth();
 	int getHeight();
 
+	int getIdByXY(int x, int y);
+	int getXById(int id);
+	int getYById(int id);
+
 	list<Room*> getRooms();
 
 protected:
