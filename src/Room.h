@@ -18,7 +18,7 @@ public:
     ~Room(void);
 
 	list<Wall*> getWalls();
-
+	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
 
 protected:

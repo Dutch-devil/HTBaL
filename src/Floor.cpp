@@ -22,6 +22,15 @@ Mesh* Floor::getMesh() {
                             Vector3(Floor::width / 2, Floor::height / 2, 0));
 }
 
+Floor* Floor::setDoor(WallDir dir) {
+	this->doorDir = dir;
+	return this;
+}
+
+WallDir Floor::getDoor() {
+	return doorDir;
+}
+
 int Floor::getId() {
 	return id;
 }

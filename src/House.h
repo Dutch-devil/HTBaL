@@ -6,6 +6,7 @@ class House;
 #include <list>
 #include <cmath>
 #include "Room.h"
+#include "Floor.h"
 
 using namespace std;
 
@@ -30,18 +31,22 @@ public:
 
 	list<Room*> getRooms();
 	void addRandomRooms(Scene* scene);
+	
+	void setDoor(list<Floor*> tiles, WalledTile adjacent);
 
-	void clearAllAround(vector<int>* ids, int x, int y);
-	void pushAllHallAround(vector<int>* ids, int x, int y);
+	void clearAllAround(vector<WalledTile>* ids, int x, int y);
+	void pushAllHallAround(vector<WalledTile>* ids, int x, int y);
 	bool canBeHallway(int x, int y);
 	bool floorTouchesSide(int x, int y);
 	bool floorHasNeighbours(int x, int y);
 
 	void pushAllRoomAround(vector<int>* ids, int x, int y);
+	void pushAllRoomAround(vector<WalledTile>* ids, int x, int y);
 	bool canBeRoom(int x, int y);
 	void removeId(vector<int>* ids, int id);
-	list<Floor*> getGaps(vector<int>* toCheck);
-	list<Floor*> getGaps(vector<int>* toCheck, unsigned int maxSize);
+	void removeId(vector<WalledTile>* ids, int id);
+	list<Floor*> getGaps(vector<WalledTile>* toCheck);
+	list<Floor*> getGaps(vector<WalledTile>* toCheck, unsigned int maxSize);
 	bool getEnclosed(int startId, list<Floor*>* others);
 
 protected:

@@ -95,10 +95,10 @@ void House::addRandomRooms(Scene* scene) {
         hallStartX = rand() % 2 * (getWidth() - largeHallStart - 1);
         hallStartY = rand() % (getHeight() - largeHallStart - 3) + 1;
     }
-    list<Floor*> roomTiles = list<Floor*>();
+    list<Floor*> hallStartTiles = list<Floor*>();
 
     // list of all possible hall places
-    vector<int>* hallPossibilities = new vector<int>();
+    vector<WalledTile>* hallPossibilities = new vector<WalledTile>();
 
     pushAllHallAround(hallPossibilities, hallStartX, hallStartY);
     if (largeHallStart) {
@@ -106,13 +106,13 @@ void House::addRandomRooms(Scene* scene) {
         pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY);
         pushAllHallAround(hallPossibilities, hallStartX, hallStartY + 1);
         pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY + 1);
-        roomTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
-        roomTiles.push_back(getFloorTile(hallStartX + 1, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
-        roomTiles.push_back(getFloorTile(hallStartX, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
-        roomTiles.push_back(getFloorTile(hallStartX + 1, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
+        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
+        hallStartTiles.push_back(getFloorTile(hallStartX + 1, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
+        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
+        hallStartTiles.push_back(getFloorTile(hallStartX + 1, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
 
-        for (vector<int>::iterator itr = hallPossibilities->begin(); itr != hallPossibilities->end();) {
-            int id = *itr;
+        for (vector<WalledTile>::iterator itr = hallPossibilities->begin(); itr != hallPossibilities->end();) {
+            int id = (*itr).id;
             if (id == getIdByXY(hallStartX, hallStartY) || id == getIdByXY(hallStartX + 1, hallStartY) ||
                     id == getIdByXY(hallStartX, hallStartY + 1) || id == getIdByXY(hallStartX + 1, hallStartY + 1)) {
                 itr = hallPossibilities->erase(itr);
@@ -121,14 +121,14 @@ void House::addRandomRooms(Scene* scene) {
             }
         }
     } else {
-        roomTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
+        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
     }
-    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
 
     // create the hallway connecting to the hallstart
     // select random room from possible hall places
-    roomTiles = list<Floor*>();
-    int id = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
+    list<Floor*> hallTiles = list<Floor*>();
+    WalledTile start = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
+	int id = start.id;
 
     hallPossibilities->clear();
     clearAllAround(hallPossibilities, getXById(id), getYById(id));
@@ -139,8 +139,12 @@ void House::addRandomRooms(Scene* scene) {
     int prevY = getYById(id);
 
     Floor* tile = getFloorTile(id);
+	tile->setDoor(start.dir);
+	print("setting hall door:\n");
+	setDoor(hallStartTiles, start);
+	print("done \n\n");
     tile->setSelected(true);
-    roomTiles.push_back(tile);
+    hallTiles.push_back(tile);
     tile->setColor(FLOOR_HALL);
 
     int curX, curY, dir = -1;
@@ -163,7 +167,7 @@ void House::addRandomRooms(Scene* scene) {
         }
 
         if (id == -1) {
-            id = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
+            id = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())].id;
         }
         curX = getXById(id);
         curY = getYById(id);
@@ -187,14 +191,14 @@ void House::addRandomRooms(Scene* scene) {
         pushAllHallAround(hallPossibilities, curX, curY);
 
         tile = getFloorTile(id);
-        roomTiles.push_back(tile);
+        hallTiles.push_back(tile);
         tile->setColor(FLOOR_HALL);
     }
 	tile->setSelected(true);
 
     // get all tiles next to hall tiles
-    vector<int>* roomStartPosibilities = new vector<int>();
-    for (Floor* hallTile : roomTiles) {
+	vector<WalledTile>* roomStartPosibilities = new vector<WalledTile>();
+    for (Floor* hallTile : hallTiles) {
         pushAllRoomAround(roomStartPosibilities, getXById(hallTile->getId()), getYById(hallTile->getId()));
     }
 	list<Floor*> gaps = getGaps(roomStartPosibilities, 3);
@@ -202,20 +206,20 @@ void House::addRandomRooms(Scene* scene) {
 		gap->setColor(FLOOR_HALL);
 		removeId(roomStartPosibilities, gap->getId());
 	}
-	roomTiles.merge(gaps);
-    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
-
+	hallTiles.merge(gaps);
 
     // and add rooms to the house
     delete hallPossibilities;
-    vector<int>* roomPossibilities = new vector<int>();
+    vector<WalledTile>* roomPossibilities = new vector<WalledTile>();
+	list<Floor*> roomTiles = list<Floor*>();
 
     while (!roomStartPosibilities->empty()) {
         roomPossibilities->clear();
         roomTiles.clear();
 
-        id = (*roomStartPosibilities)[(int)(rand() % roomStartPosibilities->size())];
-        tile = getFloorTile(id);
+        WalledTile startTile = (*roomStartPosibilities)[(int)(rand() % roomStartPosibilities->size())];
+        tile = getFloorTile(startTile.id);
+		tile->setDoor(startTile.dir);
         roomTiles.push_back(tile->setSelected(true));
         removeId(roomStartPosibilities, tile->getId());
         pushAllRoomAround(roomPossibilities, getXById(tile->getId()), getYById(tile->getId()));
@@ -223,7 +227,7 @@ void House::addRandomRooms(Scene* scene) {
             if (roomPossibilities->empty()) {
                 break;
             }
-            id = (*roomPossibilities)[(int)(rand() % roomPossibilities->size())];
+            id = (*roomPossibilities)[(int)(rand() % roomPossibilities->size())].id;
             tile = getFloorTile(id);
 
             roomTiles.push_back(tile->setSelected(true));
@@ -238,6 +242,7 @@ void House::addRandomRooms(Scene* scene) {
         roomTiles.merge(gaps);
 
         if (roomTiles.size() >= 4) {
+			setDoor(hallTiles, startTile);
             for (Floor* roomTile : roomTiles) {
                 roomTile->setColor(FLOOR_ROOM);
             }
@@ -245,9 +250,15 @@ void House::addRandomRooms(Scene* scene) {
         }else {
 			for (Floor* roomTile : roomTiles) {
 				roomTile->setSelected(false);
+				roomTile->setDoor(NONE);
 			}
 		}
     }
+
+    addRoom(Room::createRoomFromFloor(scene, this, hallStartTiles));
+    addRoom(Room::createRoomFromFloor(scene, this, hallTiles));
+
+
 	for (int i = 0; i < getWidth() * getHeight(); i++) {
 		if (!getFloorTile(i)->getSelected()) {
 			getFloorTile(i)->setColor(FLOOR_BLACK);
@@ -256,10 +267,23 @@ void House::addRandomRooms(Scene* scene) {
 	}
 }
 
-void House::clearAllAround(vector<int>* ids, int x, int y) {
+void House::setDoor(list<Floor*> tiles, WalledTile adjacent) {
+	int searchId = getIdByXY(getXById(adjacent.id) + (adjacent.dir == LEFT?-1:(adjacent.dir == RIGHT?1:0)),
+							 getYById(adjacent.id) + (adjacent.dir == BOTTOM?-1:(adjacent.dir == TOP?1:0)));
+	print("searching id %d\n", searchId);
+	for (Floor* tile : tiles) {
+		print("tile: %d\n", tile->getId());
+		if (tile->getId() == searchId) {
+			tile->setDoor(adjacent.dir == LEFT?RIGHT:(adjacent.dir == RIGHT?LEFT:(adjacent.dir == TOP?BOTTOM:(adjacent.dir == BOTTOM?TOP:NONE))));
+			break;
+		}
+	}
+}
+
+void House::clearAllAround(vector<WalledTile>* ids, int x, int y) {
     // clear all the possibilities around this newly generated tile
-    for (vector<int>::iterator itr = ids->begin(); itr != ids->end();) {
-        int id = *itr;
+    for (vector<WalledTile>::iterator itr = ids->begin(); itr != ids->end();) {
+        int id = (*itr).id;
         if (id == getIdByXY(x, y) || id == getIdByXY(x - 1, y) || id == getIdByXY(x, y - 1) ||
                 id == getIdByXY(x + 1, y) || id == getIdByXY(x, y + 1)) {
             itr = ids->erase(itr);
@@ -269,20 +293,20 @@ void House::clearAllAround(vector<int>* ids, int x, int y) {
     }
 }
 
-void House::pushAllHallAround(vector<int>* ids, int x, int y) {
+void House::pushAllHallAround(vector<WalledTile>* ids, int x, int y) {
     // only non occupied tiles with no side next to them can be made
     // also no hallway tile may touch another occupied tile
     if (canBeHallway(x - 1, y)) {
-        ids->push_back(getIdByXY(x - 1, y));
+        ids->push_back(WalledTile(getIdByXY(x - 1, y), RIGHT));
     }
     if (canBeHallway(x, y - 1)) {
-        ids->push_back(getIdByXY(x, y - 1));
+        ids->push_back(WalledTile(getIdByXY(x, y - 1), TOP));
     }
     if (canBeHallway(x + 1, y)) {
-        ids->push_back(getIdByXY(x + 1, y));
+        ids->push_back(WalledTile(getIdByXY(x + 1, y), LEFT));
     }
     if (canBeHallway(x, y + 1)) {
-        ids->push_back(getIdByXY(x, y + 1));
+        ids->push_back(WalledTile(getIdByXY(x, y + 1), BOTTOM));
     }
 }
 
@@ -332,6 +356,22 @@ void House::pushAllRoomAround(vector<int>* ids, int x, int y) {
     }
 }
 
+void House::pushAllRoomAround(vector<WalledTile>* ids, int x, int y) {
+    // all non-occupied tiles next to this one can be room
+    if (canBeRoom(x - 1, y)) {
+		ids->push_back(WalledTile(getIdByXY(x - 1, y), RIGHT));
+    }
+    if (canBeRoom(x, y - 1)) {
+        ids->push_back(WalledTile(getIdByXY(x, y - 1), TOP));
+    }
+    if (canBeRoom(x + 1, y)) {
+        ids->push_back(WalledTile(getIdByXY(x + 1, y), LEFT));
+    }
+    if (canBeRoom(x, y + 1)) {
+        ids->push_back(WalledTile(getIdByXY(x, y + 1), BOTTOM));
+    }
+}
+
 bool House::canBeRoom(int x, int y) {
     Floor* tile = getFloorTile(x, y);
     return tile != NULL && !tile->getSelected();
@@ -347,15 +387,25 @@ void House::removeId(vector<int>* ids, int id) {
     }
 }
 
-list<Floor*> House::getGaps(vector<int>* toCheck) {
+void House::removeId(vector<WalledTile>* ids, int id) {
+    for (vector<WalledTile>::iterator itr = ids->begin(); itr != ids->end();) {
+        if ((*itr).id == id) {
+            itr = ids->erase(itr);
+        } else {
+            itr++;
+        }
+    }
+}
+
+list<Floor*> House::getGaps(vector<WalledTile>* toCheck) {
 	return getGaps(toCheck, 0);
 }
 
-list<Floor*> House::getGaps(vector<int>* toCheck, unsigned int maxSize) {
+list<Floor*> House::getGaps(vector<WalledTile>* toCheck, unsigned int maxSize) {
 	list<Floor*> gapTiles;
-    for (int possibility : *toCheck) {
+    for (WalledTile possibility : *toCheck) {
         list<Floor*>* tmp = new list<Floor*>();
-        if (!getEnclosed(possibility, tmp) || (maxSize > 0 && tmp->size() > maxSize)) {
+        if (!getEnclosed(possibility.id, tmp) || (maxSize > 0 && tmp->size() > maxSize)) {
             for (Floor* unselect : *tmp) {
                 unselect->setSelected(false);
             }

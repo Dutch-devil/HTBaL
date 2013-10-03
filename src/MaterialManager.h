@@ -8,6 +8,7 @@ using namespace gameplay;
 enum MaterialType {
 	FLOOR,
 	WALL,
+	DOOR,
 	COUNT
 };
 

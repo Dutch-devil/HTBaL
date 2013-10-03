@@ -28,25 +28,25 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
         int nextTile = house->getIdByXY(house->getXById(i)-1,house->getYById(i));
         if (nextTile == -1 || floorTiles[nextTile] == NULL) {
             walls.push_back(new Wall(new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2),
-                                     new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+                                     new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2), floorTile->getDoor() == LEFT));
         }
 
         nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)+1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
             walls.push_back(new Wall(new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2),
-                                     new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2)));
+                                     new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2), floorTile->getDoor() == TOP));
         }
 
         nextTile = house->getIdByXY(house->getXById(i)+1,house->getYById(i));
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
             walls.push_back(new Wall(new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2),
-                                     new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2)));
+                                     new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2), floorTile->getDoor() == RIGHT));
         }
 
         nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)-1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
             walls.push_back(new Wall(new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2),
-                                     new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2)));
+                                     new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2), floorTile->getDoor() == BOTTOM));
         }
     }
 

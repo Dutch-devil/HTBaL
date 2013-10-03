@@ -9,6 +9,7 @@ using namespace gameplay;
 class Wall {
 public:
 	Wall(Vector2* start, Vector2* end);
+	Wall(Vector2* start, Vector2* end, bool door);
     ~Wall();
 
 	Vector2* getStart();
@@ -20,6 +21,7 @@ public:
 protected:
 	Vector2* start;
 	Vector2* end;
+	bool door;
 	Model* model;
 };
 

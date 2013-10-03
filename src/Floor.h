@@ -25,6 +25,16 @@ class Floor;
 using namespace gameplay;
 using namespace std;
  
+enum WallDir {
+	TOP, LEFT, BOTTOM, RIGHT, NONE
+};
+struct WalledTile {
+	WalledTile(int id): id(id), dir(NONE) {}
+	WalledTile(int id, WallDir dir): id(id), dir(dir) {}
+	int id;
+	WallDir dir;
+};
+
 class Floor {
 public:
 	static float width, height;
@@ -34,6 +44,9 @@ public:
 	
 	Mesh* getMesh();
 	int getId();
+	
+	Floor* setDoor(WallDir dir);
+	WallDir getDoor();
 
 	float getX();
 	float getY();
@@ -54,6 +67,7 @@ protected:
 	int id;
 	float x, y;
 	Model* model;
+	WallDir doorDir;
 	Vector3* color;
 	Vector3* realColor;
 	bool selected;

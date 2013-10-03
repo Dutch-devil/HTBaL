@@ -4,10 +4,11 @@
 Wall::Wall(Vector2* start, Vector2* end): start(start), end(end) {
 	model = NULL;
 }
-
-
-Wall::~Wall() {
+Wall::Wall(Vector2* start, Vector2* end, bool door): start(start), end(end), door(door) {
+	model = NULL;
 }
+
+Wall::~Wall() {}
 
 Vector2* Wall::getStart() {
     return start;
@@ -29,7 +30,7 @@ Model* Wall::getModel() {
         model = Model::create(getMesh());
 
         // Create the ground material
-        model->setMaterial(MaterialManager::getMaterial(WALL));
+        model->setMaterial(MaterialManager::getMaterial(door?DOOR:WALL));
     }
     return model;
 }

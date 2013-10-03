@@ -24,6 +24,9 @@ Material* MaterialManager::getMaterial(MaterialType type) {
 		case WALL:
 			propertiesArray[type] = fixProperties(Properties::create("res/house/wall.material"));
 			break;
+		case DOOR:
+			propertiesArray[type] = fixProperties(Properties::create("res/house/door.material"));
+			break;
 		default:
 			GP_ERROR("No matching material found");
 		}
