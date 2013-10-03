@@ -23,25 +23,25 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBl
 			floorTile->setColor(FLOOR_BLUE);
 
 			int nextTile = house->getIdByXY(house->getXById(i)-1,house->getYById(i));
-			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+			if (nextTile == -1 || floorTiles[nextTile] == NULL) {
 				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2), 
 													 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2)));
 			}
 
 			nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)+1);
-			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+			if(nextTile == -1 || floorTiles[nextTile] == NULL) {
 				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() + Floor::height / 2), 
 													 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2)));
 			}
 
 			nextTile = house->getIdByXY(house->getXById(i)+1,house->getYById(i));
-			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+			if(nextTile == -1 || floorTiles[nextTile] == NULL) {
 				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() + Floor::height / 2), 
 													 new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2)));
 			}
 
 			nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)-1);
-			if(nextTile < 0 || nextTile >= tileCount || floorTiles[nextTile] == NULL) {
+			if(nextTile == -1 || floorTiles[nextTile] == NULL) {
 				walls.push_back(new Wall(stateBlock, new Vector2(floorTile->getX() + Floor::width / 2, floorTile->getY() - Floor::height / 2), 
 													 new Vector2(floorTile->getX() - Floor::width / 2, floorTile->getY() - Floor::height / 2)));
 			}

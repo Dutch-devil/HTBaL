@@ -13,6 +13,10 @@ HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
 }
 
 HouseRenderer::~HouseRenderer() {
+	print("destruct");
+	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
+	mainMenuButton->removeListener(this);
+	SAFE_RELEASE(houseRendererForm);
 	SAFE_RELEASE(scene);
 }
 

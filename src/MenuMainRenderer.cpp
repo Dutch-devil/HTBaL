@@ -12,6 +12,7 @@ void MenuMainRenderer::initialize() {
 }
 
 MenuMainRenderer::~MenuMainRenderer() {
+	print("destruct menu \n");
 	Control* roomButton = mainMenuForm->getControl("roomButton");
 	roomButton->removeListener(this);
 	SAFE_RELEASE(mainMenuForm);

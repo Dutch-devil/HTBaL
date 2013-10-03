@@ -27,6 +27,9 @@ list<Room*> House::getRooms() {
 }
 
 int House::getIdByXY(int x, int y) {
+	if (x < 0 || x >= width || y < 0 || y >= height) {
+		return -1;
+	}
 	return y*width+x;
 }
 

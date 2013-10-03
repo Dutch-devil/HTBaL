@@ -17,7 +17,7 @@ using namespace gameplay;
 class Renderer {
 public:
 	Renderer(Rectangle viewport);
-	~Renderer();
+	virtual ~Renderer();
 
 	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 	
