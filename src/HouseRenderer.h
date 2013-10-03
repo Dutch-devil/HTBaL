@@ -40,8 +40,6 @@ protected:
 	Scene* scene;
 	House* house;
 	RenderState::StateBlock* stateBlock;
-	Floor** floorTiles;
-	list<Model*> wallModels;
 	float aspectRatio;
 	float menuWidth;
 	float renderHeight;

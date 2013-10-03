@@ -57,6 +57,13 @@ bool Floor::getSelected() {
 	return selected;
 }
 
+Floor* Floor::setSelected(bool selected) {
+	if (getSelected() != selected) {
+		toggleSelect();
+	}
+	return this;
+}
+
 void Floor::toggleColor(Vector3* first, Vector3* second) {
     // toggle the color
     if (!this->isColor(first)) {

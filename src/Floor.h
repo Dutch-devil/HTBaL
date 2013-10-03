@@ -38,6 +38,7 @@ public:
 	Vector3 blendColors(Vector3* color1, Vector3* color2);
 	
 	bool getSelected();
+	Floor* setSelected(bool selected);
 	void toggleSelect();
 
 protected:

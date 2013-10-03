@@ -13,8 +13,6 @@ list<Wall*> Room::getWalls() {
 }
 
 Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, Floor** floorTiles, int tileCount) {
-	float startX = -(float)house->getWidth() / 2 * Floor::width;
-    float startY = -(float)house->getHeight() / 2 * Floor::height;
     list<Wall*> walls;
 
 	for (int i = 0; i < tileCount; i++) {

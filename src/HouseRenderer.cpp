@@ -5,15 +5,13 @@
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
     this->aspectRatio = viewport.width / viewport.height;
-	menuWidth = 100;
+	menuWidth = 300;
 	renderViewPort.width = viewport.width - menuWidth;
-	renderViewPort.height = viewport.height - 100;
-	renderViewPort.y = 100;
+	renderViewPort.height = viewport.height;
     initialize();
 }
 
 HouseRenderer::~HouseRenderer() {
-	print("destruct");
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
 	mainMenuButton->removeListener(this);
 	SAFE_RELEASE(houseRendererForm);
@@ -32,7 +30,7 @@ void HouseRenderer::initialize() {
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 	
 	float maxPixels = min((renderViewPort.width / (float)sqrt(2)), renderViewPort.height);
-	renderHeight = 100 * viewport.height / maxPixels;
+	renderHeight = 110 * viewport.height / maxPixels;
 #ifdef PERSPECTIVE
     Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
     Node* cameraNode = scene->addNode();
@@ -58,14 +56,18 @@ void HouseRenderer::initialize() {
 void HouseRenderer::createMenu(float menuWidth) {
 	nextRenderer = KEEP;
 	houseRendererForm = Form::create("res/menu/houseRenderer.form");
+
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
 	mainMenuButton->addListener(this, Control::Listener::CLICK);
 	mainMenuButton->setWidth(menuWidth);
+	
+	Control* refreshButton = houseRendererForm->getControl("refreshButton");
+	refreshButton->addListener(this, Control::Listener::CLICK);
+	refreshButton->setWidth(menuWidth);
 }
 
 void HouseRenderer::createHouse(float renderHeight) {
-    house = new House(7, 7);
-    floorTiles = new Floor*[house->getWidth() * house->getHeight()];
+    house = new House(rand() % 11 + 5, rand() % 11 + 5);
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
@@ -77,25 +79,11 @@ void HouseRenderer::createHouse(float renderHeight) {
     float screenSize = 100;
 #endif
 
-    Floor::width = screenSize / house->getWidth();
-    Floor::height = screenSize / house->getHeight();
-
-    for (int x = 0; x < house->getWidth(); x++) {
-        for (int y = 0; y < house->getHeight(); y++) {
-            // Make a new floor tile
-            Floor* floor = new Floor(stateBlock, (x - (float)house->getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)house->getHeight() / 2) * Floor::height + Floor::height / 2);
-
-            Node* tileNode = scene->addNode();
-            tileNode->translateX(floor->getX());
-            tileNode->translateY(floor->getY());
-            tileNode->setModel(floor->getModel());
-            floorTiles[x + y * house->getWidth()] = floor;
-        }
-    };
+	house->addFloor(scene, stateBlock, screenSize);
 }
 
 void HouseRenderer::createRoom() {
-	Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
+	/*Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
 	for(int i = 0; i < house->getWidth()*house->getHeight(); i++) {
 		switch(i) {
 		case 0:
@@ -103,14 +91,16 @@ void HouseRenderer::createRoom() {
 		case 5:
 		case 6:
 		case 7:
-			roomTiles[i] = floorTiles[i];
+			roomTiles[i] = house->getFloorTile(i);
 			break;
 		default:
 			roomTiles[i] = NULL;
 		}
-	}
+	}*/
 
-	house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
+	//house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
+
+	house->addRandomRooms(scene, stateBlock);
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
@@ -121,26 +111,35 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
 #else
     Vector2* destination = new Vector2();
-    destination->x = (float)x / renderViewPort.width * renderHeight / sqrt(2) * aspectRatio - renderHeight / 2 / sqrt(2) * aspectRatio;
-    destination->y = (float)y / renderViewPort.height * renderHeight - renderHeight / 2;
+    destination->x = (float)x * renderHeight / viewport.height / sqrt(2) - renderHeight / 2;
+    destination->y = (float)y * renderHeight / viewport.height - renderHeight / 2;
 
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
     rotated->y = (destination->x - destination->y);
 
     destination = rotated;
-#endif
-	if (destination->x < -50 || destination->x > 50 || destination->y < -50 || destination->y > 50) {
-		prevFloor = NULL;
-		return;
-	}
 
+	destination->x /= 2;
+	destination->y /= 2;
+#endif
+
+	if (house->getWidth() < house->getHeight()) {
+		destination->x = destination->x / house->getWidth() * house->getHeight();
+	}else {
+		destination->y = destination->y / house->getHeight() * house->getWidth();
+	}
     destination->x += 50;
     destination->y += 50;
 
     int floorX = (int)(destination->x / 100 * house->getWidth());
     int floorY = (int)(destination->y / 100 * house->getHeight());
-    Floor* floor = floorTiles[floorX + floorY * house->getWidth()];
+	int id = house->getIdByXY(floorX, floorY);
+	if (id == -1) {
+		prevFloor = NULL;
+		return;
+	}
+	Floor* floor = house->getFloorTile(id);
 
     if (floor != prevFloor) {
         // same model twice, don't toggle
@@ -158,9 +157,9 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 		Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
 		
 		for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
-			if (floorTiles[i]->getSelected()) {
-				floorTiles[i]->toggleSelect();
-				roomTiles[i] = floorTiles[i];
+			if (house->getFloorTile(i)->getSelected()) {
+				house->getFloorTile(i)->toggleSelect();
+				roomTiles[i] = house->getFloorTile(i);
 			} else {
 				roomTiles[i] = NULL;
 			}
@@ -177,8 +176,8 @@ Renderers HouseRenderer::update(float elapsedTime) {
 void HouseRenderer::render(float elapsedTime) {
     // Draw the scene
 	houseRendererForm->draw();
-	Floor** curFloor = floorTiles;
-	while (curFloor - floorTiles < house->getWidth() * house->getHeight()) {
+	Floor** curFloor = house->getFloorTiles();
+	while (curFloor - house->getFloorTiles() < house->getWidth() * house->getHeight()) {
 		(*curFloor)->getModel()->draw();
 		curFloor++;
     }
@@ -192,5 +191,8 @@ void HouseRenderer::render(float elapsedTime) {
 void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType evt) {
 	if (!strcmp("mainMenuButton", control->getId())) {
 		nextRenderer = MAIN_MENU;
+	}else if (!strcmp("refreshButton", control->getId())) {
+		createHouse(0);
+		createRoom();
 	}
 }
