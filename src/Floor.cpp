@@ -1,5 +1,6 @@
 
 #include "Floor.h"
+#include "MaterialManager.h"
 
 
 float Floor::width, Floor::height;
@@ -10,7 +11,7 @@ Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     realColor = color = FLOOR_UNSELECTED;
     selected = false;
 
-    model->setMaterial("res/house/floor.material")->setStateBlock(stateBlock);
+    model->setMaterial(MaterialManager::getMaterial(FLOOR));
     setColor(color);
 }
  

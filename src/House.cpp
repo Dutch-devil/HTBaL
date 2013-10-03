@@ -1,5 +1,5 @@
 #include "House.h"
-
+#include "MaterialManager.h"
 
 House::House(int w, int h): width(w), height(h) {
     if(width <= 0 || height <= 0) {
@@ -17,10 +17,10 @@ void House::addFloor(Scene* scene, float screenSize) {
     float maxAxis = max(getWidth(), getHeight());
     Floor::width = screenSize / maxAxis;
     Floor::height = screenSize / maxAxis;
-
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
+			
             Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)getHeight() / 2) * Floor::height + Floor::height / 2);
 
             Node* tileNode = scene->addNode();

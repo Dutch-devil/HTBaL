@@ -6,16 +6,7 @@
 using namespace gameplay;
 
 enum MaterialType {
-	FLOOR_EMPTY,
-	FLOOR_HALL_START,
-	FLOOR_HALL,
-	FLOOR_ROOM,
-	FLOOR_STAIR,
-	FLOOR_EMPTY_SEL,
-	FLOOR_HALL_START_SEL,
-	FLOOR_HALL_SEL,
-	FLOOR_ROOM_SEL,
-	FLOOR_STAIR_SEL,
+	FLOOR,
 	WALL,
 	COUNT
 };
@@ -25,8 +16,9 @@ public:
 	static Material* getMaterial(MaterialType type);
 
 private:
-	static Material** materialArray;
+	static Properties** propertiesArray;
 	static RenderState::StateBlock* stateBlock;
+	static Properties* fixProperties(Properties* properties);
 	MaterialManager();
 };
 
