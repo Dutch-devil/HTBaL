@@ -124,8 +124,8 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 #endif
 
 	int maxSize = max(house->getWidth(), house->getHeight());
-    int floorX = (int)(destination->x / 100 * maxSize + house->getWidth() / 2);
-    int floorY = (int)(destination->y / 100 * maxSize + house->getHeight() / 2);
+    int floorX = (int)(destination->x / 100 * maxSize + (float)house->getWidth() / 2);
+    int floorY = (int)(destination->y / 100 * maxSize + (float)house->getHeight() / 2);
 
 	int id = house->getIdByXY(floorX, floorY);
 	if (id == -1) {
