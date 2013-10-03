@@ -58,6 +58,9 @@
     <ClCompile Include="src\HouseRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MaterialManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\HouseRenderer.h">
@@ -86,6 +89,9 @@
     </ClInclude>
     <ClInclude Include="src\Room.h">
       <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MaterialManager.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

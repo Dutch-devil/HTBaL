@@ -13,7 +13,7 @@ House::House(int w, int h): width(w), height(h) {
 House::~House(void) {
 }
 
-void House::addFloor(Scene* scene, RenderState::StateBlock* stateBlock, float screenSize) {
+void House::addFloor(Scene* scene, float screenSize) {
     float maxAxis = max(getWidth(), getHeight());
     Floor::width = screenSize / maxAxis;
     Floor::height = screenSize / maxAxis;
@@ -21,7 +21,7 @@ void House::addFloor(Scene* scene, RenderState::StateBlock* stateBlock, float sc
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
-            Floor* floor = new Floor(getIdByXY(x, y), stateBlock, (x - (float)getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)getHeight() / 2) * Floor::height + Floor::height / 2);
+            Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)getHeight() / 2) * Floor::height + Floor::height / 2);
 
             Node* tileNode = scene->addNode();
             tileNode->translateX(floor->getX());
@@ -78,7 +78,7 @@ int House::getYById(int id) {
     return id / width;
 }
 
-House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) {
+House* House::addRandomRooms(Scene* scene) {
     if (this->getRooms().size() != 0) {
         throw "Cannot add rooms to non-empty house";
     }
@@ -123,7 +123,7 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
     } else {
         roomTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true));
     }
-    addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
+    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
 
     // create the hallway connecting to the hallstart
     // select random room from possible hall places
@@ -189,7 +189,7 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
         roomTiles.push_back(tile);
     }
 	tile->setSelected(true);
-    addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
+    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
 
     for (int id : *hallPossibilities) {
         getFloorTile(id)->setSelected(true);

@@ -1,6 +1,7 @@
 #include "Wall.h"
+#include "MaterialManager.h"
 
-Wall::Wall(RenderState::StateBlock* stateBlock, Vector2* start, Vector2* end): stateBlock(stateBlock), start(start), end(end) {
+Wall::Wall(Vector2* start, Vector2* end): start(start), end(end) {
 	model = NULL;
 }
 
@@ -28,8 +29,7 @@ Model* Wall::getModel() {
         model = Model::create(getMesh());
 
         // Create the ground material
-        Material* wallMaterial = model->setMaterial("res/house/wall.material");
-        wallMaterial->setStateBlock(stateBlock);
+        model->setMaterial(MaterialManager::getMaterial(WALL));
     }
     return model;
 }

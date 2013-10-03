@@ -4,7 +4,7 @@
 
 float Floor::width, Floor::height;
 
-Floor::Floor(int id, RenderState::StateBlock* stateBlock, float x, float y): id(id), x(x), y(y) {
+Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     this->model = Model::create(getMesh());
 
     realColor = color = FLOOR_UNSELECTED;

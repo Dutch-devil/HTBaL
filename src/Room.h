@@ -19,8 +19,7 @@ public:
 
 	list<Wall*> getWalls();
 
-	static Room* createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, list<Floor*> roomTiles);
-	static Wall* getDuplicateWall(Wall* wall, list<Wall*> walls);
+	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
 
 protected:
 	int x;
