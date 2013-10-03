@@ -7,8 +7,7 @@
 HTBaL game;
 
 // Our constructor :)
-HTBaL::HTBaL() {
-}
+HTBaL::HTBaL() {}
 
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {
@@ -27,6 +26,14 @@ void HTBaL::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contact
 // When we receive a key event, we send it to the active renderer.
 void HTBaL::keyEvent(Keyboard::KeyEvent evt, int key) {
 	activeRenderer->keyEvent(evt, key);
+}
+
+void HTBaL::resizeEvent(unsigned int width, unsigned int height) {
+	Rectangle viewport = getViewport();
+	viewport.width = width;
+	viewport.height = height;
+	setViewport(viewport);
+	activeRenderer->resizeEvent(width, height);
 }
 
 // We let the activerenderer update, and, with the return value of the

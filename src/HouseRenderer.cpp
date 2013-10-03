@@ -4,10 +4,6 @@
 //#define PERSPECTIVE
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
-    this->aspectRatio = viewport.width / viewport.height;
-	menuWidth = 300;
-	renderViewPort.width = viewport.width - menuWidth;
-	renderViewPort.height = viewport.height;
     initialize();
 }
 
@@ -29,33 +25,63 @@ void HouseRenderer::initialize() {
     stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
     stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 	
+#ifdef PERSPECTIVE
+	Camera* camera = Camera::createPerspective(0, 0, 0, 0);
+#else
+    Camera* camera = Camera::createOrthographic(0, 0, 0, 0, 0);
+#endif
+	Node* cameraNode = scene->addNode();
+	cameraNode->setCamera(camera);
+    scene->setActiveCamera(camera);
+
+	resize();
+
+    createHouse(false);
+    createRoom();
+}
+
+void HouseRenderer::resize() {
+    this->aspectRatio = viewport.width / viewport.height;
+	menuWidth = 300;
+	renderViewPort.width = viewport.width - menuWidth;
+	renderViewPort.height = viewport.height;
+	
 	float maxPixels = min((renderViewPort.width / (float)sqrt(2)), renderViewPort.height);
 	renderHeight = 110 * viewport.height / maxPixels;
+	Camera* camera = scene->getActiveCamera();
+	Node* cameraNode = camera->getNode();
+	if (cameraNode != NULL) {
+		scene->removeNode(cameraNode);
+		SAFE_RELEASE(cameraNode);
+	}
+	cameraNode = scene->addNode();
+    cameraNode->setCamera(camera);
+
+	camera->setAspectRatio(aspectRatio);
 #ifdef PERSPECTIVE
-    Camera* camera = Camera::createPerspective(45, aspectRatio, 0.25, 100.1);
-    Node* cameraNode = scene->addNode();
+	camera->setFieldOfView(45);
+	camera->setNearPlane(0.25);
+	camera->setFarPlane(100.1);
 #else
-    Camera* camera = Camera::createOrthographic(aspectRatio * renderHeight, renderHeight, aspectRatio, 0.25, 600);
-    Node* cameraNode = scene->addNode();
+	camera->setZoomX(aspectRatio * renderHeight);
+	camera->setZoomY(renderHeight);
+	camera->setNearPlane(0.25);
+	camera->setFarPlane(600);
+
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
 #endif
 	cameraNode->translateLeft(-renderHeight * ((viewport.width - renderViewPort.width) / 2 - renderViewPort.x) / (viewport.height));
 	cameraNode->translateUp(-renderHeight * ((viewport.height - renderViewPort.height) / 2 - renderViewPort.y) / (viewport.height));
-	 
-    cameraNode->setCamera(camera);
-    scene->setActiveCamera(camera);
 
     cameraNode->translateForward(-100);
-
+	
+	houseRendererForm = Form::create("res/menu/houseRenderer.form");
 	createMenu(menuWidth);
-    createHouse(renderHeight);
-    createRoom();
 }
 
 void HouseRenderer::createMenu(float menuWidth) {
 	nextRenderer = KEEP;
-	houseRendererForm = Form::create("res/menu/houseRenderer.form");
 
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
 	mainMenuButton->addListener(this, Control::Listener::CLICK);
@@ -66,8 +92,12 @@ void HouseRenderer::createMenu(float menuWidth) {
 	refreshButton->setWidth(menuWidth);
 }
 
-void HouseRenderer::createHouse(float renderHeight) {
-    house = new House(rand() % 11 + 5, rand() % 11 + 5);
+void HouseRenderer::createHouse(bool random) {
+	if (random) {
+		house = new House(rand() % 11 + 5, rand() % 11 + 5);
+	}else {
+		house = new House(5, 5);
+	}
 #ifdef PERSPECTIVE
     Vector3* destination = new Vector3();
     scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
@@ -158,6 +188,10 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles));
 	}
 }
+void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
+	Renderer::resizeEvent(width, height);
+	resize();
+}
 
 Renderers HouseRenderer::update(float elapsedTime) {
 	houseRendererForm->update(elapsedTime);
@@ -183,7 +217,7 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
 	if (!strcmp("mainMenuButton", control->getId())) {
 		nextRenderer = MAIN_MENU;
 	}else if (!strcmp("refreshButton", control->getId())) {
-		createHouse(0);
+		createHouse(true);
 		createRoom();
 	}
 }

@@ -45,6 +45,8 @@ protected:
 
 	
 	void keyEvent(Keyboard::KeyEvent evt, int key);
+	
+	void resizeEvent(unsigned int width, unsigned int height);
 
     /**
      * Update callback for handling update routines.

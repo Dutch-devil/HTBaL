@@ -22,11 +22,12 @@ public:
 	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 	
 	virtual void keyEvent(Keyboard::KeyEvent evt, int key);
+	
+	virtual void resizeEvent(unsigned int width, unsigned int height);
 
     virtual Renderers update(float elapsedTime) = 0;
 
     virtual void render(float elapsedTime) = 0;
-
 protected:
 	Rectangle viewport;
 };
