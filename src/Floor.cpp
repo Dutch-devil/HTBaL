@@ -42,11 +42,14 @@ Vector3* Floor::getColor() {
 }
 
 bool Floor::isColor(Vector3* other) {
-    return color->x == other->x && color->y == other->y && color->z == other->z;
+    return realColor->x == other->x && realColor->y == other->y && realColor->z == other->z;
 }
 
 Floor* Floor::setColor(Vector3* color) {
     this->realColor = color;
+	if (!getSelected()) {
+		this->color = realColor;
+	}
 	updateColor();
 	return this;
 }
@@ -84,7 +87,7 @@ void Floor::toggleSelect() {
     if (selected) {
         color = FLOOR_SELECTED;
     } else {
-        color = FLOOR_UNSELECTED;
+        color = realColor;
     }
 	updateColor();
 }

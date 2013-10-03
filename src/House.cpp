@@ -78,7 +78,7 @@ int House::getYById(int id) {
     return id / width;
 }
 
-House* House::addRandomRooms(Scene* scene) {
+void House::addRandomRooms(Scene* scene) {
     if (this->getRooms().size() != 0) {
         throw "Cannot add rooms to non-empty house";
     }
@@ -191,7 +191,6 @@ House* House::addRandomRooms(Scene* scene) {
         tile->setColor(FLOOR_HALL);
     }
 	tile->setSelected(true);
-    addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
 
     // get all tiles next to hall tiles
     vector<int>* roomStartPosibilities = new vector<int>();
@@ -201,6 +200,7 @@ House* House::addRandomRooms(Scene* scene) {
 	list<Floor*> gaps = getGaps(roomStartPosibilities, 3);
 	for (Floor* gap : gaps) {
 		gap->setColor(FLOOR_HALL);
+		removeId(roomStartPosibilities, gap->getId());
 	}
 	roomTiles.merge(gaps);
     addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
@@ -225,21 +225,35 @@ House* House::addRandomRooms(Scene* scene) {
             }
             id = (*roomPossibilities)[(int)(rand() % roomPossibilities->size())];
             tile = getFloorTile(id);
+
             roomTiles.push_back(tile->setSelected(true));
             removeId(roomStartPosibilities, tile->getId());
             removeId(roomPossibilities, tile->getId());
             pushAllRoomAround(roomPossibilities, getXById(tile->getId()), getYById(tile->getId()));
         }
-
-        roomTiles.merge(getGaps(roomPossibilities));
+		list<Floor*> gaps = getGaps(roomPossibilities);
+		for (Floor* gap : gaps) {
+			removeId(roomStartPosibilities, gap->getId());
+		}
+        roomTiles.merge(gaps);
 
         if (roomTiles.size() >= 4) {
             for (Floor* roomTile : roomTiles) {
                 roomTile->setColor(FLOOR_ROOM);
             }
             addRoom(Room::createRoomFromFloor(scene, this, roomTiles));
-        }
+        }else {
+			for (Floor* roomTile : roomTiles) {
+				roomTile->setSelected(false);
+			}
+		}
     }
+	for (int i = 0; i < getWidth() * getHeight(); i++) {
+		if (!getFloorTile(i)->getSelected()) {
+			getFloorTile(i)->setColor(FLOOR_BLACK);
+		}
+		getFloorTile(i)->setSelected(false);
+	}
 }
 
 void House::clearAllAround(vector<int>* ids, int x, int y) {

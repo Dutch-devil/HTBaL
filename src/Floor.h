@@ -7,6 +7,7 @@
 #define FLOOR_GREEN new Vector3(0, 1, 0)
 #define FLOOR_BLUE new Vector3(0, 0, 1)
 #define FLOOR_YELLOW new Vector3(1, 1, 0)
+#define FLOOR_BLACK new Vector3(0, 0, 0)
 
 #define FLOOR_UNSELECTED FLOOR_WHITE
 #define FLOOR_SELECTED FLOOR_RED

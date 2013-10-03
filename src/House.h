@@ -29,7 +29,7 @@ public:
 	Floor* getFloorTile(int x, int y);
 
 	list<Room*> getRooms();
-	House* addRandomRooms(Scene* scene);
+	void addRandomRooms(Scene* scene);
 
 	void clearAllAround(vector<int>* ids, int x, int y);
 	void pushAllHallAround(vector<int>* ids, int x, int y);
