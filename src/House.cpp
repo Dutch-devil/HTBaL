@@ -145,6 +145,9 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
 	int curX, curY, dir = -1;
 	tile = NULL;
     for (int i = 0; i < getWidth() * getHeight() / 6.2; i++) {
+		if (hallPossibilities->empty()) {
+			break;
+		}
 		id = -1;
 		if (dir != -1) {
 			int testX = curX + (dir == 0?-1:(dir == 2?1:0));

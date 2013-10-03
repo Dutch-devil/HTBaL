@@ -33,6 +33,10 @@ void HouseRenderer::initialize() {
 	Node* cameraNode = scene->addNode();
 	cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
+#ifndef PERSPECTIVE
+    cameraNode->rotateZ(3.14f / 4);
+    cameraNode->rotateX(3.14f / 4);
+#endif
 
 	resize();
 
@@ -50,12 +54,7 @@ void HouseRenderer::resize() {
 	renderHeight = 110 * viewport.height / maxPixels;
 	Camera* camera = scene->getActiveCamera();
 	Node* cameraNode = camera->getNode();
-	if (cameraNode != NULL) {
-		scene->removeNode(cameraNode);
-		SAFE_RELEASE(cameraNode);
-	}
-	cameraNode = scene->addNode();
-    cameraNode->setCamera(camera);
+	cameraNode->setTranslation(Vector3::zero());
 
 	camera->setAspectRatio(aspectRatio);
 #ifdef PERSPECTIVE
@@ -68,8 +67,6 @@ void HouseRenderer::resize() {
 	camera->setNearPlane(0.25);
 	camera->setFarPlane(600);
 
-    cameraNode->rotateZ(3.14f / 4);
-    cameraNode->rotateX(3.14f / 4);
 #endif
 	cameraNode->translateLeft(-renderHeight * ((viewport.width - renderViewPort.width) / 2 - renderViewPort.x) / (viewport.height));
 	cameraNode->translateUp(-renderHeight * ((viewport.height - renderViewPort.height) / 2 - renderViewPort.y) / (viewport.height));
