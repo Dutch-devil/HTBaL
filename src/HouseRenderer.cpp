@@ -124,16 +124,10 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     destination = rotated;
 #endif
 
-	if (house->getWidth() < house->getHeight()) {
-		destination->x = destination->x / house->getWidth() * house->getHeight();
-	}else {
-		destination->y = destination->y / house->getHeight() * house->getWidth();
-	}
-    destination->x += 50;
-    destination->y += 50;
+	int maxSize = max(house->getWidth(), house->getHeight());
+    int floorX = (int)(destination->x / 100 * maxSize + house->getWidth() / 2);
+    int floorY = (int)(destination->y / 100 * maxSize + house->getHeight() / 2);
 
-    int floorX = (int)(destination->x / 100 * house->getWidth());
-    int floorY = (int)(destination->y / 100 * house->getHeight());
 	int id = house->getIdByXY(floorX, floorY);
 	if (id == -1) {
 		prevFloor = NULL;

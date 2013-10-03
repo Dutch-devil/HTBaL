@@ -116,7 +116,6 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
 	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles, getWidth() * getHeight()));
 
 	// create the hallway connecting to the hallstart
-	memset(roomTiles, NULL, sizeof(Floor*) * getWidth() * getHeight());
 	// select random room from possible hall places
 	int id = (int)(rand() % hallPossibilities->size());
 	Floor* tile = getFloorTile((*hallPossibilities)[id]);
@@ -125,7 +124,7 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
 	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles, getWidth() * getHeight()));
 
 
-	return NULL;
+	return this;
 }
 
 void House::pushAllHallAround(vector<int>* ids, int x, int y) {

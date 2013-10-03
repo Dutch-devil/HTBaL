@@ -12,7 +12,14 @@ list<Wall*> Room::getWalls() {
 	return walls;
 }
 
-Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, Floor** floorTiles, int tileCount) {
+Room* Room::createRoomFromFloor(Scene* scene, House* house, RenderState::StateBlock* stateBlock, Floor** roomTiles, int tileCount) {
+	Floor** floorTiles = new Floor*[house->getWidth() * house->getHeight()];
+	memset(floorTiles, NULL, sizeof(Floor*) * house->getWidth() * house->getHeight());
+
+	for (Floor** itr = roomTiles; itr < roomTiles + tileCount; itr++) {
+
+	}
+
     list<Wall*> walls;
 
 	for (int i = 0; i < tileCount; i++) {
