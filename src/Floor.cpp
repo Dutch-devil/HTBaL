@@ -4,6 +4,7 @@
 
 
 float Floor::width, Floor::height;
+Mesh* Floor::mesh = NULL;
 
 Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     this->model = Model::create(getMesh());
@@ -14,12 +15,32 @@ Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     model->setMaterial(MaterialManager::getMaterial(FLOOR));
     setColor(color);
 }
+
+void Floor::calculateMesh() {
+	mesh = Mesh::createQuad(Vector3(-Floor::width / 2, -Floor::height / 2, 0),
+						Vector3(Floor::width / 2, -Floor::height / 2, 0),
+						Vector3(-Floor::width / 2, Floor::height / 2, 0),
+						Vector3(Floor::width / 2, Floor::height / 2, 0));
+}
  
 Mesh* Floor::getMesh() {
-    return Mesh::createQuad(Vector3(-Floor::width / 2, -Floor::height / 2, 0),
-                            Vector3(Floor::width / 2, -Floor::height / 2, 0),
-                            Vector3(-Floor::width / 2, Floor::height / 2, 0),
-                            Vector3(Floor::width / 2, Floor::height / 2, 0));
+	if(mesh == NULL)
+		calculateMesh();
+	return mesh;
+}
+
+void Floor::setHeightWidth(float height, float width) {
+	Floor::height = height;
+	Floor::width = width;
+	calculateMesh();
+}
+
+float Floor::getHeight() {
+	return height;
+}
+
+float Floor::getWidth() {
+	return width;
 }
 
 Floor* Floor::setDoor(WallDir dir) {

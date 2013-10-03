@@ -19,9 +19,9 @@ Vector2* Wall::getEnd() {
 }
 
 Mesh* Wall::getMesh() {
-    return Mesh::createQuad(Vector3(start->x, start->y, (Floor::width + Floor::height) / 4),
+    return Mesh::createQuad(Vector3(start->x, start->y, (Floor::getWidth() + Floor::getHeight()) / 4),
                             Vector3(start->x, start->y, 0),
-                            Vector3(end->x, end->y, (Floor::width + Floor::height) / 4),
+                            Vector3(end->x, end->y, (Floor::getWidth() + Floor::getHeight()) / 4),
                             Vector3(end->x, end->y, 0));
 }
 
