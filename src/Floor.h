@@ -28,7 +28,7 @@ class Floor {
 public:
 	static float width, height;
 
-	Floor(int id, RenderState::StateBlock* stateBlock, float x, float y);
+	Floor(int id, float x, float y);
     ~Floor();
 	
 	Mesh* getMesh();

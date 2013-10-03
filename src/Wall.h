@@ -8,7 +8,7 @@ using namespace gameplay;
 
 class Wall {
 public:
-	Wall(RenderState::StateBlock* stateBlock, Vector2* start, Vector2* end);
+	Wall(Vector2* start, Vector2* end);
     ~Wall();
 
 	Vector2* getStart();
@@ -18,7 +18,6 @@ public:
 	Model* getModel();
 
 protected:
-	RenderState::StateBlock* stateBlock;
 	Vector2* start;
 	Vector2* end;
 	Model* model;

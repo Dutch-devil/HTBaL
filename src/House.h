@@ -13,7 +13,7 @@ class House {
 public:
 	House(int, int);
     ~House(void);
-	void addFloor(Scene* scene, RenderState::StateBlock* stateBlock, float screenSize);
+	void addFloor(Scene* scene, float screenSize);
 
 	void addRoom(Room* room);
 
@@ -29,7 +29,7 @@ public:
 	Floor* getFloorTile(int x, int y);
 
 	list<Room*> getRooms();
-	void addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock);
+	House* addRandomRooms(Scene* scene);
 
 	void clearAllAround(vector<int>* ids, int x, int y);
 	void pushAllHallAround(vector<int>* ids, int x, int y);

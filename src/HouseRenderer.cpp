@@ -20,14 +20,6 @@ HouseRenderer::~HouseRenderer() {
 
 void HouseRenderer::initialize() {
 	scene = Scene::create("HouseScene");
-
-    // Create our render state block that will be reused
-    // across all materials
-    stateBlock = RenderState::StateBlock::create();
-    stateBlock->setCullFace(false);
-    stateBlock->setBlend(true);
-    stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
-    stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 	
 #ifdef PERSPECTIVE
 	Camera* camera = Camera::createPerspective(0, 0, 0, 0);
@@ -115,7 +107,7 @@ void HouseRenderer::createHouse(bool random) {
     float screenSize = 100;
 #endif
 
-	house->addFloor(scene, stateBlock, screenSize);
+	house->addFloor(scene, screenSize);
 }
 
 void HouseRenderer::createRoom() {
@@ -136,7 +128,7 @@ void HouseRenderer::createRoom() {
 
 	//house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
 
-	house->addRandomRooms(scene, stateBlock);
+	house->addRandomRooms(scene);
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
@@ -191,7 +183,7 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 				roomTiles.push_back(house->getFloorTile(i));
 			}
 		}
-		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles));
+		house->addRoom(Room::createRoomFromFloor(scene, house, roomTiles));
 	}
 }
 void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {

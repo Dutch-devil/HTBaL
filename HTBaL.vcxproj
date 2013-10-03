@@ -336,6 +336,7 @@
     <ClCompile Include="src\HouseRenderer.cpp" />
     <ClCompile Include="src\HTBaL.cpp" />
     <ClCompile Include="src\MapRenderer.cpp" />
+    <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\MenuMainRenderer.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Room.cpp" />
@@ -347,6 +348,7 @@
     <ClInclude Include="src\HouseRenderer.h" />
     <ClInclude Include="src\HTBaL.h" />
     <ClInclude Include="src\MapRenderer.h" />
+    <ClInclude Include="src\MaterialManager.h" />
     <ClInclude Include="src\MenuMainRenderer.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Room.h" />
