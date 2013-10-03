@@ -17,11 +17,6 @@ HouseRenderer::~HouseRenderer() {
 
 void HouseRenderer::initialize() {
 	scene = Scene::create("HouseScene");
-<<<<<<< HEAD
-=======
-    house = new House(5, 10);
-    floorTiles = new Floor*[house->getWidth() * house->getHeight()];
->>>>>>> 4ccd9fa220fd0f0300f327bb091982a2e082fcf3
 
     // Create our render state block that will be reused
     // across all materials
