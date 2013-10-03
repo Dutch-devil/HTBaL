@@ -4,7 +4,7 @@
 
 float Floor::width, Floor::height;
 
-Floor::Floor(RenderState::StateBlock* stateBlock, float x, float y): x(x), y(y) {
+Floor::Floor(int id, RenderState::StateBlock* stateBlock, float x, float y): id(id), x(x), y(y) {
     this->model = Model::create(getMesh());
 
     realColor = color = FLOOR_UNSELECTED;
@@ -19,6 +19,10 @@ Mesh* Floor::getMesh() {
                             Vector3(Floor::width / 2, -Floor::height / 2, 0),
                             Vector3(-Floor::width / 2, Floor::height / 2, 0),
                             Vector3(Floor::width / 2, Floor::height / 2, 0));
+}
+
+int Floor::getId() {
+	return id;
 }
 
 float Floor::getX() {

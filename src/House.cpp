@@ -21,7 +21,7 @@ void House::addFloor(Scene* scene, RenderState::StateBlock* stateBlock, float sc
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
-            Floor* floor = new Floor(stateBlock, (x - (float)getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)getHeight() / 2) * Floor::height + Floor::height / 2);
+            Floor* floor = new Floor(getIdByXY(x, y), stateBlock, (x - (float)getWidth() / 2) * Floor::width + Floor::width / 2, (y - (float)getHeight() / 2) * Floor::height + Floor::height / 2);
 
             Node* tileNode = scene->addNode();
             tileNode->translateX(floor->getX());
@@ -95,34 +95,54 @@ House* House::addRandomRooms(Scene* scene, RenderState::StateBlock* stateBlock) 
 		hallStartX = rand() % 2 * (getWidth() - largeHallStart - 1);
 		hallStartY = rand() % (getHeight() - largeHallStart - 1);
 	}
-	Floor** roomTiles;
-	roomTiles = new Floor*[getWidth() * getHeight()];
-	memset(roomTiles, NULL, sizeof(Floor*) * getWidth() * getHeight());
+	list<Floor*> roomTiles = list<Floor*>();
 
 	// list of all possible hall places
 	vector<int>* hallPossibilities = new vector<int>();
-
+	
 	pushAllHallAround(hallPossibilities, hallStartX, hallStartY);
-	roomTiles[getIdByXY(hallStartX, hallStartY)] = getFloorTile(hallStartX, hallStartY)->setSelected(true);
 	if (largeHallStart) {
 		// add extra tiles to hallstart
 		pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY);
 		pushAllHallAround(hallPossibilities, hallStartX, hallStartY + 1);
 		pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY + 1);
-		roomTiles[getIdByXY(hallStartX + 1, hallStartY)] = getFloorTile(hallStartX + 1, hallStartY)->setSelected(true);
-		roomTiles[getIdByXY(hallStartX, hallStartY + 1)] = getFloorTile(hallStartX, hallStartY + 1)->setSelected(true);
-		roomTiles[getIdByXY(hallStartX + 1, hallStartY + 1)] = getFloorTile(hallStartX + 1, hallStartY + 1)->setSelected(true);
+		roomTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true));
+		roomTiles.push_back(getFloorTile(hallStartX + 1, hallStartY)->setSelected(true));
+		roomTiles.push_back(getFloorTile(hallStartX, hallStartY + 1)->setSelected(true));
+		roomTiles.push_back(getFloorTile(hallStartX + 1, hallStartY + 1)->setSelected(true));
+
+		for (vector<int>::iterator itr = hallPossibilities->begin(); itr != hallPossibilities->end();) {
+			int id = *itr;
+			if (id == getIdByXY(hallStartX, hallStartY) || id == getIdByXY(hallStartX + 1, hallStartY) ||
+						id == getIdByXY(hallStartX, hallStartY + 1) || id == getIdByXY(hallStartX + 1, hallStartY + 1)) {
+				itr = hallPossibilities->erase(itr);
+			}else {
+				itr++;
+			}
+		}
+	}else {
+		roomTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true));
 	}
-	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles, getWidth() * getHeight()));
+	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
 
 	// create the hallway connecting to the hallstart
 	// select random room from possible hall places
-	int id = (int)(rand() % hallPossibilities->size());
-	Floor* tile = getFloorTile((*hallPossibilities)[id]);
-	tile->setSelected(true);
-	roomTiles[getIdByXY(tile->getX(), tile->getY())] = tile;
-	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles, getWidth() * getHeight()));
+	roomTiles = list<Floor*>();
+	int id = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
 
+	hallPossibilities->clear();
+	pushAllHallAround(hallPossibilities, getXById(id), getYById(id));
+
+	Floor* tile = getFloorTile(id);
+	tile->setSelected(true);
+	roomTiles.push_back(tile);
+	addRoom(Room::createRoomFromFloor(scene, this, stateBlock, roomTiles));
+
+	for (int id : *hallPossibilities) {
+		getFloorTile(id)->setSelected(true);
+	}
+
+	// x + y - 5
 
 	return this;
 }

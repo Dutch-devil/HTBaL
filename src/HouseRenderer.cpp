@@ -116,7 +116,6 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 	destination->x = destination->x / sqrt(2);
 
-	print("%f %f\n", destination->x, destination->y);
     Vector2* rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
     rotated->y = (destination->x - destination->y);
@@ -148,17 +147,15 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
 void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 	if (key == 'r') {
-		Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
+		list<Floor*> roomTiles = list<Floor*>();
 		
 		for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
 			if (house->getFloorTile(i)->getSelected()) {
 				house->getFloorTile(i)->toggleSelect();
-				roomTiles[i] = house->getFloorTile(i);
-			} else {
-				roomTiles[i] = NULL;
+				roomTiles.push_back(house->getFloorTile(i));
 			}
 		}
-		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
+		house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles));
 	}
 }
 

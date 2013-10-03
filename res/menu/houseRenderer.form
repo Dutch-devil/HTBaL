@@ -8,11 +8,17 @@ form houseRenderer {
 	
 
     // All the Controls within this Form.
+	container {
+		height = 40
+	}
     button mainMenuButton {
 		style = buttonHover
 		text = Main Menu
 		group = formSelection
-		size = 480, 60
+		height = 60
 		alignment              = ALIGN_RIGHT
+	}
+    button refreshButton : mainMenuButton {
+		text = Refresh
 	}
 }

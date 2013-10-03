@@ -22,10 +22,12 @@ class Floor {
 public:
 	static float width, height;
 
-	Floor(RenderState::StateBlock* stateBlock, float x, float y);
+	Floor(int id, RenderState::StateBlock* stateBlock, float x, float y);
     ~Floor();
 	
 	Mesh* getMesh();
+	int getId();
+
 	float getX();
 	float getY();
 	Model* getModel();
@@ -42,6 +44,7 @@ public:
 	void toggleSelect();
 
 protected:
+	int id;
 	float x, y;
 	Model* model;
 	Vector3* color;
