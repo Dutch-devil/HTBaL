@@ -331,10 +331,12 @@
     <None Include="res\colored.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Flags.cpp" />
     <ClCompile Include="src\Floor.cpp" />
     <ClCompile Include="src\House.cpp" />
     <ClCompile Include="src\HouseRenderer.cpp" />
     <ClCompile Include="src\HTBaL.cpp" />
+    <ClCompile Include="src\KeyFlags.cpp" />
     <ClCompile Include="src\MapRenderer.cpp" />
     <ClCompile Include="src\MaterialManager.cpp" />
     <ClCompile Include="src\MenuMainRenderer.cpp" />
@@ -343,10 +345,12 @@
     <ClCompile Include="src\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Flags.h" />
     <ClInclude Include="src\Floor.h" />
     <ClInclude Include="src\House.h" />
     <ClInclude Include="src\HouseRenderer.h" />
     <ClInclude Include="src\HTBaL.h" />
+    <ClInclude Include="src\KeyFlags.h" />
     <ClInclude Include="src\MapRenderer.h" />
     <ClInclude Include="src\MaterialManager.h" />
     <ClInclude Include="src\MenuMainRenderer.h" />

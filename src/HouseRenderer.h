@@ -1,6 +1,9 @@
 #ifndef HouseRenderer_H_
 #define HouseRenderer_H_
 
+#define SCROLL_SPEED .12
+#define ZOOM_SPEED .1
+
 class HouseRenderer;
 
 #include "gameplay.h"
@@ -25,7 +28,7 @@ public:
 	
 	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging);
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-	void keyEvent(Keyboard::KeyEvent evt, int key);
+	void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
 	void resizeEvent(unsigned int width, unsigned int height);
 
 	Renderers update(float elapsedTime);
@@ -35,6 +38,9 @@ public:
 
 protected:
 	Rectangle renderViewPort;
+	Vector3* initialTranslate;
+	Vector3* curTranslate;
+	float zoomLevel;
 
 	Scene* scene;
 	House* house;
@@ -51,6 +57,7 @@ protected:
 	
 	void initialize();
 	void resize();
+	void setCamera();
 	int getViewTileId(int x, int y);
 };
 

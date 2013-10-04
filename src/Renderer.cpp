@@ -3,6 +3,7 @@
 Renderer::Renderer(Rectangle viewport) {
 	this->viewport = viewport;
 	buttonDown = 0;
+	keyFlags = NULL;
 }
 Renderer::~Renderer() {}
 
@@ -48,8 +49,23 @@ bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bo
 
 void Renderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {}
 
+void Renderer::keyEvent(Keyboard::KeyEvent evt, int key) {
+	if (evt == Keyboard::KeyEvent::KEY_PRESS) {
+		getKeyFlags()->setFlag(key);
+	}else if (evt == Keyboard::KeyEvent::KEY_RELEASE) {
+		getKeyFlags()->resetFlag(key);
+	}
+	keyEvent(evt, key, getKeyFlags());
+}
+void Renderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {}
 
-void Renderer::keyEvent(Keyboard::KeyEvent evt, int key) {}
+KeyFlags* Renderer::getKeyFlags() {
+	if (keyFlags == NULL) {
+		keyFlags = new KeyFlags();
+	}
+	return keyFlags;
+}
+
 void Renderer::resizeEvent(unsigned int width, unsigned int height) {
 	this->viewport.width = width;
 	this->viewport.height = height;
