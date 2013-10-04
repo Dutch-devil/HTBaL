@@ -139,10 +139,10 @@ void House::addRandomRooms(Scene* scene) {
     int prevY = getYById(id);
 
     Floor* tile = getFloorTile(id);
+
 	tile->setDoor(start.dir);
-	print("setting hall door:\n");
 	setDoor(hallStartTiles, start);
-	print("done \n\n");
+
     tile->setSelected(true);
     hallTiles.push_back(tile);
     tile->setColor(FLOOR_HALL);
@@ -270,9 +270,7 @@ void House::addRandomRooms(Scene* scene) {
 void House::setDoor(list<Floor*> tiles, WalledTile adjacent) {
 	int searchId = getIdByXY(getXById(adjacent.id) + (adjacent.dir == LEFT?-1:(adjacent.dir == RIGHT?1:0)),
 							 getYById(adjacent.id) + (adjacent.dir == BOTTOM?-1:(adjacent.dir == TOP?1:0)));
-	print("searching id %d\n", searchId);
 	for (Floor* tile : tiles) {
-		print("tile: %d\n", tile->getId());
 		if (tile->getId() == searchId) {
 			tile->setDoor(adjacent.dir == LEFT?RIGHT:(adjacent.dir == RIGHT?LEFT:(adjacent.dir == TOP?BOTTOM:(adjacent.dir == BOTTOM?TOP:NONE))));
 			break;

@@ -23,10 +23,9 @@ public:
 	void createHouse(bool random);
 	void createRoom();
 	
+	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging);
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-	
 	void keyEvent(Keyboard::KeyEvent evt, int key);
-	
 	void resizeEvent(unsigned int width, unsigned int height);
 
 	Renderers update(float elapsedTime);
@@ -35,8 +34,6 @@ public:
 	void controlEvent(Control* control, Control::Listener::EventType evt);
 
 protected:
-	void initialize();
-	void resize();
 	Rectangle renderViewPort;
 
 	Scene* scene;
@@ -47,9 +44,14 @@ protected:
 	float renderHeight;
 
 	Floor* prevFloor;
+	Floor* prevHover;
 
 	Form* houseRendererForm;
 	Renderers nextRenderer;
+	
+	void initialize();
+	void resize();
+	int getViewTileId(int x, int y);
 };
 
 

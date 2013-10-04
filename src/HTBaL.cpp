@@ -18,6 +18,10 @@ void HTBaL::initialize() {
 void HTBaL::finalize() {
 }
 
+bool HTBaL::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
+	return activeRenderer->mouseEvent(evt, x, y, wheelData);
+}
+
 // When we receive a touch event, we send it to the active renderer.
 void HTBaL::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
 	activeRenderer->touchEvent(evt, x, y, contactIndex);

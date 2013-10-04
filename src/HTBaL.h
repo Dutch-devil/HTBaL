@@ -30,6 +30,8 @@ protected:
 	  * This cleans up everything. 
 	  */
     void finalize();
+	
+	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData);
 
     /**
      * Touch callback on touch events.
@@ -43,7 +45,6 @@ protected:
      */
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 
-	
 	void keyEvent(Keyboard::KeyEvent evt, int key);
 	
 	void resizeEvent(unsigned int width, unsigned int height);

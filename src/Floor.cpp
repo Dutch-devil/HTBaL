@@ -9,7 +9,7 @@ Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     this->model = Model::create(getMesh());
 
     realColor = color = FLOOR_UNSELECTED;
-    selected = false;
+    hover = selected = false;
 
     model->setMaterial(MaterialManager::getMaterial(FLOOR));
     setColor(color);
@@ -64,22 +64,20 @@ Floor* Floor::setColor(Vector3* color) {
 }
 
 void Floor::updateColor() {
+	if (selected && hover) {
+        color = &FLOOR_HOVER_SELECTED;
+    } else if (selected) {
+		color = FLOOR_SELECTED;
+	}else if (hover) {
+		color = FLOOR_HOVER;
+	}else {
+        color = realColor;
+    }
     model->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(blendColors(color, realColor));
 }
 
 Vector3 Floor::blendColors(Vector3* color1, Vector3* color2) {
     return .5 * (*color1) + .5 * (*color2);
-}
-
-bool Floor::getSelected() {
-	return selected;
-}
-
-Floor* Floor::setSelected(bool selected) {
-	if (getSelected() != selected) {
-		toggleSelect();
-	}
-	return this;
 }
 
 void Floor::toggleColor(Vector3* first, Vector3* second) {
@@ -91,12 +89,24 @@ void Floor::toggleColor(Vector3* first, Vector3* second) {
     }
 }
 
-void Floor::toggleSelect() {
-    selected = !selected;
-    if (selected) {
-        color = FLOOR_SELECTED;
-    } else {
-        color = realColor;
-    }
+bool Floor::getSelected() {
+	return selected;
+}
+
+Floor* Floor::setSelected(bool selected) {
+	this->selected = selected;
 	updateColor();
+	return this;
+}
+
+Floor* Floor::toggleSelect() {
+    selected = !selected;
+	updateColor();
+	return this;
+}
+
+Floor* Floor::setHover(bool hover) {
+	this->hover = hover;
+	updateColor();
+	return this;
 }

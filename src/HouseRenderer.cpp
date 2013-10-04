@@ -91,6 +91,7 @@ void HouseRenderer::createMenu(float menuWidth) {
 }
 
 void HouseRenderer::createHouse(bool random) {
+	prevHover = false;
 	if (random) {
 		house = new House(rand() % 11 + 5, rand() % 11 + 5);
 	}else {
@@ -130,32 +131,57 @@ void HouseRenderer::createRoom() {
 
 	house->addRandomRooms(scene);
 }
+	
+bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging) {
+	if (dragging) {
+		if (leftButtonDown()) {
+			// Dragging left button
+		}
+		if (rightButtonDown()) {
+			// Dragging right button
+		}
+		if (middleButtonDown()) {
+			// Dragging middle button
+		}
+		// Dragging should be handled by the touchEvent
+		return false;
+	}else if (evt == Mouse::MOUSE_MOVE) {
+		// Moved mouse withoud dragging
+		int id = getViewTileId(x, y);
+		if (prevHover != NULL && id != prevHover->getId()) {
+			prevHover->setHover(false);
+			prevHover = NULL;
+		}
+		if (id != -1) {
+			prevHover = house->getFloorTile(id)->setHover(true);
+		}
+	}else if (evt == Mouse::MOUSE_WHEEL) {
+		// Scrolled the mouse wheel
+		Camera* camera = scene->getActiveCamera();
+#ifdef PERSPECTIVE
+#else
+		camera->setZoomX(camera->getZoomX() * (1 - (float)wheelData / 10));
+		camera->setZoomY(camera->getZoomY() * (1 - (float)wheelData / 10));
+#endif
+	}else {
+		// Clicked any button on the mouse
+		if (evt == Mouse::MOUSE_PRESS_LEFT_BUTTON && prevHover != NULL) {
+			prevHover->setHover(false);
+			prevHover = NULL;
+		}else if (evt == Mouse::MOUSE_RELEASE_LEFT_BUTTON) {
+			int id = getViewTileId(x, y);
+			if (id != -1) {
+				prevHover = house->getFloorTile(id)->setHover(true);
+			}
+		}
+		// Mouse click should be handled by touchEvent
+		return false;
+	}
+	return true;
+}
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
-	x -= renderViewPort.x;
-	y -= renderViewPort.y;
-#ifdef PERSPECTIVE
-    Vector3* destination = new Vector3();
-    scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
-#else
-    Vector2* destination = new Vector2();
-	destination->x = (x - renderViewPort.width/2) / viewport.height * renderHeight;
-	destination->y = (y - renderViewPort.height/2) / viewport.height * renderHeight;
-
-	destination->x = destination->x / sqrt(2);
-
-    Vector2* rotated = new Vector2();
-    rotated->x = (destination->x + destination->y);
-    rotated->y = (destination->x - destination->y);
-
-    destination = rotated;
-#endif
-
-	int maxSize = max(house->getWidth(), house->getHeight());
-    int floorX = (int)(destination->x / 100 * maxSize + (float)house->getWidth() / 2);
-    int floorY = (int)(destination->y / 100 * maxSize + (float)house->getHeight() / 2);
-
-	int id = house->getIdByXY(floorX, floorY);
+	int id = getViewTileId(x, y);
 	if (id == -1) {
 		prevFloor = NULL;
 		return;
@@ -173,17 +199,57 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     }
 }
 
+int HouseRenderer::getViewTileId(int x, int y) {
+	print("%f, %f \n", scene->getActiveCamera()->getNode()->getTranslationWorld().x, scene->getActiveCamera()->getNode()->getTranslationWorld().y);
+
+	x -= renderViewPort.x;
+	y -= renderViewPort.y;
+#ifdef PERSPECTIVE
+    Vector3* destination = new Vector3();
+    scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
+#else
+    Vector2* destination = new Vector2();
+
+	destination->x = (x - renderViewPort.width/2) / viewport.height * renderHeight;
+	destination->y = (y - renderViewPort.height/2) / viewport.height * renderHeight;
+
+	destination->x = destination->x / sqrt(2);
+
+    Vector2* rotated = new Vector2();
+    rotated->x = (destination->x + destination->y);
+    rotated->y = (destination->x - destination->y);
+
+    destination = rotated;
+#endif
+
+	int maxSize = max(house->getWidth(), house->getHeight());
+    int floorX = (int)(destination->x / 100 * maxSize + (float)house->getWidth() / 2);
+    int floorY = (int)(destination->y / 100 * maxSize + (float)house->getHeight() / 2);
+
+	return house->getIdByXY(floorX, floorY);
+}
+
 void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key) {
-	if (key == 'r') {
-		list<Floor*> roomTiles = list<Floor*>();
+	if (evt == Keyboard::KeyEvent::KEY_RELEASE) {
+		if (key == 'r') {
+			list<Floor*> roomTiles = list<Floor*>();
 		
-		for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
-			if (house->getFloorTile(i)->getSelected()) {
-				house->getFloorTile(i)->toggleSelect();
-				roomTiles.push_back(house->getFloorTile(i));
+			for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
+				if (house->getFloorTile(i)->getSelected()) {
+					house->getFloorTile(i)->toggleSelect();
+					roomTiles.push_back(house->getFloorTile(i));
+				}
 			}
+			house->addRoom(Room::createRoomFromFloor(scene, house, roomTiles));
+		}else if (key == 'w') {
+			scene->getActiveCamera()->getNode()->translateUp(10);
+		}else if (key == 'a') {
+			scene->getActiveCamera()->getNode()->translateLeft(10);
+		}else if (key == 's') {
+			scene->getActiveCamera()->getNode()->translateUp(-10);
+		}else if (key == 'd') {
+			scene->getActiveCamera()->getNode()->translateLeft(-10);
 		}
-		house->addRoom(Room::createRoomFromFloor(scene, house, roomTiles));
 	}
 }
 void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
