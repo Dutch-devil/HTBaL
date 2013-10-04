@@ -72,6 +72,9 @@ public:
 	Floor* toggleSelect();
 	Floor* setHover(bool hover);
 
+	
+	static void releaseMesh();
+
 protected:
 	static Mesh* mesh;
 	static float width, height;

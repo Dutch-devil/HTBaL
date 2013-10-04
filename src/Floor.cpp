@@ -32,6 +32,10 @@ void Floor::calculateMesh() {
 						Vector3(-Floor::width / 2, Floor::height / 2, 0),
 						Vector3(Floor::width / 2, Floor::height / 2, 0));
 }
+
+void Floor::releaseMesh() {
+	SAFE_RELEASE(mesh);
+}
  
 Mesh* Floor::getMesh() {
 	if (mesh == NULL) {

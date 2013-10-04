@@ -15,6 +15,8 @@ public:
 	static void calculateMesh();
 	Mesh* getMesh();
 	Model* getModel();
+	
+	static void releaseMesh();
 
 protected:
 	static Mesh* mesh;

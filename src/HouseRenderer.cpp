@@ -19,6 +19,8 @@ HouseRenderer::~HouseRenderer() {
 	
     SAFE_RELEASE(scene);
     SAFE_DELETE(house);
+	Floor::releaseMesh();
+	Wall::releaseMesh();
 }
 
 void HouseRenderer::initialize() {

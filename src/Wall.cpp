@@ -11,7 +11,13 @@ Wall::Wall(bool door): door(door) {
 	model = NULL;
 }
 
-Wall::~Wall() {}
+Wall::~Wall() {
+	SAFE_RELEASE(model);
+}
+
+void Wall::releaseMesh() {
+	SAFE_RELEASE(mesh);
+}
 
 void Wall::calculateMesh() {
     SAFE_DELETE(mesh);
@@ -32,7 +38,6 @@ Model* Wall::getModel() {
     if (model == NULL) {
 		Mesh* mesh = getMesh();
         model = Model::create(mesh);
-		SAFE_RELEASE(mesh);
 
         // Create the ground material
 		Material* material = MaterialManager::getMaterial(door?DOOR:WALL);

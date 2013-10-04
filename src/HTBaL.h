@@ -17,6 +17,7 @@ public:
 
 	/** The main constructor */
     HTBaL();
+    ~HTBaL();
 
 protected:
 	/** 

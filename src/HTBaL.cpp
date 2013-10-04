@@ -12,6 +12,7 @@ HTBaL game;
 
 // Our constructor :)
 HTBaL::HTBaL() {}
+HTBaL::~HTBaL() {}
 
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {

@@ -9,7 +9,7 @@ Room::Room(int x, int y, list<Wall*> walls) : x(x), y(y), walls(walls) {
 
 Room::~Room(void) {
     for (Wall* wall : walls) {
-        SAFE_DELETE(wall);
+		SAFE_DELETE(wall);
     }
 }
 
@@ -64,8 +64,8 @@ Wall* Room::createWall(bool door, Scene* scene, float x, float y, float rot) {
     wallNode->translateX(x);
     wallNode->translateY(y);
     wallNode->rotateZ(rot);
-    wallNode->setModel(wall->getModel());
-	//SAFE_RELEASE(wallNode);
+	Model* model = wall->getModel();
+    wallNode->setModel(model);
 	return wall;
 }
 
