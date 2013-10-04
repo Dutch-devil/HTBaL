@@ -41,12 +41,14 @@ struct WalledTile {
 
 class Floor {
 public:
-	static float width, height;
-
 	Floor(int id, float x, float y);
     ~Floor();
+
+	static void setHeightWidth(float height, float width);
+	static float getHeight();
+	static float getWidth();
 	
-	Mesh* getMesh();
+	static Mesh* getMesh();
 	int getId();
 	
 	Floor* setDoor(WallDir dir);
@@ -69,6 +71,9 @@ public:
 	Floor* setHover(bool hover);
 
 protected:
+	static Mesh* mesh;
+	static float width, height;
+	static void calculateMesh();
 	int id;
 	float x, y;
 	Model* model;
