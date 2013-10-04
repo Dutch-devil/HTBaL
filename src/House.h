@@ -50,6 +50,7 @@ public:
 	bool getEnclosed(int startId, list<Floor*>* others);
 
 protected:
+	static int i;
 	int height;
 	int width;
 	list<Room*> rooms;

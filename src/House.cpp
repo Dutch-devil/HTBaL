@@ -1,6 +1,8 @@
 #include "House.h"
 #include "MaterialManager.h"
 
+int House::i = 0;
+
 House::House(int w, int h): width(w), height(h) {
     if (width <= 0 || height <= 0) {
         throw "Invalid house size (has to be bigger than 0)";
@@ -27,13 +29,16 @@ void House::addFloor(Scene* scene, float screenSize) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
             Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::getWidth() + Floor::getWidth() / 2, (y - (float)getHeight() / 2) * Floor::getHeight() + Floor::getHeight() / 2);
-
-            Node* tileNode = scene->addNode();
+			
+			char* buf = new char[30];
+			sprintf(buf, "floor %d", i++);
+            Node* tileNode = scene->addNode(buf);
+			delete[] buf;
             tileNode->translateX(floor->getX());
             tileNode->translateY(floor->getY());
             tileNode->setModel(floor->getModel());
             floorTiles[getIdByXY(x, y)] = floor;
-			SAFE_RELEASE(tileNode);
+			//SAFE_RELEASE(tileNode);
         }
     };
 }

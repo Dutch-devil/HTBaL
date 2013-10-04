@@ -26,6 +26,7 @@ class Floor;
 
 #include <list>
 #include "gameplay.h"
+#include "Wall.h"
 
 using namespace gameplay;
 using namespace std;

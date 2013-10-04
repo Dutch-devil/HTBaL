@@ -15,6 +15,7 @@ Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
 
 	Material* material = MaterialManager::getMaterial(FLOOR);
     model->setMaterial(material);
+	SAFE_RELEASE(material);
     updateColor();
 }
 
@@ -43,6 +44,7 @@ void Floor::setHeightWidth(float height, float width) {
 	Floor::height = height;
 	Floor::width = width;
 	calculateMesh();
+	Wall::calculateMesh();
 }
 
 float Floor::getHeight() {

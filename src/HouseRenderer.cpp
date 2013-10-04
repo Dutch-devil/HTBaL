@@ -11,14 +11,14 @@ HouseRenderer::~HouseRenderer() {
     Control* refreshButton = houseRendererForm->getControl("refreshButton");
     refreshButton->removeListener(this);
     Control* clearButton = houseRendererForm->getControl("clearButton");
-
-    SAFE_DELETE(house);
+	clearButton->removeListener(this);
+	
     SAFE_DELETE(initialTranslate);
     SAFE_DELETE(curTranslate);
-    SAFE_DELETE(prevFloor);
-    SAFE_DELETE(prevHover);
     SAFE_RELEASE(houseRendererForm);
+	
     SAFE_RELEASE(scene);
+    SAFE_DELETE(house);
 }
 
 void HouseRenderer::initialize() {
@@ -189,15 +189,15 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 int HouseRenderer::getViewTileId(int x, int y) {
     Camera* camera = scene->getActiveCamera();
 
-    Vector2* rotated = new Vector2();
-    rotated->x = (-curTranslate->x - curTranslate->y) / sqrt(2);
-    rotated->y = (-curTranslate->x + curTranslate->y);
-
     x -= renderViewPort.x;
     y -= renderViewPort.y;
     if (x < 0 || x > renderViewPort.width || y < 0 || y > renderViewPort.height) {
         return -1;
     }
+
+    Vector2* rotated = new Vector2();
+    rotated->x = (-curTranslate->x - curTranslate->y) / sqrt(2);
+    rotated->y = (-curTranslate->x + curTranslate->y);
 
     Vector2* destination = new Vector2();
 

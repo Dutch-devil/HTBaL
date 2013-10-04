@@ -22,9 +22,12 @@ public:
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
 
 protected:
+	static int i;
 	int x;
 	int y;
 	list<Wall*> walls;
+	
+	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);
 };
 
 #endif

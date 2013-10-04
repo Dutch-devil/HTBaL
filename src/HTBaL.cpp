@@ -50,6 +50,9 @@ void HTBaL::resizeEvent(unsigned int width, unsigned int height) {
 // We let the activerenderer update, and, with the return value of the
 // function we determine if the activerenderer has to change.
 void HTBaL::update(float elapsedTime) {
+	if (deleting) {
+		return;
+	}
 	setActiveRenderer(activeRenderer->update(elapsedTime));
 }
 

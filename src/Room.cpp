@@ -1,14 +1,16 @@
 #include "Room.h"
 
+int Room::i = 0;
+
 Room::Room(int x, int y, list<Wall*> walls) : x(x), y(y), walls(walls) {
 
 }
 
 
 Room::~Room(void) {
-	for (Wall* wall : walls) {
-		SAFE_DELETE(wall);
-	}
+    for (Wall* wall : walls) {
+        SAFE_DELETE(wall);
+    }
 }
 
 list<Wall*> Room::getWalls() {
@@ -26,39 +28,45 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     list<Wall*> walls;
 
     for (Floor* floorTile : roomTiles) {
-		int i = floorTile->getId();
+        int i = floorTile->getId();
 
-        int nextTile = house->getIdByXY(house->getXById(i)-1,house->getYById(i));
+        int nextTile = house->getIdByXY(house->getXById(i) - 1, house->getYById(i));
         if (nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(new Wall(new Vector2(floorTile->getX() - Floor::getWidth() / 2, floorTile->getY() - Floor::getHeight() / 2),
-                                     new Vector2(floorTile->getX() - Floor::getWidth() / 2, floorTile->getY() + Floor::getHeight() / 2), floorTile->getDoor() == LEFT));
+            walls.push_back(createWall(floorTile->getDoor() == LEFT, scene, floorTile->getX(), floorTile->getY(), MATH_PI));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)+1);
+        nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) + 1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-			walls.push_back(new Wall(new Vector2(floorTile->getX() - Floor::getWidth() / 2, floorTile->getY() + Floor::getHeight() / 2),
-                                     new Vector2(floorTile->getX() + Floor::getWidth() / 2, floorTile->getY() + Floor::getHeight() / 2), floorTile->getDoor() == TOP));
+            walls.push_back(createWall(floorTile->getDoor() == TOP, scene, floorTile->getX(), floorTile->getY(), MATH_PI / 2));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i)+1,house->getYById(i));
+        nextTile = house->getIdByXY(house->getXById(i) + 1, house->getYById(i));
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(new Wall(new Vector2(floorTile->getX() + Floor::getWidth() / 2, floorTile->getY() + Floor::getHeight() / 2),
-                                     new Vector2(floorTile->getX() + Floor::getWidth() / 2, floorTile->getY() - Floor::getHeight() / 2), floorTile->getDoor() == RIGHT));
+            walls.push_back(createWall(floorTile->getDoor() == RIGHT, scene, floorTile->getX(), floorTile->getY(), 0));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i),house->getYById(i)-1);
+        nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) - 1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(new Wall(new Vector2(floorTile->getX() + Floor::getWidth() / 2, floorTile->getY() - Floor::getHeight() / 2),
-                                     new Vector2(floorTile->getX() - Floor::getWidth() / 2, floorTile->getY() - Floor::getHeight() / 2), floorTile->getDoor() == BOTTOM));
+            walls.push_back(createWall(floorTile->getDoor() == BOTTOM, scene, floorTile->getX(), floorTile->getY(), -MATH_PI / 2));
         }
     }
 
-    for (Wall* wall : walls) {
-        Node* wallNode = scene->addNode();
-        wallNode->setModel(wall->getModel());
-		SAFE_RELEASE(wallNode);
-    }
-
-	SAFE_DELETE_ARRAY(floorTiles);
+    SAFE_DELETE_ARRAY(floorTiles);
     return new Room(0, 0, walls);
 }
+
+Wall* Room::createWall(bool door, Scene* scene, float x, float y, float rot) {
+    Wall* wall = new Wall(door);
+	char* buf = new char[30];
+	sprintf(buf, "wall %d", i++);
+    Node* wallNode = scene->addNode(buf);
+	delete[] buf;
+    wallNode->translateX(x);
+    wallNode->translateY(y);
+    wallNode->rotateZ(rot);
+    wallNode->setModel(wall->getModel());
+	//SAFE_RELEASE(wallNode);
+	return wall;
+}
+
+
