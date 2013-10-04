@@ -14,6 +14,12 @@ Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     model->setMaterial(MaterialManager::getMaterial(FLOOR));
     setColor(color);
 }
+
+Floor::~Floor() {
+	SAFE_DELETE(color);
+	SAFE_DELETE(realColor);
+	SAFE_RELEASE(model);
+}
  
 Mesh* Floor::getMesh() {
     return Mesh::createQuad(Vector3(-Floor::width / 2, -Floor::height / 2, 0),

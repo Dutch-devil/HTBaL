@@ -14,6 +14,12 @@ HouseRenderer::~HouseRenderer() {
     refreshButton->removeListener(this);
     Control* clearButton = houseRendererForm->getControl("clearButton");
     clearButton->removeListener(this);
+
+	SAFE_DELETE(house);
+	SAFE_DELETE(initialTranslate);
+	SAFE_DELETE(curTranslate);
+	SAFE_DELETE(prevFloor);
+	SAFE_DELETE(prevHover);
     SAFE_RELEASE(houseRendererForm);
     SAFE_RELEASE(scene);
 }
@@ -123,23 +129,6 @@ void HouseRenderer::createHouse(bool random) {
 }
 
 void HouseRenderer::createRoom() {
-    /*Floor** roomTiles = new Floor*[house->getWidth()*house->getHeight()];
-    for(int i = 0; i < house->getWidth()*house->getHeight(); i++) {
-    	switch(i) {
-    	case 0:
-    	case 1:
-    	case 5:
-    	case 6:
-    	case 7:
-    		roomTiles[i] = house->getFloorTile(i);
-    		break;
-    	default:
-    		roomTiles[i] = NULL;
-    	}
-    }*/
-
-    //house->addRoom(Room::createRoomFromFloor(scene, house, stateBlock, roomTiles, house->getWidth()*house->getHeight()));
-
     house->addRandomRooms(scene);
 }
 

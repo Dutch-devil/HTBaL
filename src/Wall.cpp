@@ -8,7 +8,11 @@ Wall::Wall(Vector2* start, Vector2* end, bool door): start(start), end(end), doo
 	model = NULL;
 }
 
-Wall::~Wall() {}
+Wall::~Wall() {
+	SAFE_DELETE(start);
+	SAFE_DELETE(end);
+	SAFE_RELEASE(model);
+}
 
 Vector2* Wall::getStart() {
     return start;

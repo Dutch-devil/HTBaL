@@ -11,6 +11,7 @@ House::House(int w, int h): width(w), height(h) {
 }
 
 House::~House(void) {
+	SAFE_DELETE_ARRAY(floorTiles);
 }
 
 void House::addFloor(Scene* scene, float screenSize) {

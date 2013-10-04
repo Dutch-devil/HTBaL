@@ -44,7 +44,6 @@ protected:
 
 	Scene* scene;
 	House* house;
-	RenderState::StateBlock* stateBlock;
 	float aspectRatio;
 	float menuWidth;
 	float renderHeight;
