@@ -1,7 +1,7 @@
 #include "Wall.h"
 #include "MaterialManager.h"
 
-Wall::Wall(Vector2* start, Vector2* end): start(start), end(end) {
+Wall::Wall(Vector2* start, Vector2* end): start(start), end(end), door(false) {
 	model = NULL;
 }
 Wall::Wall(Vector2* start, Vector2* end, bool door): start(start), end(end), door(door) {
@@ -34,7 +34,8 @@ Model* Wall::getModel() {
         model = Model::create(getMesh());
 
         // Create the ground material
-        model->setMaterial(MaterialManager::getMaterial(door?DOOR:WALL));
+		Material* material = MaterialManager::getMaterial(door?DOOR:WALL);
+        model->setMaterial(material);
     }
     return model;
 }

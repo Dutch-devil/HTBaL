@@ -1,8 +1,6 @@
 #include "HouseRenderer.h"
 #include <cmath>
 
-//#define PERSPECTIVE
-
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
     initialize();
 }
@@ -13,7 +11,6 @@ HouseRenderer::~HouseRenderer() {
     Control* refreshButton = houseRendererForm->getControl("refreshButton");
     refreshButton->removeListener(this);
     Control* clearButton = houseRendererForm->getControl("clearButton");
-    clearButton->removeListener(this);
 
 	SAFE_DELETE(house);
 	SAFE_DELETE(initialTranslate);
@@ -29,20 +26,15 @@ void HouseRenderer::initialize() {
     zoomLevel = 1;
     curTranslate = new Vector3();
 
-#ifdef PERSPECTIVE
-    Camera* camera = Camera::createPerspective(0, 0, 0, 0);
-#else
-    Camera* camera = Camera::createOrthographic(0, 0, 0, 0, 0);
-    camera->setNearPlane(0.25);
-    camera->setFarPlane(600);
-#endif
+    Camera* camera = Camera::createOrthographic(0, 0, 0, 0.25, 600);
+
     Node* cameraNode = scene->addNode();
     cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
-#ifndef PERSPECTIVE
+
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
-#endif
+
 
     houseRendererForm = Form::create("res/menu/houseRenderer.form");
     houseRendererForm->setState(Control::State::NORMAL);
@@ -78,15 +70,10 @@ void HouseRenderer::setCamera() {
     cameraNode->setTranslation(Vector3::zero());
 
     camera->setAspectRatio(aspectRatio);
-#ifdef PERSPECTIVE
-    camera->setFieldOfView(45);
-    camera->setNearPlane(0.25);
-    camera->setFarPlane(100.1);
-#else
+
     camera->setZoomX(aspectRatio * renderHeight);
     camera->setZoomY(renderHeight);
 
-#endif
     cameraNode->translateLeft(-renderHeight * ((viewport.width - renderViewPort.width) / 2 - renderViewPort.x) / (viewport.height));
     cameraNode->translateUp(-renderHeight * ((viewport.height - renderViewPort.height) / 2 - renderViewPort.y) / (viewport.height));
     cameraNode->translateForward(-100);
@@ -114,16 +101,7 @@ void HouseRenderer::createHouse(bool random) {
     } else {
         house = new House(5, 5);
     }
-#ifdef PERSPECTIVE
-    Vector3* destination = new Vector3();
-    scene->getActiveCamera()->unproject(viewport, 0, 0, 1, destination);
-
-    float screenWidth = -2 * destination->x;
-    float screenHeight = 2 * destination->y;
-    float screenSize = (screenWidth > screenHeight)?screenHeight:screenWidth;
-#else
     float screenSize = 100;
-#endif
 
     house->addFloor(scene, screenSize);
 }
@@ -181,6 +159,12 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
 }
 
 void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+    if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
+        // reset last floor on release
+        prevFloor = NULL;
+		return;
+    }
+
     int id = getViewTileId(x, y);
     if (id == -1) {
         prevFloor = NULL;
@@ -192,10 +176,6 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         // same model twice, don't toggle
         floor->toggleSelect();
         prevFloor = floor;
-    }
-    if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
-        // reset last floor on release
-        prevFloor = NULL;
     }
 }
 
@@ -211,10 +191,7 @@ int HouseRenderer::getViewTileId(int x, int y) {
     if (x < 0 || x > renderViewPort.width || y < 0 || y > renderViewPort.height) {
         return -1;
     }
-#ifdef PERSPECTIVE
-    Vector3* destination = new Vector3();
-    scene->getActiveCamera()->unproject(viewport, x, y, 1, destination);
-#else
+
     Vector2* destination = new Vector2();
 
     destination->x = (x - renderViewPort.width / 2) / viewport.height * renderHeight - rotated->x;
@@ -222,17 +199,19 @@ int HouseRenderer::getViewTileId(int x, int y) {
 
     destination->x = destination->x / sqrt(2);
 
+	SAFE_DELETE(rotated);
     rotated = new Vector2();
     rotated->x = (destination->x + destination->y);
     rotated->y = (destination->x - destination->y);
-
+	
+	SAFE_DELETE(destination);
     destination = rotated;
-#endif
 
     int maxSize = max(house->getWidth(), house->getHeight());
     int floorX = (int)(destination->x / 100 * maxSize + (float)house->getWidth() / 2);
     int floorY = (int)(destination->y / 100 * maxSize + (float)house->getHeight() / 2);
 
+	SAFE_DELETE(rotated);
     return house->getIdByXY(floorX, floorY);
 }
 

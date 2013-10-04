@@ -5,7 +5,9 @@ Renderer::Renderer(Rectangle viewport) {
 	buttonDown = 0;
 	keyFlags = NULL;
 }
-Renderer::~Renderer() {}
+Renderer::~Renderer() {
+	SAFE_DELETE(keyFlags);
+}
 
 bool Renderer::leftButtonDown() {
 	return buttonDown & LEFT_BUTTON;

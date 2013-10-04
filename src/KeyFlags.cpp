@@ -11,6 +11,7 @@ unsigned int KeyFlags::convertFlag(unsigned int flagIndex) {
 	}else if (flagIndex >= 'a' && flagIndex <= 'z') {
 		return flagIndex - 'a' + 4;
 	}
+	GP_WARN("Invalid flagIndex specified");
 	return -1;
 }
 

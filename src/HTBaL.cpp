@@ -1,3 +1,7 @@
+#define _CRTDB_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h> 
+
 #include "HTBaL.h"
 #include "MenuMainRenderer.h"
 #include "HouseRenderer.h"
@@ -11,11 +15,14 @@ HTBaL::HTBaL() {}
 
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {
+	deleting = false;
 	activeRenderer = new HouseRenderer(getViewport());
 }
 
 // We don't have to do anything when the game closes;
 void HTBaL::finalize() {
+	deleting = true;
+	SAFE_DELETE(activeRenderer);
 }
 
 bool HTBaL::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
@@ -47,25 +54,27 @@ void HTBaL::update(float elapsedTime) {
 }
 
 void HTBaL::render(float elapsedTime) {
+	if (deleting) {
+		return;
+	}
     // Clear the color and depth buffers.
     clear(CLEAR_COLOR_DEPTH, Vector4::zero(), 1.0f, 0);
 
 	// We let the active renderer update
 	activeRenderer->render(elapsedTime);
 
-    // Load font
-    Font* _font = Font::create("res/arial40.gpb");
 	// Draw the fps
-	drawFrameRate(_font, Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
+	drawFrameRate(Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());
 }
 
-void HTBaL::drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps)
-{
+void HTBaL::drawFrameRate(const Vector4& color, unsigned int x, unsigned int y, unsigned int fps) {
     char buffer[10];										// Make a char buffer
     sprintf(buffer, "%u", fps);								// Print the fps to the buffer
+	Font* font = Font::create("res/arial40.gpb");
     font->start();											// start using the font
     font->drawText(buffer, x, y, color, font->getSize());	// Writing the fps to the screen
     font->finish();											// stop using the font
+	SAFE_RELEASE(font);
 }
 
 void HTBaL::setActiveRenderer(Renderers renderer) {
@@ -73,8 +82,7 @@ void HTBaL::setActiveRenderer(Renderers renderer) {
 		return;												// Do nothing
 	}
 															// Else
-	delete activeRenderer;									// Delete the active renderer that was used before
-	activeRenderer = NULL;									// set it to NULL to be sure nothing can go wrong
+	SAFE_DELETE(activeRenderer);							// Delete the active renderer that was used before
 	switch (renderer) {										// Switch over the posible renderers, and create the correct one.
 		case MAIN_MENU:
 			activeRenderer = new MenuMainRenderer(getViewport());

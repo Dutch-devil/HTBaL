@@ -6,7 +6,7 @@ Properties** MaterialManager::propertiesArray = NULL;
 RenderState::StateBlock* MaterialManager::stateBlock = NULL;
 
 Material* MaterialManager::getMaterial(MaterialType type) {
-	if(propertiesArray == NULL) {
+	if (propertiesArray == NULL) {
 		propertiesArray = new Properties*[COUNT];
 		memset(propertiesArray, NULL, COUNT*sizeof(Properties*));
 

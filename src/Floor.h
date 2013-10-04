@@ -14,8 +14,9 @@
 #define FLOOR_UNSELECTED FLOOR_WHITE
 #define FLOOR_SELECTED FLOOR_RED
 #define FLOOR_HOVER FLOOR_GREEN
-#define FLOOR_HOVER_SELECTED blendColors(FLOOR_SELECTED, FLOOR_HOVER)
+#define FLOOR_HOVER_SELECTED new Vector3(blendColors(FLOOR_SELECTED, FLOOR_HOVER))
 
+#define FLOOR_NONE FLOOR_BLACK
 #define FLOOR_EMPTY FLOOR_UNSELECTED
 #define FLOOR_HALL_START FLOOR_YELLOW
 #define FLOOR_HALL FLOOR_BLUE
@@ -74,6 +75,7 @@ protected:
 	static Mesh* mesh;
 	static float width, height;
 	static void calculateMesh();
+
 	int id;
 	float x, y;
 	Model* model;

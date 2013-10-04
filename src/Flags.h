@@ -2,8 +2,10 @@
 #define Flags_H_
 
 #include <memory.h>
+#include <gameplay.h>
 
 using namespace std;
+using namespace gameplay;
 
 class Flags {
 public:

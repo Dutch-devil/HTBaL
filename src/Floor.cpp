@@ -9,11 +9,13 @@ Mesh* Floor::mesh = NULL;
 Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
     this->model = Model::create(getMesh());
 
-    realColor = color = FLOOR_UNSELECTED;
+    realColor = FLOOR_UNSELECTED;
+	color = FLOOR_UNSELECTED;
     hover = selected = false;
 
-    model->setMaterial(MaterialManager::getMaterial(FLOOR));
-    setColor(color);
+	Material* material = MaterialManager::getMaterial(FLOOR);
+    model->setMaterial(material);
+    updateColor();
 }
 
 Floor::~Floor() {
@@ -23,6 +25,7 @@ Floor::~Floor() {
 }
 
 void Floor::calculateMesh() {
+	SAFE_DELETE(mesh);
 	mesh = Mesh::createQuad(Vector3(-Floor::width / 2, -Floor::height / 2, 0),
 						Vector3(Floor::width / 2, -Floor::height / 2, 0),
 						Vector3(-Floor::width / 2, Floor::height / 2, 0),
@@ -30,8 +33,9 @@ void Floor::calculateMesh() {
 }
  
 Mesh* Floor::getMesh() {
-	if(mesh == NULL)
+	if (mesh == NULL) {
 		calculateMesh();
+	}
 	return mesh;
 }
 
@@ -82,23 +86,22 @@ bool Floor::isColor(Vector3* other) {
 }
 
 Floor* Floor::setColor(Vector3* color) {
+	SAFE_DELETE(this->realColor);
     this->realColor = color;
-	if (!getSelected()) {
-		this->color = realColor;
-	}
 	updateColor();
 	return this;
 }
 
 void Floor::updateColor() {
+	SAFE_DELETE(color);
 	if (selected && hover) {
-        color = &FLOOR_HOVER_SELECTED;
+        color = FLOOR_HOVER_SELECTED;
     } else if (selected) {
 		color = FLOOR_SELECTED;
 	}else if (hover) {
 		color = FLOOR_HOVER;
 	}else {
-        color = realColor;
+        color = new Vector3(*realColor);
     }
     model->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(blendColors(color, realColor));
 }

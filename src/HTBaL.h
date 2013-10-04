@@ -80,7 +80,6 @@ protected:
 	/**
 	  * Helper function to draw the framerate of the game.
 	  *
-	  * @param font The font used.
 	  * @param color The color used.
 	  * @param x The x position the framerate will be drawn at.
 	  * @param y The y position the framerate will be drawn at.
@@ -88,10 +87,10 @@ protected:
 	  *
 	  * @see gameplay::Game::getFrameRate()
 	  */
-	void drawFrameRate(Font* font, const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
+	void drawFrameRate(const Vector4& color, unsigned int x, unsigned int y, unsigned int fps);
 
 private:
-
+	bool deleting;
 	Renderer* activeRenderer;			/// The active renderer.
 };
 

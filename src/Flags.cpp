@@ -8,7 +8,7 @@ Flags::Flags(unsigned int flagCount) {
 }
 
 Flags::~Flags() {
-	delete[] flags;
+	SAFE_DELETE_ARRAY(flags);
 }
 
 void Flags::setFlag(unsigned int flagIndex) {

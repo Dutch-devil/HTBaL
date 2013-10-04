@@ -6,6 +6,9 @@ Room::Room(int x, int y, list<Wall*> walls) : x(x), y(y), walls(walls) {
 
 
 Room::~Room(void) {
+	for (Wall* wall : walls) {
+		SAFE_DELETE(wall);
+	}
 }
 
 list<Wall*> Room::getWalls() {
@@ -53,7 +56,9 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     for (Wall* wall : walls) {
         Node* wallNode = scene->addNode();
         wallNode->setModel(wall->getModel());
+		//SAFE_RELEASE(wallNode);
     }
 
+	SAFE_DELETE_ARRAY(floorTiles);
     return new Room(0, 0, walls);
 }

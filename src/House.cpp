@@ -2,7 +2,7 @@
 #include "MaterialManager.h"
 
 House::House(int w, int h): width(w), height(h) {
-    if(width <= 0 || height <= 0) {
+    if (width <= 0 || height <= 0) {
         throw "Invalid house size (has to be bigger than 0)";
     }
     floorTiles = new Floor*[getWidth() * getHeight()];
@@ -11,6 +11,9 @@ House::House(int w, int h): width(w), height(h) {
 }
 
 House::~House(void) {
+	for (Room* room : rooms) {
+		SAFE_DELETE(room);
+	}
 	SAFE_DELETE_ARRAY(floorTiles);
 }
 
@@ -20,7 +23,6 @@ void House::addFloor(Scene* scene, float screenSize) {
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
-			
             Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::getWidth() + Floor::getWidth() / 2, (y - (float)getHeight() / 2) * Floor::getHeight() + Floor::getHeight() / 2);
 
             Node* tileNode = scene->addNode();
@@ -82,9 +84,20 @@ void House::addRandomRooms(Scene* scene) {
     if (this->getRooms().size() != 0) {
         throw "Cannot add rooms to non-empty house";
     }
+	Floor* tile;														// generic tile used along calculations
+
+	bool largeHallStart;												// start with a small or large hall?
+    list<Floor*> hallStartTiles = list<Floor*>();						// all tiles belonging to the hall start
+    vector<WalledTile>* hallPossibilities = new vector<WalledTile>();	// list of all possible hall places
+	
+    list<Floor*> hallTiles = list<Floor*>();							// all tiles belonging to the hall
+	
+	vector<WalledTile>* roomStartPosibilities = new vector<WalledTile>();	// all possible starts for new rooms
+    vector<WalledTile>* roomPossibilities = new vector<WalledTile>();	// all possible places for the current room
+	list<Floor*> roomTiles = list<Floor*>();							// all tiles belonging to the current generated room
 
     // create a hall, either 1*1 or 2*2
-    bool largeHallStart = (getWidth() + getHeight()) / 2 >= 8;
+   largeHallStart = (getWidth() + getHeight()) / 2 >= 8;
     int hallStartX, hallStartY;
     if (rand() % 2) {
         // start the hall on x-axis
@@ -95,10 +108,6 @@ void House::addRandomRooms(Scene* scene) {
         hallStartX = rand() % 2 * (getWidth() - largeHallStart - 1);
         hallStartY = rand() % (getHeight() - largeHallStart - 3) + 1;
     }
-    list<Floor*> hallStartTiles = list<Floor*>();
-
-    // list of all possible hall places
-    vector<WalledTile>* hallPossibilities = new vector<WalledTile>();
 
     pushAllHallAround(hallPossibilities, hallStartX, hallStartY);
     if (largeHallStart) {
@@ -126,9 +135,8 @@ void House::addRandomRooms(Scene* scene) {
 
     // create the hallway connecting to the hallstart
     // select random room from possible hall places
-    list<Floor*> hallTiles = list<Floor*>();
-    WalledTile start = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
-	int id = start.id;
+    WalledTile startTile = (*hallPossibilities)[(int)(rand() % hallPossibilities->size())];
+	int id = startTile.id;
 
     hallPossibilities->clear();
     clearAllAround(hallPossibilities, getXById(id), getYById(id));
@@ -138,10 +146,10 @@ void House::addRandomRooms(Scene* scene) {
     int prevX = getXById(id);
     int prevY = getYById(id);
 
-    Floor* tile = getFloorTile(id);
+    tile = getFloorTile(id);
 
-	tile->setDoor(start.dir);
-	setDoor(hallStartTiles, start);
+	tile->setDoor(startTile.dir);
+	setDoor(hallStartTiles, startTile);
 
     tile->setSelected(true);
     hallTiles.push_back(tile);
@@ -197,7 +205,6 @@ void House::addRandomRooms(Scene* scene) {
 	tile->setSelected(true);
 
     // get all tiles next to hall tiles
-	vector<WalledTile>* roomStartPosibilities = new vector<WalledTile>();
     for (Floor* hallTile : hallTiles) {
         pushAllRoomAround(roomStartPosibilities, getXById(hallTile->getId()), getYById(hallTile->getId()));
     }
@@ -207,17 +214,13 @@ void House::addRandomRooms(Scene* scene) {
 		removeId(roomStartPosibilities, gap->getId());
 	}
 	hallTiles.merge(gaps);
-
+	
     // and add rooms to the house
-    delete hallPossibilities;
-    vector<WalledTile>* roomPossibilities = new vector<WalledTile>();
-	list<Floor*> roomTiles = list<Floor*>();
-
     while (!roomStartPosibilities->empty()) {
         roomPossibilities->clear();
         roomTiles.clear();
 
-        WalledTile startTile = (*roomStartPosibilities)[(int)(rand() % roomStartPosibilities->size())];
+        startTile = (*roomStartPosibilities)[(int)(rand() % roomStartPosibilities->size())];
         tile = getFloorTile(startTile.id);
 		tile->setDoor(startTile.dir);
         roomTiles.push_back(tile->setSelected(true));
@@ -258,13 +261,15 @@ void House::addRandomRooms(Scene* scene) {
     addRoom(Room::createRoomFromFloor(scene, this, hallStartTiles));
     addRoom(Room::createRoomFromFloor(scene, this, hallTiles));
 
-
 	for (int i = 0; i < getWidth() * getHeight(); i++) {
 		if (!getFloorTile(i)->getSelected()) {
-			getFloorTile(i)->setColor(FLOOR_BLACK);
+			getFloorTile(i)->setColor(FLOOR_NONE);
 		}
 		getFloorTile(i)->setSelected(false);
 	}
+    SAFE_DELETE(hallPossibilities);
+	SAFE_DELETE(roomStartPosibilities);
+	SAFE_DELETE(roomPossibilities);
 }
 
 void House::setDoor(list<Floor*> tiles, WalledTile adjacent) {
@@ -410,6 +415,7 @@ list<Floor*> House::getGaps(vector<WalledTile>* toCheck, unsigned int maxSize) {
         } else {
             gapTiles.merge(*tmp);
         }
+		SAFE_DELETE(tmp);
     }
 	return gapTiles;
 }
@@ -423,8 +429,10 @@ bool House::getEnclosed(int startId, list<Floor*>* others) {
     pushAllRoomAround(ids, getXById(startId), getYById(startId));
     for (int id : *ids) {
         if (!getEnclosed(id, others)) {
+			SAFE_DELETE(ids);
             return false;
         }
     }
+	SAFE_DELETE(ids);
     return true;
 }
