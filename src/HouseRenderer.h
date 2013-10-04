@@ -26,6 +26,8 @@ public:
 	void createHouse(bool random);
 	void createRoom();
 	
+	void checkHover(int x, int y);
+	
 	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging);
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 	void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);

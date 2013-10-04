@@ -33,6 +33,7 @@ void House::addFloor(Scene* scene, float screenSize) {
             tileNode->translateY(floor->getY());
             tileNode->setModel(floor->getModel());
             floorTiles[getIdByXY(x, y)] = floor;
+			SAFE_RELEASE(tileNode);
         }
     };
 }

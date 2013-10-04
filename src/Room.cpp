@@ -56,7 +56,7 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     for (Wall* wall : walls) {
         Node* wallNode = scene->addNode();
         wallNode->setModel(wall->getModel());
-		//SAFE_RELEASE(wallNode);
+		SAFE_RELEASE(wallNode);
     }
 
 	SAFE_DELETE_ARRAY(floorTiles);
