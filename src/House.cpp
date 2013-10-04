@@ -14,6 +14,9 @@ House::~House(void) {
 	for (Room* room : rooms) {
 		SAFE_DELETE(room);
 	}
+	for (int i = 0; i < getWidth() * getHeight(); i++) {
+		SAFE_DELETE(floorTiles[i]);
+	}
 	SAFE_DELETE_ARRAY(floorTiles);
 }
 
