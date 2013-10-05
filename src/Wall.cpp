@@ -14,7 +14,7 @@ Wall::Wall(bool door): door(door) {
 Wall::~Wall() {}
 
 void Wall::calculateMesh() {
-    SAFE_DELETE(mesh);
+    SAFE_RELEASE(mesh);
 	mesh = Mesh::createQuad(Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
 						Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
 						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),

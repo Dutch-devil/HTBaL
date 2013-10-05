@@ -26,12 +26,11 @@ Floor::~Floor() {
 }
 
 void Floor::calculateMesh() {
-	SAFE_DELETE(mesh);
-	mesh = Mesh::createQuad(Vector3(-Floor::width / 2, -Floor::height / 2, 0),
-						Vector3(Floor::width / 2, -Floor::height / 2, 0),
-						Vector3(-Floor::width / 2, Floor::height / 2, 0),
-						Vector3(Floor::width / 2, Floor::height / 2, 0));
-}
+	SAFE_RELEASE(mesh);
+	mesh = Mesh::createQuad(Vector3(-Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
+						Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
+						Vector3(-Floor::getWidth() / 2, Floor::getHeight() / 2, 0),
+						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, 0));}
  
 Mesh* Floor::getMesh() {
 	if (mesh == NULL) {
