@@ -2,15 +2,18 @@
 
 int Room::i = 0;
 
-Room::Room(int x, int y, list<Wall*> walls) : x(x), y(y), walls(walls) {
-
+Room::Room(int x, int y, list<Wall*> walls, Scene* scene) : x(x), y(y), walls(walls), scene(scene) {
+	scene->addRef();
 }
 
 
 Room::~Room(void) {
-    for (Wall* wall : walls) {
-        SAFE_DELETE(wall);
+    while(!walls.empty()) {
+		scene->removeNode(walls.back()->getNode());
+        SAFE_DELETE(walls.back());
+		walls.pop_back();
     }
+	SAFE_RELEASE(scene);
 }
 
 list<Wall*> Room::getWalls() {
@@ -52,20 +55,19 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     }
 
     SAFE_DELETE_ARRAY(floorTiles);
-    return new Room(0, 0, walls);
+    return new Room(0, 0, walls, scene);
 }
 
 Wall* Room::createWall(bool door, Scene* scene, float x, float y, float rot) {
-    Wall* wall = new Wall(door);
 	char* buf = new char[30];
 	sprintf(buf, "wall %d", i++);
     Node* wallNode = scene->addNode(buf);
+	Wall* wall = new Wall(wallNode, door);
 	delete[] buf;
     wallNode->translateX(x);
     wallNode->translateY(y);
     wallNode->rotateZ(rot);
     wallNode->setModel(wall->getModel());
-	//SAFE_RELEASE(wallNode);
 	return wall;
 }
 

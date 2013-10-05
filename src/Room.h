@@ -14,20 +14,20 @@ using namespace gameplay;
 
 class Room {
 public:
-	Room(int, int, list<Wall*>);
     ~Room(void);
-
-	list<Wall*> getWalls();
 	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
+	list<Wall*> getWalls();
 
 protected:
+	Room(int, int, list<Wall*>, Scene* scene);
+	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);
+
 	static int i;
 	int x;
 	int y;
 	list<Wall*> walls;
-	
-	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);
+	Scene* scene;
 };
 
 #endif

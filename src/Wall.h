@@ -8,19 +8,20 @@ using namespace gameplay;
 
 class Wall {
 public:
-	Wall();
-	Wall(bool door);
+	Wall(Node* node, bool door = false);
     ~Wall();
 
 	static void calculateMesh();
 	static void finalize();
 
+	Node* getNode();
 	Mesh* getMesh();
 	Model* getModel();
 
 protected:
 	static Mesh* mesh;
 	bool door;
+	Node* node;
 	Model* model;
 };
 
