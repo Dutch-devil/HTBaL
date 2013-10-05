@@ -6,7 +6,7 @@
 float Floor::width, Floor::height;
 Mesh* Floor::mesh = NULL;
 
-Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
+Floor::Floor(int id, float x, float y): id(id), x(x), y(y), doorDir(NONE) {
     this->model = Model::create(getMesh());
 
     realColor = FLOOR_UNSELECTED;
@@ -24,6 +24,10 @@ Floor::~Floor() {
 	SAFE_DELETE(realColor);
 	SAFE_RELEASE(model);
 }
+
+void Floor::finalize() {
+	SAFE_RELEASE(mesh);
+} 
 
 void Floor::calculateMesh() {
 	SAFE_RELEASE(mesh);

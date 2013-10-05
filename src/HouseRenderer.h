@@ -24,6 +24,7 @@ public:
 
 	void createMenu(float menuWidth);
 	void createHouse(bool random);
+	void removeHouse();
 	void createRoom();
 	
 	void checkHover(int x, int y);

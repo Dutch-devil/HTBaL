@@ -4,14 +4,19 @@
 
 Mesh* Wall::mesh = NULL;
 
-Wall::Wall(): door(false) {
-	model = NULL;
+Wall::Wall(): door(false), model(NULL) {
 }
-Wall::Wall(bool door): door(door) {
-	model = NULL;
+Wall::Wall(bool door): door(door), model(NULL) {
 }
 
-Wall::~Wall() {}
+Wall::~Wall() {
+	/* TEMP COMMENTS, just to commit only working versions!
+	print("model refs: %d\n", model->getRefCount());
+	model->release();
+	if(model)
+		print("-model refs: %d\n", model->getRefCount());
+	*/
+}
 
 void Wall::calculateMesh() {
     SAFE_RELEASE(mesh);
@@ -26,6 +31,10 @@ Mesh* Wall::getMesh() {
 		calculateMesh();
 	}
 	return mesh;
+}
+
+void Wall::finalize() {
+	SAFE_RELEASE(mesh);
 }
 
 Model* Wall::getModel() {
