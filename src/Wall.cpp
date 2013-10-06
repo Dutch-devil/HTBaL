@@ -11,7 +11,7 @@ Wall::Wall(Node* node, bool door): door(door), model(NULL), node(node) {
 Wall::~Wall() {
 	SAFE_RELEASE(node);
 	print("wallmodelrefcount: %d\n", model->getRefCount());
-	//SAFE_RELEASE(model);
+	SAFE_RELEASE(model);
 }
 
 void Wall::calculateMesh() {
@@ -39,9 +39,7 @@ void Wall::finalize() {
 
 Model* Wall::getModel() {
     if (model == NULL) {
-		Mesh* mesh = getMesh();
-        model = Model::create(mesh);
-		SAFE_RELEASE(mesh);
+        model = Model::create(getMesh());
 
         // Create the ground material
 		Material* material = MaterialManager::getMaterial(door?DOOR:WALL);
