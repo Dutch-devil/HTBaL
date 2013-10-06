@@ -4,10 +4,10 @@
 
 Mesh* Wall::mesh = NULL;
 
-Wall::Wall(): door(false) {
+Wall::Wall(bool inverted): inverted(inverted), door(false) {
 	model = NULL;
 }
-Wall::Wall(bool door): door(door) {
+Wall::Wall(bool inverted, bool door): inverted(inverted), door(door) {
 	model = NULL;
 }
 

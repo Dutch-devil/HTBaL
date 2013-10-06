@@ -8,8 +8,8 @@ using namespace gameplay;
 
 class Wall {
 public:
-	Wall();
-	Wall(bool door);
+	Wall(bool inverted);
+	Wall(bool inverted, bool door);
     ~Wall();
 
 	static void calculateMesh();
@@ -20,7 +20,7 @@ public:
 
 protected:
 	static Mesh* mesh;
-	bool door;
+	bool inverted, door;
 	Model* model;
 };
 

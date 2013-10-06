@@ -38,6 +38,10 @@ enum Direction {
 	BOTTOM = 3, // y + 1
 	RIGHT = 4,	// x + 1
 	NONE = 5	// no wall
+
+	//Direction invert(Direction dir) {
+	//	return (dir + 2) % 4;
+	//}
 };
 
 struct WalledTile {

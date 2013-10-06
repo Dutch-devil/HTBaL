@@ -28,24 +28,24 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     for (Floor* floorTile : roomTiles) {
         int i = floorTile->getId();
 
-        int nextTile = house->getIdByXY(house->getXById(i) - 1, house->getYById(i));
-        if (nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(LEFT), scene, floorTile, MATH_PI));
+		Floor* floor = house->getFloorInDirection(i, LEFT);
+        if (!floor || !floorTiles[floor->getId()]) {
+            walls.push_back(createWall(scene, floorTile, LEFT));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) + 1);
-        if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(TOP), scene, floorTile, MATH_PI / 2));
+		floor = house->getFloorInDirection(i, TOP);
+		if (!floor || !floorTiles[floor->getId()]) {
+            walls.push_back(createWall(scene, floorTile, TOP));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i) + 1, house->getYById(i));
-        if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(RIGHT), scene, floorTile, 0));
+		floor = house->getFloorInDirection(i, RIGHT);
+		if (!floor || !floorTiles[floor->getId()]) {
+            walls.push_back(createWall(scene, floorTile, RIGHT));
         }
 
-        nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) - 1);
-        if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(BOTTOM), scene, floorTile, -MATH_PI / 2));
+		floor = house->getFloorInDirection(i, BOTTOM);
+		if (!floor || !floorTiles[floor->getId()]) {
+            walls.push_back(createWall(scene, floorTile, BOTTOM));
         }
     }
 
@@ -53,11 +53,15 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     return new Room(walls);
 }
 
-Wall* Room::createWall(bool door, Scene* scene, Floor* floorTile, float rot) {
-    Wall* wall = new Wall(door);
+Wall* Room::createWall(Scene* scene, Floor* floorTile, Direction dir) {
+    Wall* wall = new Wall(floorTile->getDoor(dir));
     Node* wallNode = scene->addNode();
 	floorTile->getModel()->getNode()->addChild(wallNode);
-    wallNode->rotateZ(rot);
+	switch (dir) {
+		case LEFT: wallNode->rotateZ(MATH_PI); break;
+		case BOTTOM: wallNode->rotateZ(MATH_PI / 2); break;
+		case TOP: wallNode->rotateZ(-MATH_PI / 2); break;
+	}
 	Model* model = wall->getModel();
     wallNode->setModel(model);
 	return wall;
