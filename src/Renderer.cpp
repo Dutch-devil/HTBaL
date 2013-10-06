@@ -4,25 +4,30 @@ Renderer::Renderer(Rectangle viewport) {
 	this->viewport = viewport;
 	buttonDown = 0;
 	keyFlags = NULL;
+	mouseFlags = NULL;
 }
 Renderer::~Renderer() {
+	SAFE_DELETE(mouseFlags);
 	SAFE_DELETE(keyFlags);
 }
 
 bool Renderer::leftButtonDown() {
-	return buttonDown & LEFT_BUTTON;
+	return getMouseFlags()->getFlag(Mouse::MouseEvent::MOUSE_PRESS_LEFT_BUTTON / 2);
 }
 
 bool Renderer::rightButtonDown() {
-	return buttonDown & RIGHT_BUTTON;
+	return getMouseFlags()->getFlag(Mouse::MouseEvent::MOUSE_PRESS_RIGHT_BUTTON / 2);
 }
 
 bool Renderer::middleButtonDown() {
-	return buttonDown & MIDDLE_BUTTON;
+	return getMouseFlags()->getFlag(Mouse::MouseEvent::MOUSE_PRESS_MIDDLE_BUTTON / 2);
 }
 
 bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
-	switch (evt) {
+	if (Mouse::MouseEvent::MOUSE_PRESS_LEFT_BUTTON == 1) {
+		getMouseFlags()->forceFlag(evt / 2, evt % 2);
+	}else {
+	/*switch (evt) {
 		case Mouse::MOUSE_PRESS_LEFT_BUTTON:
 			buttonDown |= LEFT_BUTTON;
 			break;
@@ -41,8 +46,9 @@ bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
 		case Mouse::MOUSE_RELEASE_MIDDLE_BUTTON:
 			buttonDown &= LEFT_BUTTON | RIGHT_BUTTON;
 			break;
+	}*/
 	}
-	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && buttonDown != 0);
+	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && (leftButtonDown() || rightButtonDown() || middleButtonDown()));
 }
 
 bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging) {
@@ -60,6 +66,14 @@ void Renderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 	keyEvent(evt, key, getKeyFlags());
 }
 void Renderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {}
+
+
+Flags* Renderer::getMouseFlags() {
+	if (mouseFlags == NULL) {
+		mouseFlags = new Flags(4);
+	}
+	return mouseFlags;
+}
 
 KeyFlags* Renderer::getKeyFlags() {
 	if (keyFlags == NULL) {

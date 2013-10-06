@@ -1,10 +1,6 @@
 #ifndef Renderer_H_
 #define Renderer_H_
 
-#define LEFT_BUTTON 1
-#define RIGHT_BUTTON 2
-#define MIDDLE_BUTTON 4
-
 class Renderer;
 
 enum Renderers {
@@ -43,9 +39,11 @@ protected:
 	Rectangle viewport;
 	short buttonDown;
 
+	Flags* getMouseFlags();
 	KeyFlags* getKeyFlags();
 
 private:
+	Flags* mouseFlags;
 	KeyFlags* keyFlags;
 };
 

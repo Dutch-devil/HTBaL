@@ -14,6 +14,7 @@ public:
 
 	virtual void setFlag(unsigned int flagIndex);
 	virtual void resetFlag(unsigned int flagIndex);
+	virtual void forceFlag(unsigned int flagIndex, bool set);
 	virtual bool getFlag(unsigned int flagIndex);
 private:
 	unsigned char* flags;

@@ -14,17 +14,14 @@ using namespace gameplay;
 
 class Room {
 public:
-	Room(int, int, list<Wall*>);
-    ~Room(void);
+	Room(list<Wall*>);
+    ~Room();
 
 	list<Wall*> getWalls();
 	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
 
 protected:
-	static int i;
-	int x;
-	int y;
 	list<Wall*> walls;
 	
 	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);

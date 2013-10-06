@@ -1,8 +1,6 @@
 #include "House.h"
 #include "MaterialManager.h"
 
-int House::i = 0;
-
 House::House(int w, int h): width(w), height(h) {
     if (width <= 0 || height <= 0) {
         throw "Invalid house size (has to be bigger than 0)";
@@ -30,10 +28,7 @@ void House::addFloor(Scene* scene, float screenSize) {
             // Make a new floor tile
             Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::getWidth() + Floor::getWidth() / 2, (y - (float)getHeight() / 2) * Floor::getHeight() + Floor::getHeight() / 2);
 			
-			char* buf = new char[30];
-			sprintf(buf, "floor %d", i++);
-            Node* tileNode = scene->addNode(buf);
-			delete[] buf;
+            Node* tileNode = scene->addNode();
             tileNode->translateX(floor->getX());
             tileNode->translateY(floor->getY());
             tileNode->setModel(floor->getModel());
@@ -157,7 +152,7 @@ void House::addRandomRooms(Scene* scene) {
 
     tile = getFloorTile(id);
 
-	tile->setDoor(startTile.dir);
+	tile->setDoor(startTile.dir, true);
 	setDoor(hallStartTiles, startTile);
 
     tile->setSelected(true);
@@ -231,7 +226,7 @@ void House::addRandomRooms(Scene* scene) {
 
         startTile = (*roomStartPosibilities)[(int)(rand() % roomStartPosibilities->size())];
         tile = getFloorTile(startTile.id);
-		tile->setDoor(startTile.dir);
+		tile->setDoor(startTile.dir, true);
         roomTiles.push_back(tile->setSelected(true));
         removeId(roomStartPosibilities, tile->getId());
         pushAllRoomAround(roomPossibilities, getXById(tile->getId()), getYById(tile->getId()));
@@ -262,7 +257,7 @@ void House::addRandomRooms(Scene* scene) {
         }else {
 			for (Floor* roomTile : roomTiles) {
 				roomTile->setSelected(false);
-				roomTile->setDoor(NONE);
+				roomTile->setDoor(startTile.dir, false);
 			}
 		}
     }
@@ -286,7 +281,7 @@ void House::setDoor(list<Floor*> tiles, WalledTile adjacent) {
 							 getYById(adjacent.id) + (adjacent.dir == BOTTOM?-1:(adjacent.dir == TOP?1:0)));
 	for (Floor* tile : tiles) {
 		if (tile->getId() == searchId) {
-			tile->setDoor(adjacent.dir == LEFT?RIGHT:(adjacent.dir == RIGHT?LEFT:(adjacent.dir == TOP?BOTTOM:(adjacent.dir == BOTTOM?TOP:NONE))));
+			tile->setDoor(adjacent.dir == LEFT?RIGHT:(adjacent.dir == RIGHT?LEFT:(adjacent.dir == TOP?BOTTOM:(adjacent.dir == BOTTOM?TOP:NONE))), true);
 			break;
 		}
 	}

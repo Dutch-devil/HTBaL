@@ -27,18 +27,24 @@ class Floor;
 #include <list>
 #include "gameplay.h"
 #include "Wall.h"
+#include "Flags.h"
 
 using namespace gameplay;
 using namespace std;
  
-enum WallDir {
-	TOP, LEFT, BOTTOM, RIGHT, NONE
+enum Direction {
+	TOP = 1,	// y - 1
+	LEFT = 2,	// x - 1
+	BOTTOM = 3, // y + 1
+	RIGHT = 4,	// x + 1
+	NONE = 5	// no wall
 };
+
 struct WalledTile {
 	WalledTile(int id): id(id), dir(NONE) {}
-	WalledTile(int id, WallDir dir): id(id), dir(dir) {}
+	WalledTile(int id, Direction dir): id(id), dir(dir) {}
 	int id;
-	WallDir dir;
+	Direction dir;
 };
 
 class Floor {
@@ -53,8 +59,8 @@ public:
 	static Mesh* getMesh();
 	int getId();
 	
-	Floor* setDoor(WallDir dir);
-	WallDir getDoor();
+	Floor* setDoor(Direction dir, bool door);
+	bool getDoor(Direction dir);
 
 	float getX();
 	float getY();
@@ -83,10 +89,11 @@ protected:
 	int id;
 	float x, y;
 	Model* model;
-	WallDir doorDir;
 	Vector3* color;
 	Vector3* realColor;
 	bool selected, hover;
+
+	Flags* doors;
 };
 
 #endif

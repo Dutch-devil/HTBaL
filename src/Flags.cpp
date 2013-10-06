@@ -15,6 +15,14 @@ void Flags::setFlag(unsigned int flagIndex) {
 	flags[flagIndex / 8] |= (1 << (flagIndex % 8));
 }
 
+void Flags::forceFlag(unsigned int flagIndex, bool set) {
+	if (set) {
+		setFlag(flagIndex);
+	}else {
+		resetFlag(flagIndex);
+	}
+}
+
 void Flags::resetFlag(unsigned int flagIndex) {
 	flags[flagIndex / 8] &= ~(1 << (flagIndex % 8));
 }
