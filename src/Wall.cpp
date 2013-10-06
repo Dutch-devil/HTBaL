@@ -20,11 +20,15 @@ void Wall::releaseMesh() {
 }
 
 void Wall::calculateMesh() {
-    SAFE_DELETE(mesh);
+    SAFE_RELEASE(mesh);
 	mesh = Mesh::createQuad(Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
 						Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
 						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
 						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, 0));
+}
+
+Node* Wall::getNode(){
+	return model->getNode();
 }
 
 Mesh* Wall::getMesh() {
@@ -34,10 +38,13 @@ Mesh* Wall::getMesh() {
 	return mesh;
 }
 
+void Wall::finalize() {
+	SAFE_RELEASE(mesh);
+}
+
 Model* Wall::getModel() {
     if (model == NULL) {
-		Mesh* mesh = getMesh();
-        model = Model::create(mesh);
+        model = Model::create(getMesh());
 
         // Create the ground material
 		Material* material = MaterialManager::getMaterial(door?DOOR:WALL);

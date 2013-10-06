@@ -1,7 +1,10 @@
 #include "HouseRenderer.h"
+#include "Floor.h"
+#include "MaterialManager.h"
+#include "Wall.h"
 #include <cmath>
 
-HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport) {
+HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport), initialTranslate(NULL) {
     initialize();
 }
 
@@ -17,10 +20,11 @@ HouseRenderer::~HouseRenderer() {
     SAFE_DELETE(curTranslate);
     SAFE_RELEASE(houseRendererForm);
 	
+	removeHouse();
     SAFE_RELEASE(scene);
-    SAFE_DELETE(house);
-	Floor::releaseMesh();
-	Wall::releaseMesh();
+	Floor::finalize();
+	MaterialManager::finalize();
+	Wall::finalize();
 }
 
 void HouseRenderer::initialize() {
@@ -33,6 +37,8 @@ void HouseRenderer::initialize() {
     Node* cameraNode = scene->addNode();
     cameraNode->setCamera(camera);
     scene->setActiveCamera(camera);
+
+	SAFE_RELEASE(camera);
 
     cameraNode->rotateZ(3.14f / 4);
     cameraNode->rotateX(3.14f / 4);
@@ -81,6 +87,7 @@ void HouseRenderer::setCamera() {
     cameraNode->translateUp(-renderHeight * ((viewport.height - renderViewPort.height) / 2 - renderViewPort.y) / (viewport.height));
     cameraNode->translateForward(-100);
 
+	SAFE_DELETE(initialTranslate);
     initialTranslate = new Vector3(cameraNode->getTranslation());
 
     cameraNode->translate(*curTranslate);
@@ -109,6 +116,10 @@ void HouseRenderer::createHouse(bool random) {
     house->addFloor(scene, screenSize);
 }
 
+void HouseRenderer::removeHouse() {
+	SAFE_DELETE(house);
+}
+
 void HouseRenderer::createRoom() {
     house->addRandomRooms(scene);
 }
@@ -130,6 +141,10 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
         checkHover(x, y);
     } else if (evt == Mouse::MOUSE_WHEEL) {
         // Scrolled the mouse wheel
+		if(wheelData > 5)
+			wheelData = 5;
+		else if(wheelData < -5)
+			wheelData = -5;
         zoomLevel *= (1 - (float)wheelData * ZOOM_SPEED);
         setCamera();
 		// reset hover when zooming, as the mouse moves relative to the screen
@@ -290,9 +305,11 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
     if (!strcmp("mainMenuButton", control->getId())) {
         nextRenderer = MAIN_MENU;
     } else if (!strcmp("refreshButton", control->getId())) {
+		removeHouse();
         createHouse(true);
         createRoom();
     } else if (!strcmp("clearButton", control->getId())) {
+		removeHouse();
         createHouse(true);
     }
     control->setState(Control::State::NORMAL);

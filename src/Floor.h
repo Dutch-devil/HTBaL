@@ -14,7 +14,8 @@
 #define FLOOR_UNSELECTED FLOOR_WHITE
 #define FLOOR_SELECTED FLOOR_RED
 #define FLOOR_HOVER FLOOR_GREEN
-#define FLOOR_HOVER_SELECTED new Vector3(blendColors(FLOOR_SELECTED, FLOOR_HOVER))
+//LEAK!!!: #define FLOOR_HOVER_SELECTED new Vector3(blendColors(FLOOR_SELECTED, FLOOR_HOVER))
+#define FLOOR_HOVER_SELECTED new Vector3(.5, .5, 0)
 
 #define FLOOR_NONE FLOOR_BLACK
 #define FLOOR_EMPTY FLOOR_UNSELECTED
@@ -61,6 +62,7 @@ public:
 	static float getWidth();
 	
 	static Mesh* getMesh();
+	static void finalize();
 	int getId();
 	
 	Floor* setDoor(Direction dir, bool door);

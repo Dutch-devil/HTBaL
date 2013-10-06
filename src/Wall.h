@@ -13,6 +13,9 @@ public:
     ~Wall();
 
 	static void calculateMesh();
+	static void finalize();
+
+	Node* getNode();
 	Mesh* getMesh();
 	Model* getModel();
 	

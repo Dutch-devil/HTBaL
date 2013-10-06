@@ -1,14 +1,16 @@
 #include "Room.h"
 
-Room::Room(list<Wall*> walls): walls(walls) {
-
-}
-
+Room::Room(list<Wall*> walls): walls(walls) {}
 
 Room::~Room(void) {
-    for (Wall* wall : walls) {
-		SAFE_DELETE(wall);
-    }
+	if (!walls.empty()) {
+		Scene* scene = walls.back()->getNode()->getScene();
+		while (!walls.empty()) {
+			scene->removeNode(walls.back()->getNode());
+			SAFE_DELETE(walls.back());
+			walls.pop_back();
+		}
+	}
 }
 
 list<Wall*> Room::getWalls() {
@@ -64,7 +66,6 @@ Wall* Room::createWall(Scene* scene, Floor* floorTile, Direction dir) {
 	}
 	Model* model = wall->getModel();
     wallNode->setModel(model);
-	return wall;
 }
 
 

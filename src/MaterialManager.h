@@ -15,6 +15,7 @@ enum MaterialType {
 class MaterialManager {
 public:
 	static Material* getMaterial(MaterialType type);
+	static void finalize();
 
 private:
 	static Properties** propertiesArray;
