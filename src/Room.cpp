@@ -66,6 +66,7 @@ Wall* Room::createWall(Scene* scene, Floor* floorTile, Direction dir) {
 	}
 	Model* model = wall->getModel();
     wallNode->setModel(model);
+	return wall;
 }
 
 

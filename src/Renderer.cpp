@@ -24,8 +24,8 @@ bool Renderer::middleButtonDown() {
 }
 
 bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
-	if (Mouse::MouseEvent::MOUSE_PRESS_LEFT_BUTTON == 1) {
-		getMouseFlags()->forceFlag(evt / 2, evt % 2);
+	if (Mouse::MouseEvent::MOUSE_PRESS_LEFT_BUTTON == 0) {
+		getMouseFlags()->forceFlag(evt / 2, (evt + 1) % 2);
 	}else {
 	/*switch (evt) {
 		case Mouse::MOUSE_PRESS_LEFT_BUTTON:

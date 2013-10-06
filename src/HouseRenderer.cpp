@@ -141,10 +141,11 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
         checkHover(x, y);
     } else if (evt == Mouse::MOUSE_WHEEL) {
         // Scrolled the mouse wheel
-		if(wheelData > 5)
+		if (wheelData > 5) {
 			wheelData = 5;
-		else if(wheelData < -5)
+		}else if (wheelData < -5) {
 			wheelData = -5;
+		}
         zoomLevel *= (1 - (float)wheelData * ZOOM_SPEED);
         setCamera();
 		// reset hover when zooming, as the mouse moves relative to the screen

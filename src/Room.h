@@ -20,7 +20,6 @@ public:
 	list<Wall*> getWalls();
 	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
-	list<Wall*> getWalls();
 
 protected:
 	list<Wall*> walls;
