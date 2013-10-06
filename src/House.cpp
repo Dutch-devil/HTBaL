@@ -26,11 +26,11 @@ void House::addFloor(Scene* scene, float screenSize) {
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
             // Make a new floor tile
-            Floor* floor = new Floor(getIdByXY(x, y), (x - (float)getWidth() / 2) * Floor::getWidth() + Floor::getWidth() / 2, (y - (float)getHeight() / 2) * Floor::getHeight() + Floor::getHeight() / 2);
+            Floor* floor = new Floor(getIdByXY(x, y));
 			
             Node* tileNode = scene->addNode();
-            tileNode->translateX(floor->getX());
-            tileNode->translateY(floor->getY());
+            tileNode->translateX((x - (float)getWidth() / 2) * Floor::getWidth() + Floor::getWidth() / 2);
+            tileNode->translateY((y - (float)getHeight() / 2) * Floor::getHeight() + Floor::getHeight() / 2);
             tileNode->setModel(floor->getModel());
             floorTiles[getIdByXY(x, y)] = floor;
 			//SAFE_RELEASE(tileNode);

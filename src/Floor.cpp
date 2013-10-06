@@ -6,7 +6,7 @@
 float Floor::width, Floor::height;
 Mesh* Floor::mesh = NULL;
 
-Floor::Floor(int id, float x, float y): id(id), x(x), y(y) {
+Floor::Floor(int id): id(id) {
     this->model = Model::create(getMesh());
 	this->doors = new Flags(5);
 
@@ -72,13 +72,6 @@ bool Floor::getDoor(Direction dir) {
 
 int Floor::getId() {
 	return id;
-}
-
-float Floor::getX() {
-	return x;
-}
-float Floor::getY() {
-	return y;
 }
 
 Model* Floor::getModel() {

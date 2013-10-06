@@ -30,22 +30,22 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
 
         int nextTile = house->getIdByXY(house->getXById(i) - 1, house->getYById(i));
         if (nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(LEFT), scene, floorTile->getX(), floorTile->getY(), MATH_PI));
+            walls.push_back(createWall(floorTile->getDoor(LEFT), scene, floorTile, MATH_PI));
         }
 
         nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) + 1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(TOP), scene, floorTile->getX(), floorTile->getY(), MATH_PI / 2));
+            walls.push_back(createWall(floorTile->getDoor(TOP), scene, floorTile, MATH_PI / 2));
         }
 
         nextTile = house->getIdByXY(house->getXById(i) + 1, house->getYById(i));
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(RIGHT), scene, floorTile->getX(), floorTile->getY(), 0));
+            walls.push_back(createWall(floorTile->getDoor(RIGHT), scene, floorTile, 0));
         }
 
         nextTile = house->getIdByXY(house->getXById(i), house->getYById(i) - 1);
         if(nextTile == -1 || floorTiles[nextTile] == NULL) {
-            walls.push_back(createWall(floorTile->getDoor(BOTTOM), scene, floorTile->getX(), floorTile->getY(), -MATH_PI / 2));
+            walls.push_back(createWall(floorTile->getDoor(BOTTOM), scene, floorTile, -MATH_PI / 2));
         }
     }
 
@@ -53,11 +53,10 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
     return new Room(walls);
 }
 
-Wall* Room::createWall(bool door, Scene* scene, float x, float y, float rot) {
+Wall* Room::createWall(bool door, Scene* scene, Floor* floorTile, float rot) {
     Wall* wall = new Wall(door);
     Node* wallNode = scene->addNode();
-    wallNode->translateX(x);
-    wallNode->translateY(y);
+	floorTile->getModel()->getNode()->addChild(wallNode);
     wallNode->rotateZ(rot);
 	Model* model = wall->getModel();
     wallNode->setModel(model);

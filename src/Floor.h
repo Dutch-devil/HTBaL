@@ -49,7 +49,7 @@ struct WalledTile {
 
 class Floor {
 public:
-	Floor(int id, float x, float y);
+	Floor(int id);
     ~Floor();
 
 	static void setHeightWidth(float height, float width);
@@ -61,9 +61,6 @@ public:
 	
 	Floor* setDoor(Direction dir, bool door);
 	bool getDoor(Direction dir);
-
-	float getX();
-	float getY();
 	Model* getModel();
 
 	Vector3* getColor();
@@ -87,7 +84,6 @@ protected:
 	static void calculateMesh();
 
 	int id;
-	float x, y;
 	Model* model;
 	Vector3* color;
 	Vector3* realColor;

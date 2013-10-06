@@ -24,7 +24,7 @@ public:
 protected:
 	list<Wall*> walls;
 	
-	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);
+	static Wall* createWall(bool door, Scene* scene, Floor* floorTile, float rot);
 };
 
 #endif
