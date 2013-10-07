@@ -51,6 +51,7 @@ protected:
 	float menuWidth;
 	float renderHeight;
 
+	Room* prevRoom;
 	Floor* prevFloor;
 	Floor* prevHover;
 

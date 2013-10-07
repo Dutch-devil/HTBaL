@@ -65,8 +65,11 @@ public:
 	static void finalize();
 	int getId();
 	
+	Floor* setWall(Direction dir, bool wall);
+	bool getWall(Direction dir);
 	Floor* setDoor(Direction dir, bool door);
 	bool getDoor(Direction dir);
+
 	Model* getModel();
 
 	Vector3* getColor();
@@ -94,7 +97,8 @@ protected:
 	Vector3* color;
 	Vector3* realColor;
 	bool selected, hover;
-
+	
+	Flags* walls;
 	Flags* doors;
 };
 

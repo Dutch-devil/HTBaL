@@ -24,30 +24,7 @@ bool Renderer::middleButtonDown() {
 }
 
 bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
-	if (Mouse::MouseEvent::MOUSE_PRESS_LEFT_BUTTON == 0) {
-		getMouseFlags()->forceFlag(evt / 2, (evt + 1) % 2);
-	}else {
-	/*switch (evt) {
-		case Mouse::MOUSE_PRESS_LEFT_BUTTON:
-			buttonDown |= LEFT_BUTTON;
-			break;
-		case Mouse::MOUSE_PRESS_RIGHT_BUTTON:
-			buttonDown |= RIGHT_BUTTON;
-			break;
-		case Mouse::MOUSE_PRESS_MIDDLE_BUTTON:
-			buttonDown |= MIDDLE_BUTTON;
-			break;
-		case Mouse::MOUSE_RELEASE_LEFT_BUTTON:
-			buttonDown &= RIGHT_BUTTON | MIDDLE_BUTTON;
-			break;
-		case Mouse::MOUSE_RELEASE_RIGHT_BUTTON:
-			buttonDown &= LEFT_BUTTON | MIDDLE_BUTTON;
-			break;
-		case Mouse::MOUSE_RELEASE_MIDDLE_BUTTON:
-			buttonDown &= LEFT_BUTTON | RIGHT_BUTTON;
-			break;
-	}*/
-	}
+	getMouseFlags()->forceFlag(evt / 2, (evt + 1) % 2);
 	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && (leftButtonDown() || rightButtonDown() || middleButtonDown()));
 }
 
@@ -85,4 +62,12 @@ KeyFlags* Renderer::getKeyFlags() {
 void Renderer::resizeEvent(unsigned int width, unsigned int height) {
 	this->viewport.width = width;
 	this->viewport.height = height;
+}
+
+void Renderer::drawText(const Vector4& color, unsigned int x, unsigned int y, char* text) {
+	Font* font = Font::create("res/arial14.gpb");
+    font->start();											// start using the font
+    font->drawText(text, x, y, color, font->getSize());	// Writing the fps to the screen
+    font->finish();											// stop using the font
+	SAFE_RELEASE(font);
 }

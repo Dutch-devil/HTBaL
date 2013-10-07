@@ -95,6 +95,15 @@ list<Room*> House::getRooms() {
     return rooms;
 }
 
+Room* House::getRoom(Floor* tile) {
+	for (Room* room : rooms) {
+		if (room->contains(tile)) {
+			return room;
+		}
+	}
+	return NULL;
+}
+
 int House::getIdByXY(int x, int y) {
     if (x < 0 || x >= width || y < 0 || y >= height) {
         return -1;
@@ -288,8 +297,8 @@ void House::addRandomRooms(Scene* scene) {
 		}
     }
 
-    addRoom(Room::createRoomFromFloor(scene, this, hallStartTiles));
-    addRoom(Room::createRoomFromFloor(scene, this, hallTiles));
+    addRoom(Room::createRoomFromFloor(scene, this, hallStartTiles, HALL_START));
+    addRoom(Room::createRoomFromFloor(scene, this, hallTiles, HALL));
 
 	for (int i = 0; i < getWidth() * getHeight(); i++) {
 		if (!getFloorTile(i)->getSelected()) {
@@ -460,6 +469,19 @@ list<Floor*> House::getGaps(vector<WalledTile>* toCheck, unsigned int maxSize) {
         }
 		SAFE_DELETE(tmp);
     }
+	for (list<Floor*>::iterator itr = gapTiles.begin(); itr  != gapTiles.end();) {
+		list<Floor*>::iterator next = itr;
+		for (next++; next != gapTiles.end();) {
+			if ((*next) == (*itr)) {
+				itr = gapTiles.erase(itr);
+				goto noIncrement;
+			}else {
+				next++;
+			}
+		}
+		itr++;
+		noIncrement:;
+	}
 	return gapTiles;
 }
 

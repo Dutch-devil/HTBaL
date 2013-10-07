@@ -67,6 +67,7 @@ void HouseRenderer::resize() {
     setCamera();
 
     createMenu(menuWidth);
+	prevRoom = NULL;
     prevFloor = NULL;
 }
 
@@ -187,6 +188,7 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
         // reset last floor on release
         prevFloor = NULL;
+		prevRoom = NULL;
         return;
     }
 
@@ -199,7 +201,18 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
     if (floor != prevFloor) {
         // same model twice, don't toggle
-        floor->toggleSelect();
+		if (prevRoom == NULL || !prevRoom->contains(floor)) {
+			// not the same room, toggle room
+			prevRoom = house->getRoom(floor);
+			if (prevRoom != NULL) {
+				for (Floor* roomTile : prevRoom->getFloor()) {
+					roomTile->toggleSelect();
+				}
+			}
+		}
+		if (prevRoom == NULL) {
+			floor->toggleSelect();
+		}
         prevFloor = floor;
     }
 }
@@ -300,6 +313,25 @@ void HouseRenderer::render(float elapsedTime) {
         }
     }
     houseRendererForm->draw();
+
+	if (prevHover) {
+		Room* hoverRoom = house->getRoom(prevHover);
+		if (hoverRoom) {
+			char* buf = new char[100];
+			sprintf(buf, "Room type: %s", hoverRoom->getRoomTypeString());
+			drawText(Vector4(1, 1, 1, 1), 5, 50, buf);
+			
+			sprintf(buf, "Room size: %d", hoverRoom->getSize());
+			drawText(Vector4(1, 1, 1, 1), 5, 65, buf);
+			
+			sprintf(buf, "Max rectangle: %d", hoverRoom->getMaxRectangle());
+			drawText(Vector4(1, 1, 1, 1), 5, 80, buf);
+			
+			sprintf(buf, "Max line: %d", hoverRoom->getMaxLine());
+			drawText(Vector4(1, 1, 1, 1), 5, 95, buf);
+			delete[] buf;
+		}
+	}
 }
 
 void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType evt) {

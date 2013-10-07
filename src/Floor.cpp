@@ -8,6 +8,7 @@ Mesh* Floor::mesh = NULL;
 
 Floor::Floor(int id): id(id) {
     this->model = Model::create(getMesh());
+	this->walls = new Flags(4);
 	this->doors = new Flags(5);
 
     realColor = FLOOR_UNSELECTED;
@@ -21,6 +22,7 @@ Floor::Floor(int id): id(id) {
 }
 
 Floor::~Floor() {
+	SAFE_DELETE(walls);
 	SAFE_DELETE(doors);
 	SAFE_DELETE(color);
 	SAFE_DELETE(realColor);
@@ -59,6 +61,15 @@ float Floor::getHeight() {
 
 float Floor::getWidth() {
 	return width;
+}
+
+Floor* Floor::setWall(Direction dir, bool wall) {
+	walls->forceFlag(dir, wall);
+	return this;
+}
+
+bool Floor::getWall(Direction dir) {
+	return walls->getFlag(dir);
 }
 
 Floor* Floor::setDoor(Direction dir, bool door) {

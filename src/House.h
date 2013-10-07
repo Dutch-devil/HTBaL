@@ -34,6 +34,8 @@ public:
 	int getFloorIdInDirection(int x, int y, Direction dir);
 
 	list<Room*> getRooms();
+	Room* getRoom(Floor* tile);
+
 	void addRandomRooms(Scene* scene);
 	
 	void setDoor(list<Floor*> tiles, WalledTile adjacent);

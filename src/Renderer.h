@@ -29,8 +29,9 @@ public:
 	virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 	virtual void keyEvent(Keyboard::KeyEvent evt, int key);
 	virtual void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
-	
 	virtual void resizeEvent(unsigned int width, unsigned int height);
+
+	void drawText(const Vector4& color, unsigned int x, unsigned int y, char* text);
 
     virtual Renderers update(float elapsedTime) = 0;
 
