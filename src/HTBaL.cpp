@@ -25,6 +25,7 @@ void HTBaL::initialize() {
 void HTBaL::finalize() {
 	deleting = true;
 	SAFE_DELETE(activeRenderer);
+	MaterialManager::finalize();
 }
 
 bool HTBaL::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {

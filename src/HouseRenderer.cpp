@@ -23,7 +23,6 @@ HouseRenderer::~HouseRenderer() {
 	removeHouse();
     SAFE_RELEASE(scene);
 	Floor::finalize();
-	MaterialManager::finalize();
 	Wall::finalize();
 }
 

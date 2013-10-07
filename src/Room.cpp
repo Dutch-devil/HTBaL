@@ -136,7 +136,7 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
 
 Wall* Room::createWall(Scene* scene, Floor* floorTile, Direction dir) {
 	floorTile->setWall(dir, true);
-    Wall* wall = new Wall(false, floorTile->getDoor(dir));
+    Wall* wall = new Wall(!(dir == LEFT || dir == BOTTOM), floorTile->getDoor(dir));
     Node* wallNode = scene->addNode();
 	floorTile->getModel()->getNode()->addChild(wallNode);
 	switch (dir) {
