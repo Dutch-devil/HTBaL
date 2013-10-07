@@ -469,19 +469,6 @@ list<Floor*> House::getGaps(vector<WalledTile>* toCheck, unsigned int maxSize) {
         }
 		SAFE_DELETE(tmp);
     }
-	for (list<Floor*>::iterator itr = gapTiles.begin(); itr  != gapTiles.end();) {
-		list<Floor*>::iterator next = itr;
-		for (next++; next != gapTiles.end();) {
-			if ((*next) == (*itr)) {
-				itr = gapTiles.erase(itr);
-				goto noIncrement;
-			}else {
-				next++;
-			}
-		}
-		itr++;
-		noIncrement:;
-	}
 	return gapTiles;
 }
 
@@ -489,7 +476,9 @@ bool House::getEnclosed(int startId, list<Floor*>* others) {
     if (floorTouchesSide(startId)) {
         return false;
     }
-    others->push_back(getFloorTile(startId)->setSelected(true));
+	if (!getFloorTile(startId)->getSelected()) {
+		others->push_back(getFloorTile(startId)->setSelected(true));
+	}
     vector<int>* ids = new vector<int>();
     pushAllRoomAround(ids, startId);
     for (int id : *ids) {
