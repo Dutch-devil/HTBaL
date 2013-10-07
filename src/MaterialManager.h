@@ -9,6 +9,7 @@ enum MaterialType {
 	FLOOR,
 	WALL,
 	DOOR,
+	MENU_WHEEL,
 	COUNT
 };
 

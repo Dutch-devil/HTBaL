@@ -12,7 +12,8 @@ class MapRenderer: public Renderer {
 public:
 	MapRenderer(Rectangle viewport);
 	~MapRenderer();
-	Renderers update(float elapsedTime);
+	void update(float elapsedTime);
+	Renderers getNextRenderer();
 	void render(float elapsedTime);
 };
 

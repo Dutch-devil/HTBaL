@@ -67,7 +67,7 @@ void HouseRenderer::resize() {
     setCamera();
 
     createMenu(menuWidth);
-	prevRoom = NULL;
+	prevRoom = hoverRoom = NULL;
     prevFloor = NULL;
 }
 
@@ -119,13 +119,15 @@ void HouseRenderer::createHouse(bool random) {
 
 void HouseRenderer::removeHouse() {
 	SAFE_DELETE(house);
+	prevRoom = hoverRoom = NULL;
+    prevFloor = NULL;
 }
 
 void HouseRenderer::createRoom() {
     house->addRandomRooms(scene);
 }
 
-bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging) {
+bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked) {
     if (dragging) {
         if (leftButtonDown()) {
             // Dragging left button
@@ -188,7 +190,7 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
     if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
         // reset last floor on release
         prevFloor = NULL;
-		prevRoom = NULL;
+		hoverRoom = NULL;
         return;
     }
 
@@ -201,20 +203,26 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
 
     if (floor != prevFloor) {
         // same model twice, don't toggle
-		if (prevRoom == NULL || !prevRoom->contains(floor)) {
+		if (hoverRoom == NULL || !hoverRoom->contains(floor)) {
 			// not the same room, toggle room
-			prevRoom = house->getRoom(floor);
-			if (prevRoom != NULL) {
+			hoverRoom = house->getRoom(floor);
+			if (prevRoom != NULL && prevRoom != hoverRoom) {
 				for (Floor* roomTile : prevRoom->getFloor()) {
+					roomTile->setSelected(false);
+				}
+			}
+			if (hoverRoom != NULL) {
+				for (Floor* roomTile : hoverRoom->getFloor()) {
 					roomTile->toggleSelect();
 				}
 			}
 		}
-		if (prevRoom == NULL) {
+		if (hoverRoom == NULL) {
 			floor->toggleSelect();
 		}
         prevFloor = floor;
     }
+	prevRoom = hoverRoom;
 }
 
 int HouseRenderer::getViewTileId(int x, int y) {
@@ -273,7 +281,7 @@ void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
     resize();
 }
 
-Renderers HouseRenderer::update(float elapsedTime) {
+void HouseRenderer::update(float elapsedTime) {
     float translation = SCROLL_SPEED * elapsedTime * zoomLevel;
 
     houseRendererForm->update(elapsedTime);
@@ -297,7 +305,10 @@ Renderers HouseRenderer::update(float elapsedTime) {
     if (changed) {
         Vector3::subtract(scene->getActiveCamera()->getNode()->getTranslation(), *initialTranslate, curTranslate);
     }
-    return nextRenderer;
+}
+
+Renderers HouseRenderer::getNextRenderer() {
+	return nextRenderer;
 }
 
 void HouseRenderer::render(float elapsedTime) {

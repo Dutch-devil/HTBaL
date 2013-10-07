@@ -7,7 +7,11 @@ MapRenderer::~MapRenderer() {
 
 }
 
-Renderers MapRenderer::update(float elapsedTime) {
+void MapRenderer::update(float elapsedTime) {
+	
+}
+
+Renderers MapRenderer::getNextRenderer() {
 	return KEEP;
 }
 

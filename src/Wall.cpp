@@ -3,6 +3,7 @@
 
 
 Mesh* Wall::mesh = NULL;
+Mesh* Wall::mesh_inv = NULL;
 
 Wall::Wall(bool inverted): inverted(inverted), door(false) {
 	model = NULL;
@@ -17,14 +18,21 @@ Wall::~Wall() {
 
 void Wall::releaseMesh() {
 	SAFE_RELEASE(mesh);
+	SAFE_RELEASE(mesh_inv);
 }
 
 void Wall::calculateMesh() {
     SAFE_RELEASE(mesh);
+	SAFE_RELEASE(mesh_inv);
 	mesh = Mesh::createQuad(Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
 						Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
 						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
 						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, 0));
+	
+	//mesh_inv = Mesh::createQuad(Vector3(-Floor::getWidth() / 2, Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
+	//					Vector3(-Floor::getWidth() / 2, Floor::getHeight() / 2, 0),
+	//					Vector3(-Floor::getWidth() / 2, -Floor::getHeight() / 2, (Floor::getWidth() + Floor::getHeight()) / 4),
+	//					Vector3(-Floor::getWidth() / 2, -Floor::getHeight() / 2, 0));
 }
 
 Node* Wall::getNode(){
@@ -34,6 +42,9 @@ Node* Wall::getNode(){
 Mesh* Wall::getMesh() {
 	if (mesh == NULL) {
 		calculateMesh();
+	}
+	if (inverted) {
+		//return mesh_inv;
 	}
 	return mesh;
 }

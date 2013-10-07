@@ -41,6 +41,7 @@ public:
 
 	list<Floor*> getCorners();
 	list<Floor*> getLine(Floor* startTile, Direction dir);
+	list<Floor*> getLine(Floor* startTile, Direction dir, unsigned int maxLength);
 	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, RoomType roomType);

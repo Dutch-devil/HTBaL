@@ -17,7 +17,8 @@ HTBaL::~HTBaL() {}
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {
 	deleting = false;
-	activeRenderer = new HouseRenderer(getViewport());
+	activeRenderer = NULL;
+	setActiveRenderer(MAIN_MENU);
 }
 
 // We don't have to do anything when the game closes;
@@ -54,7 +55,8 @@ void HTBaL::update(float elapsedTime) {
 	if (deleting) {
 		return;
 	}
-	setActiveRenderer(activeRenderer->update(elapsedTime));
+	activeRenderer->update(elapsedTime);
+	setActiveRenderer(activeRenderer->getNextRenderer());
 }
 
 void HTBaL::render(float elapsedTime) {

@@ -29,12 +29,13 @@ public:
 	
 	void checkHover(int x, int y);
 	
-	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging);
+	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked);
 	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
 	void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
 	void resizeEvent(unsigned int width, unsigned int height);
 
-	Renderers update(float elapsedTime);
+	void update(float elapsedTime);
+	Renderers getNextRenderer();
 	void render(float elapsedTime);
 
 	void controlEvent(Control* control, Control::Listener::EventType evt);
@@ -51,7 +52,7 @@ protected:
 	float menuWidth;
 	float renderHeight;
 
-	Room* prevRoom;
+	Room* hoverRoom, *prevRoom;
 	Floor* prevFloor;
 	Floor* prevHover;
 

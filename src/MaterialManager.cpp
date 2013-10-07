@@ -8,7 +8,7 @@ RenderState::StateBlock* MaterialManager::stateBlock = NULL;
 Material* MaterialManager::getMaterial(MaterialType type) {
 	if (propertiesArray == NULL) {
 		propertiesArray = new Properties*[COUNT];
-		memset(propertiesArray, NULL, COUNT*sizeof(Properties*));
+		memset(propertiesArray, NULL, COUNT * sizeof(Properties*));
 
 		stateBlock = RenderState::StateBlock::create();
 		//stateBlock->setCullFace(false);
@@ -16,7 +16,7 @@ Material* MaterialManager::getMaterial(MaterialType type) {
 		stateBlock->setBlendSrc(RenderState::BLEND_SRC_ALPHA);
 		stateBlock->setBlendDst(RenderState::BLEND_ONE_MINUS_SRC_ALPHA);
 	}
-	if(propertiesArray[type] == NULL) {
+	if (propertiesArray[type] == NULL) {
 		switch(type) {
 		case FLOOR:
 			propertiesArray[type] = Properties::create("res/house/floor.material");
@@ -26,6 +26,9 @@ Material* MaterialManager::getMaterial(MaterialType type) {
 			break;
 		case DOOR:
 			propertiesArray[type] = Properties::create("res/house/door.material");
+			break;
+		case MENU_WHEEL:
+			propertiesArray[type] = Properties::create("res/menu/menuWheel.material");
 			break;
 		default:
 			GP_ERROR("No matching material found");

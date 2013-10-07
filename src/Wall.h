@@ -22,7 +22,7 @@ public:
 	static void releaseMesh();
 
 protected:
-	static Mesh* mesh;
+	static Mesh* mesh, *mesh_inv;
 	bool inverted, door;
 	Model* model;
 };

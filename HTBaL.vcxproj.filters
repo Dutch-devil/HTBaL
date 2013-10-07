@@ -8,6 +8,12 @@
     <Filter Include="src\House">
       <UniqueIdentifier>{3bd47eda-c920-484a-a9d0-07f48407d503}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Menu">
+      <UniqueIdentifier>{f6f81e83-ceeb-46b9-998f-e6667e3a6256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Menu\Main">
+      <UniqueIdentifier>{097c1b92-39f5-4fe6-b6ab-594b626be2da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -40,9 +46,6 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuMainRenderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\House.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
@@ -67,6 +70,15 @@
     <ClCompile Include="src\Flags.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MenuMainRenderer.cpp">
+      <Filter>src\Menu\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuWheelPart.cpp">
+      <Filter>src\Menu\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuWheel.cpp">
+      <Filter>src\Menu\Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\HouseRenderer.h">
@@ -79,9 +91,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MenuMainRenderer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\House.h">
@@ -104,6 +113,15 @@
     </ClInclude>
     <ClInclude Include="src\Flags.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MenuMainRenderer.h">
+      <Filter>src\Menu\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MenuWheelPart.h">
+      <Filter>src\Menu\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MenuWheel.h">
+      <Filter>src\Menu\Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

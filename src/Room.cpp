@@ -74,11 +74,16 @@ list<Floor*> Room::getCorners() {
 	return corners;
 }
 
+
 list<Floor*> Room::getLine(Floor* startTile, Direction dir) {
+	return getLine(startTile, dir, 0);
+}
+
+list<Floor*> Room::getLine(Floor* startTile, Direction dir, unsigned int maxLength) {
 	list<Floor*> line;
 	line.push_back(startTile);
 	Floor* nextTile = startTile;
-	while (!nextTile->getWall(dir)) {
+	while (--maxLength && !nextTile->getWall(dir)) {
 		nextTile = house->getFloorInDirection(nextTile->getId(), dir);
 		line.push_back(nextTile);
 	}
@@ -131,7 +136,7 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
 
 Wall* Room::createWall(Scene* scene, Floor* floorTile, Direction dir) {
 	floorTile->setWall(dir, true);
-    Wall* wall = new Wall(floorTile->getDoor(dir));
+    Wall* wall = new Wall(false, floorTile->getDoor(dir));
     Node* wallNode = scene->addNode();
 	floorTile->getModel()->getNode()->addChild(wallNode);
 	switch (dir) {

@@ -5,10 +5,16 @@ Renderer::Renderer(Rectangle viewport) {
 	buttonDown = 0;
 	keyFlags = NULL;
 	mouseFlags = NULL;
+	clickStarts = NULL;
 }
 Renderer::~Renderer() {
 	SAFE_DELETE(mouseFlags);
 	SAFE_DELETE(keyFlags);
+	SAFE_DELETE(clickStarts);
+}
+
+Renderers Renderer::getNextRenderer() {
+	return KEEP;
 }
 
 bool Renderer::leftButtonDown() {
@@ -24,15 +30,43 @@ bool Renderer::middleButtonDown() {
 }
 
 bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
-	getMouseFlags()->forceFlag(evt / 2, (evt + 1) % 2);
-	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && (leftButtonDown() || rightButtonDown() || middleButtonDown()));
+	int btn = evt / 2;
+	bool clicked = false;
+	if (btn < 3) {
+		bool press = (evt + 1) % 2;
+		getMouseFlags()->forceFlag(btn, press);
+		Vector2* starts = getClickStarts();
+		if (press) {
+			starts[btn].x = x;
+			starts[btn].y = y;
+		}else {
+			clicked = starts[btn].x == x && starts[btn].y == y;
+		}
+	}else {
+		clickStarts = NULL;
+	}
+	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && (leftButtonDown() || rightButtonDown() || middleButtonDown()), clicked);
 }
 
-bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging) {
+bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked) {
 	return false;
 }
 
-void Renderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {}
+void Renderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+	bool clicked = false;
+	Vector2* starts = getClickStarts();
+	if (evt == Touch::TouchEvent::TOUCH_PRESS) {
+		starts[0].x = x;
+		starts[0].y = y;
+	}else if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
+		clicked = starts[0].x == x && starts[0].y == y;
+	}else {
+		clickStarts = NULL;
+	}
+	touchEvent(evt, x, y, contactIndex, clicked);
+}
+
+void Renderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked) {}
 
 void Renderer::keyEvent(Keyboard::KeyEvent evt, int key) {
 	if (evt == Keyboard::KeyEvent::KEY_PRESS) {
@@ -57,6 +91,14 @@ KeyFlags* Renderer::getKeyFlags() {
 		keyFlags = new KeyFlags();
 	}
 	return keyFlags;
+}
+
+Vector2* Renderer::getClickStarts() {
+	if (clickStarts == NULL) {
+		clickStarts = new Vector2[3];
+		memset(clickStarts, -1, sizeof(Vector2) * 3);
+	}
+	return clickStarts;
 }
 
 void Renderer::resizeEvent(unsigned int width, unsigned int height) {
