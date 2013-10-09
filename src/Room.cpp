@@ -1,7 +1,7 @@
 #include "Room.h"
 
 Room::Room(House* house, list<Floor*> floor, list<Wall*> walls): house(house), floor(floor), walls(walls), roomType(ROOM_EMPTY) {}
-Room::Room(House* house, list<Floor*> floor, list<Wall*> walls, RoomType roomType): house(house), floor(floor), walls(walls), roomType(roomType) {}
+Room::Room(House* house, list<Floor*> floor, list<Wall*> walls, Room::Type roomType): house(house), floor(floor), walls(walls), roomType(roomType) {}
 
 Room::~Room(void) {
 	if (!walls.empty()) {
@@ -14,16 +14,43 @@ Room::~Room(void) {
 	}
 }
 
-RoomType Room::getRoomType() {
+Room::Type Room::getRoomType() {
 	return roomType;
 }
 
+void Room::setRoomType(Room::Type roomType) {
+	this->roomType = roomType;
+}
+
 const char* Room::getRoomTypeString() {
+	return getRoomTypeString(roomType);
+}
+
+const char* Room::getRoomTypeString(Room::Type roomType) {
 	switch (roomType) {
-		case HALL_START: return "Hall start";
+		case LIVING_QUARTERS: return "Living quarters";
+		case BEDROOM: return "Bedroom";
+		case DINING_ROOM: return "Dining room";
+		case STORAGE_ROOM: return "Storage room";
+		case LIBARY: return "Library";
+		case LABORATORIUM: return "Laboratorium";
+		case ARBORETUM: return "Arboretum";
+		case WORKSHOP: return "Workshop";
+		case SMITHY: return "Smithy";
+		case STINKY_SEWERS: return "Stinky sewers";
+		case DIRTPLOT: return "Dirtplot";
+		case STABLES: return "Stables";
+		case ARSENAL_ROOM: return "Arsenal room";
+		case AVIARY: return "Aviary";
+		case POOL: return "Pool";
+		case ART_ROOM: return "Art room";
+		case BALLROOM: return "Ballroom";
+		case ENTRANCE: return "Entrance";
 		case HALL: return "Hall";
 		case ROOM_EMPTY: return "Empty room";
-		default: return "None";
+		default: 
+			GP_WARN("No valid room");
+			return "None";
 	}
 }
 
@@ -96,7 +123,7 @@ Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTil
 	return createRoomFromFloor(scene, house, roomTiles, ROOM_EMPTY);
 }
 
-Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, RoomType roomType) {
+Room* Room::createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, Room::Type roomType) {
     Floor** floorTiles = new Floor*[house->getWidth() * house->getHeight()];
     memset(floorTiles, NULL, sizeof(Floor*) * house->getWidth() * house->getHeight());
 

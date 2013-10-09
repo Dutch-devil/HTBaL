@@ -5,7 +5,7 @@ class MenuMainRenderer;
 
 #include "gameplay.h"
 #include "Renderer.h"
-#include "MenuWheel.h"
+#include "MainMenuWheel.h"
 
 using namespace gameplay;
 
@@ -27,7 +27,7 @@ protected:
 	Renderers nextRenderer;
 
 	Scene* scene;
-	MenuWheel* menuWheel;
+	MainMenuWheel* menuWheel;
 };
 
 

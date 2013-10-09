@@ -14,6 +14,9 @@
     <Filter Include="src\Menu\Main">
       <UniqueIdentifier>{097c1b92-39f5-4fe6-b6ab-594b626be2da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Menu\House">
+      <UniqueIdentifier>{f71258b5-b493-4334-9648-b7f3f17fbf83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -58,9 +61,6 @@
     <ClCompile Include="src\Room.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
-    <ClCompile Include="src\HouseRenderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\MaterialManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -73,17 +73,23 @@
     <ClCompile Include="src\MenuMainRenderer.cpp">
       <Filter>src\Menu\Main</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuWheelPart.cpp">
-      <Filter>src\Menu\Main</Filter>
-    </ClCompile>
     <ClCompile Include="src\MenuWheel.cpp">
+      <Filter>src\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuWheelPart.cpp">
+      <Filter>src\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HouseRenderer.cpp">
+      <Filter>src\Menu\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HouseMenuWheel.cpp">
+      <Filter>src\Menu\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenuWheel.cpp">
       <Filter>src\Menu\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\HouseRenderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\HTBaL.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -117,10 +123,19 @@
     <ClInclude Include="src\MenuMainRenderer.h">
       <Filter>src\Menu\Main</Filter>
     </ClInclude>
-    <ClInclude Include="src\MenuWheelPart.h">
-      <Filter>src\Menu\Main</Filter>
-    </ClInclude>
     <ClInclude Include="src\MenuWheel.h">
+      <Filter>src\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MenuWheelPart.h">
+      <Filter>src\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HouseRenderer.h">
+      <Filter>src\Menu\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HouseMenuWheel.h">
+      <Filter>src\Menu\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MainMenuWheel.h">
       <Filter>src\Menu\Main</Filter>
     </ClInclude>
   </ItemGroup>

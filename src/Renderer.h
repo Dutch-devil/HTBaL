@@ -36,7 +36,8 @@ public:
 	virtual void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
 	virtual void resizeEvent(unsigned int width, unsigned int height);
 
-	static void drawText(const Vector4& color, unsigned int x, unsigned int y, char* text);
+	static void drawText(const Vector4& color, unsigned int x, unsigned int y, const char* text);
+	static void drawText(const Vector4& color, Rectangle rect, const char* text, Font::Justify justify);
 protected:
 	Rectangle viewport;
 	short buttonDown;

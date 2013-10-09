@@ -18,7 +18,7 @@ HTBaL::~HTBaL() {}
 void HTBaL::initialize() {
 	deleting = false;
 	activeRenderer = NULL;
-	setActiveRenderer(MAIN_MENU);
+	setActiveRenderer(HOUSE);
 }
 
 // We don't have to do anything when the game closes;

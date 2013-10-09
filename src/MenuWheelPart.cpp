@@ -1,36 +1,37 @@
 #include "MenuWheelPart.h"
 
 
-Rectangle MenuWheelPart::viewport;
+float MenuWheelPart::size;
 Mesh* MenuWheelPart::mesh = NULL;
 
-MenuWheelPart::MenuWheelPart(): model(NULL) {
+MenuWheelPart::MenuWheelPart(): model(NULL), title("UNDEFINED"), id(-1) {
 	color = NULL;
 	realColor = MENU_WHEEL_WHITE;
 }
 
 MenuWheelPart::~MenuWheelPart() {
 	SAFE_RELEASE(model);
+	//SAFE_DELETE_ARRAY(title);
 }
 
-void MenuWheelPart::setViewport(Rectangle viewport) {
-	MenuWheelPart::viewport = viewport;
+void MenuWheelPart::setSize(float size) {
+	MenuWheelPart::size = size;
     SAFE_RELEASE(mesh);
 	mesh = Mesh::createQuad(Vector3::zero(),
-						Vector3(0, viewport.height * -.4f, 0),
-						Vector3(viewport.height * .19f, 0, 0),
-						Vector3(viewport.height * .19f, viewport.height * -.4f, 0));
+						Vector3(0, size * -.4f, 0),
+						Vector3(size * .19f, 0, 0),
+						Vector3(size * .19f, size * -.4f, 0));
 }
 
 Mesh* MenuWheelPart::getMesh() {
 	if (mesh == NULL) {
-		setViewport(Rectangle());
+		setSize(0);
 	}
 	return mesh;
 }
 
-float MenuWheelPart::getMeshHeight() {
-	return viewport.height * .4f;
+float MenuWheelPart::getMeshSize(float relativeSize) {
+	return relativeSize * .4f;
 }
 
 void MenuWheelPart::releaseMesh() {
@@ -71,4 +72,19 @@ void MenuWheelPart::updateColor() {
 
 Vector3 MenuWheelPart::blendColors(Vector3* color1, Vector3* color2) {
     return .5 * (*color1) + .5 * (*color2);
+}
+
+int MenuWheelPart::getId() {
+	return id;
+}
+
+void MenuWheelPart::setId(int id) {
+	this->id = id;
+}
+const char* MenuWheelPart::getTitle() {
+	return title;
+}
+
+void MenuWheelPart::setTitle(const char* title) {
+	this->title = title;
 }

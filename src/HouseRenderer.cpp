@@ -24,6 +24,8 @@ HouseRenderer::~HouseRenderer() {
     SAFE_RELEASE(scene);
 	Floor::finalize();
 	Wall::finalize();
+
+	SAFE_DELETE(roomTypes);
 }
 
 void HouseRenderer::initialize() {
@@ -39,9 +41,8 @@ void HouseRenderer::initialize() {
 
 	SAFE_RELEASE(camera);
 
-    cameraNode->rotateZ(3.14f / 4);
-    cameraNode->rotateX(3.14f / 4);
-
+    cameraNode->rotateZ(MATH_PI / 4);
+    cameraNode->rotateX(MATH_PI / 4);
 
     houseRendererForm = Form::create("res/menu/houseRenderer.form");
     houseRendererForm->setState(Control::State::NORMAL);
@@ -51,7 +52,17 @@ void HouseRenderer::initialize() {
     refreshButton->addListener(this, Control::Listener::CLICK);
     Control* clearButton = houseRendererForm->getControl("clearButton");
     clearButton->addListener(this, Control::Listener::CLICK);
+
     resize();
+
+	MenuWheelPart::setSize(renderHeight);
+	roomTypes = HouseMenuWheel::create(scene, viewport);
+	roomTypes->addListener(this);
+	Node* roomTypesNode = roomTypes->getNode();
+	roomTypesNode->translateX(aspectRatio * renderHeight / 2);
+	roomTypesNode->translateY(-renderHeight / 2);
+	roomTypesNode->translateZ(10);
+	cameraNode->addChild(roomTypesNode);
 
     createHouse(false);
     createRoom();
@@ -139,7 +150,16 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
         }
         // Dragging should be handled by the touchEvent
         return false;
-    } else if (evt == Mouse::MOUSE_MOVE) {
+    } else if (clicked) {
+		// handle in the touchEvent
+		return false;
+		//if (roomTypes->click(x, y)) {
+		//	return true;
+		//}
+	} else if (evt == Mouse::MOUSE_MOVE) {
+		if (roomTypes->hover(x, y)) {
+			return true;
+		}
         checkHover(x, y);
     } else if (evt == Mouse::MOUSE_WHEEL) {
         // Scrolled the mouse wheel
@@ -185,7 +205,13 @@ void HouseRenderer::checkHover(int x, int y) {
     }
 }
 
-void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex) {
+void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked) {
+	if (clicked && roomTypes->click(x, y)) {
+		return;
+	}
+	if (evt == Touch::TOUCH_MOVE && roomTypes->drag(x, y)) {
+		return;
+	}
     if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
         // reset last floor on release
         prevFloor = NULL;
@@ -323,6 +349,7 @@ void HouseRenderer::render(float elapsedTime) {
         }
     }
     houseRendererForm->draw();
+	roomTypes->draw(elapsedTime);
 
 	if (prevHover) {
 		Room* hoverRoom = house->getRoom(prevHover);
@@ -356,4 +383,11 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
         createHouse(true);
     }
     control->setState(Control::State::NORMAL);
+}
+
+
+void HouseRenderer::menuWheelEvent(MenuWheelPart* clickedPart) {
+	if (prevRoom != NULL) {
+		prevRoom->setRoomType((Room::Type)clickedPart->getId());
+	}
 }

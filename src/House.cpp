@@ -125,8 +125,8 @@ void House::addRandomRooms(Scene* scene) {
     }
 	Floor* tile;														// generic tile used along calculations
 
-	bool largeHallStart;												// start with a small or large hall?
-    list<Floor*> hallStartTiles = list<Floor*>();						// all tiles belonging to the hall start
+	bool largeEntrance;												// start with a small or large hall?
+    list<Floor*> entranceTiles = list<Floor*>();						// all tiles belonging to the hall start
     vector<WalledTile>* hallPossibilities = new vector<WalledTile>();	// list of all possible hall places
 	
     list<Floor*> hallTiles = list<Floor*>();							// all tiles belonging to the hall
@@ -136,40 +136,40 @@ void House::addRandomRooms(Scene* scene) {
 	list<Floor*> roomTiles = list<Floor*>();							// all tiles belonging to the current generated room
 
     // create a hall, either 1*1 or 2*2
-   largeHallStart = (getWidth() + getHeight()) / 2 >= 8;
-    int hallStartX, hallStartY;
+   largeEntrance = (getWidth() + getHeight()) / 2 >= 8;
+    int entranceX, entranceY;
     if (rand() % 2) {
         // start the hall on x-axis
-        hallStartY = rand() % 2 * (getHeight() - largeHallStart - 1);
-        hallStartX = rand() % (getWidth() - largeHallStart - 3) + 1;
+        entranceY = rand() % 2 * (getHeight() - largeEntrance - 1);
+        entranceX = rand() % (getWidth() - largeEntrance - 3) + 1;
     } else {
         // start the hall on y-axis
-        hallStartX = rand() % 2 * (getWidth() - largeHallStart - 1);
-        hallStartY = rand() % (getHeight() - largeHallStart - 3) + 1;
+        entranceX = rand() % 2 * (getWidth() - largeEntrance - 1);
+        entranceY = rand() % (getHeight() - largeEntrance - 3) + 1;
     }
 
-    pushAllHallAround(hallPossibilities, hallStartX, hallStartY);
-    if (largeHallStart) {
-        // add extra tiles to hallstart
-        pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY);
-        pushAllHallAround(hallPossibilities, hallStartX, hallStartY + 1);
-        pushAllHallAround(hallPossibilities, hallStartX + 1, hallStartY + 1);
-        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
-        hallStartTiles.push_back(getFloorTile(hallStartX + 1, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
-        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
-        hallStartTiles.push_back(getFloorTile(hallStartX + 1, hallStartY + 1)->setSelected(true)->setColor(FLOOR_HALL_START));
+    pushAllHallAround(hallPossibilities, entranceX, entranceY);
+    if (largeEntrance) {
+        // add extra tiles to entrance
+        pushAllHallAround(hallPossibilities, entranceX + 1, entranceY);
+        pushAllHallAround(hallPossibilities, entranceX, entranceY + 1);
+        pushAllHallAround(hallPossibilities, entranceX + 1, entranceY + 1);
+        entranceTiles.push_back(getFloorTile(entranceX, entranceY)->setSelected(true)->setColor(FLOOR_ENTRANCE));
+        entranceTiles.push_back(getFloorTile(entranceX + 1, entranceY)->setSelected(true)->setColor(FLOOR_ENTRANCE));
+        entranceTiles.push_back(getFloorTile(entranceX, entranceY + 1)->setSelected(true)->setColor(FLOOR_ENTRANCE));
+        entranceTiles.push_back(getFloorTile(entranceX + 1, entranceY + 1)->setSelected(true)->setColor(FLOOR_ENTRANCE));
 
         for (vector<WalledTile>::iterator itr = hallPossibilities->begin(); itr != hallPossibilities->end();) {
             int id = (*itr).id;
-            if (id == getIdByXY(hallStartX, hallStartY) || id == getIdByXY(hallStartX + 1, hallStartY) ||
-                    id == getIdByXY(hallStartX, hallStartY + 1) || id == getIdByXY(hallStartX + 1, hallStartY + 1)) {
+            if (id == getIdByXY(entranceX, entranceY) || id == getIdByXY(entranceX + 1, entranceY) ||
+                    id == getIdByXY(entranceX, entranceY + 1) || id == getIdByXY(entranceX + 1, entranceY + 1)) {
                 itr = hallPossibilities->erase(itr);
             } else {
                 itr++;
             }
         }
     } else {
-        hallStartTiles.push_back(getFloorTile(hallStartX, hallStartY)->setSelected(true)->setColor(FLOOR_HALL_START));
+        entranceTiles.push_back(getFloorTile(entranceX, entranceY)->setSelected(true)->setColor(FLOOR_ENTRANCE));
     }
 
     // create the hallway connecting to the hallstart
@@ -188,7 +188,7 @@ void House::addRandomRooms(Scene* scene) {
     tile = getFloorTile(id);
 
 	tile->setDoor(startTile.dir, true);
-	setDoor(hallStartTiles, startTile);
+	setDoor(entranceTiles, startTile);
 
     tile->setSelected(true);
     hallTiles.push_back(tile);
@@ -297,8 +297,8 @@ void House::addRandomRooms(Scene* scene) {
 		}
     }
 
-    addRoom(Room::createRoomFromFloor(scene, this, hallStartTiles, HALL_START));
-    addRoom(Room::createRoomFromFloor(scene, this, hallTiles, HALL));
+    addRoom(Room::createRoomFromFloor(scene, this, entranceTiles, Room::ENTRANCE));
+    addRoom(Room::createRoomFromFloor(scene, this, hallTiles, Room::HALL));
 
 	for (int i = 0; i < getWidth() * getHeight(); i++) {
 		if (!getFloorTile(i)->getSelected()) {

@@ -23,27 +23,35 @@ public:
 	MenuWheelPart();
     ~MenuWheelPart();
 	
-	static void setViewport(Rectangle viewport);
+	static void setSize(float size);
 	static Mesh* getMesh();
 	static void releaseMesh();
-	static float getMeshHeight();
+	static float getMeshSize(float relativeSize);
 
 	Node* getNode();
 	Model* getModel();
 	
 	void setHover(bool hover);
 
+	int getId();
+	void setId(int id);
+	const char* getTitle();
+	void setTitle(const char* title);
+
 protected:
-	static Rectangle viewport;
+	static float size;
 	static Mesh* mesh;
 
 	Model* model;
 	bool hover;
+
 	Vector3* color;
 	Vector3* realColor;
-
 	void updateColor();
 	Vector3 blendColors(Vector3* color1, Vector3* color2);
+
+	int id;
+	const char* title;
 };
 
 #endif

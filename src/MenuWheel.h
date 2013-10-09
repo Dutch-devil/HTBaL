@@ -16,24 +16,36 @@ using namespace std;
 
 class MenuWheel {
 public:
-	MenuWheel(Scene* scene, Rectangle viewport, unsigned int parts);
+	class Listener {
+		public: virtual void menuWheelEvent(MenuWheelPart*) = 0;
+	};
+
+	MenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts);
+	MenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts, float initAngle);
     ~MenuWheel();
+	
+	void initialize(Scene* scene);
+	void addListener(Listener* listener);
+	
+	Node* getNode();
 
 	void update(float elapsedTime);
-	void draw(float elapsedTime);
+	virtual void draw(float elapsedTime);
 
 	bool hover(int x, int y);
 	bool drag(int x, int y);
-	Renderers click(int x, int y);
+	bool click(int x, int y);
 
 protected:
 	Rectangle viewport;
+	Vector2 middle;
+	list<Listener*> listeners;
 	Node* node;
 	vector<MenuWheelPart*> wheelParts;
 	MenuWheelPart* prevPart;
 	unsigned int prevPartIndex;
 
-	float rotation, startAngle, maxRotation;
+	float initAngle, rotation, startAngle, minRotation;
 };
 
 #endif

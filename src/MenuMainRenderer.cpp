@@ -23,7 +23,8 @@ void MenuMainRenderer::initialize() {
 
 	SAFE_RELEASE(camera);
 
-	menuWheel = new MenuWheel(scene, viewport, 5);
+	MenuWheelPart::setSize(viewport.height);
+	menuWheel = MainMenuWheel::create(scene, viewport);
 }
 
 MenuMainRenderer::~MenuMainRenderer() {
@@ -40,6 +41,9 @@ void MenuMainRenderer::update(float elapsedTime) {
 }
 
 Renderers MenuMainRenderer::getNextRenderer() {
+	if (nextRenderer == KEEP) {
+		nextRenderer = menuWheel->getNextRenderer();
+	}
 	return nextRenderer;
 }
 
@@ -63,7 +67,7 @@ void MenuMainRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned 
 	if (evt == Touch::TouchEvent::TOUCH_MOVE) {
 		menuWheel->drag(x, y);
 	}else if (clicked) {
-		nextRenderer = menuWheel->click(x, y);
+		menuWheel->click(x, y);
 	}
 }
 

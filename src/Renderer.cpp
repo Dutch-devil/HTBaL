@@ -106,10 +106,15 @@ void Renderer::resizeEvent(unsigned int width, unsigned int height) {
 	this->viewport.height = height;
 }
 
-void Renderer::drawText(const Vector4& color, unsigned int x, unsigned int y, char* text) {
+void Renderer::drawText(const Vector4& color, unsigned int x, unsigned int y, const char* text) {
+	drawText(color, Rectangle(x, y, 1000, 1000), text, Font::Justify::ALIGN_LEFT);
+}
+
+
+void Renderer::drawText(const Vector4& color, Rectangle rect, const char* text, Font::Justify justify) {
 	Font* font = Font::create("res/arial14.gpb");
     font->start();											// start using the font
-    font->drawText(text, x, y, color, font->getSize());	// Writing the fps to the screen
+    font->drawText(text, rect, color, font->getSize(), justify);	// Writing the fps to the screen
     font->finish();											// stop using the font
 	SAFE_RELEASE(font);
 }

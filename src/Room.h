@@ -12,23 +12,39 @@ class Room;
 using namespace std;
 using namespace gameplay;
 
-enum RoomType {
-	//HALL_START = "Hall start",
-	//HALL = "Hall",
-	//ROOM_EMPTY = "Empty room",
-	HALL_START,
-	HALL,
-	ROOM_EMPTY,
-};
-
 class Room {
 public:
+	enum Type {
+		LIVING_QUARTERS,
+		BEDROOM,
+		DINING_ROOM,
+		STORAGE_ROOM,
+		LIBARY,
+		LABORATORIUM,
+		ARBORETUM,
+		WORKSHOP,
+		SMITHY,
+		STINKY_SEWERS,
+		DIRTPLOT,
+		STABLES,
+		ARSENAL_ROOM,
+		AVIARY,
+		POOL,
+		ART_ROOM,
+		BALLROOM,
+		ENTRANCE,
+		HALL,
+		ROOM_EMPTY,
+		NONE,
+	};
 	Room(House* house, list<Floor*> floor, list<Wall*> walls);
-	Room(House* house, list<Floor*> floor, list<Wall*> walls, RoomType roomType);
+	Room(House* house, list<Floor*> floor, list<Wall*> walls, Room::Type roomType);
     ~Room();
 
-	RoomType getRoomType();
+	Room::Type getRoomType();
+	void setRoomType(Room::Type roomType);
 	const char* getRoomTypeString();
+	static const char* getRoomTypeString(Room::Type roomType);
 
 	list<Floor*> getFloor();
 	list<Wall*> getWalls();
@@ -44,11 +60,11 @@ public:
 	list<Floor*> getLine(Floor* startTile, Direction dir, unsigned int maxLength);
 	
 	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
-	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, RoomType roomType);
+	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, Room::Type roomType);
 
 protected:
 	House* house;
-	RoomType roomType;
+	Room::Type roomType;
 	list<Floor*> floor;
 	list<Wall*> walls;
 	
