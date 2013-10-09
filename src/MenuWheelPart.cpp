@@ -11,6 +11,8 @@ MenuWheelPart::MenuWheelPart(): model(NULL), title("UNDEFINED"), id(-1) {
 
 MenuWheelPart::~MenuWheelPart() {
 	SAFE_RELEASE(model);
+	SAFE_DELETE(color);
+	SAFE_DELETE(realColor);
 	//SAFE_DELETE_ARRAY(title);
 }
 

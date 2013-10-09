@@ -10,7 +10,7 @@ Renderer::Renderer(Rectangle viewport) {
 Renderer::~Renderer() {
 	SAFE_DELETE(mouseFlags);
 	SAFE_DELETE(keyFlags);
-	SAFE_DELETE(clickStarts);
+	SAFE_DELETE_ARRAY(clickStarts);
 }
 
 Renderers Renderer::getNextRenderer() {
@@ -42,8 +42,8 @@ bool Renderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {
 		}else {
 			clicked = starts[btn].x == x && starts[btn].y == y;
 		}
-	}else {
-		clickStarts = NULL;
+	}else if (clickStarts != NULL) {
+		memset(clickStarts, 0, sizeof(Vector2) * 3);
 	}
 	return mouseEvent(evt, x, y, wheelData, evt == Mouse::MOUSE_MOVE && (leftButtonDown() || rightButtonDown() || middleButtonDown()), clicked);
 }
@@ -60,8 +60,8 @@ void Renderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int cont
 		starts[0].y = y;
 	}else if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
 		clicked = starts[0].x == x && starts[0].y == y;
-	}else {
-		clickStarts = NULL;
+	}else if (clickStarts != NULL) {
+		memset(clickStarts, 0, sizeof(Vector2) * 3);
 	}
 	touchEvent(evt, x, y, contactIndex, clicked);
 }
@@ -96,7 +96,7 @@ KeyFlags* Renderer::getKeyFlags() {
 Vector2* Renderer::getClickStarts() {
 	if (clickStarts == NULL) {
 		clickStarts = new Vector2[3];
-		memset(clickStarts, -1, sizeof(Vector2) * 3);
+		memset(clickStarts, 0, sizeof(Vector2) * 3);
 	}
 	return clickStarts;
 }
