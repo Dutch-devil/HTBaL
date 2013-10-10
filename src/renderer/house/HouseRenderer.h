@@ -8,11 +8,9 @@ class HouseRenderer;
 
 #include "gameplay.h"
 #include <list>
-#include "Room.h"
-#include "Renderer.h"
-#include "House.h"
-#include "Floor.h"
-#include "Wall.h"
+#include "../../house/House.h"
+#include "../../factories/HouseFactory.h"
+#include "../Renderer.h"
 #include "HouseMenuWheel.h"
 
 using namespace gameplay;
@@ -24,9 +22,8 @@ public:
 	~HouseRenderer();
 
 	void createMenu(float menuWidth);
-	void createHouse(bool random);
+	void createHouse(bool random, bool rooms);
 	void removeHouse();
-	void createRoom();
 	
 	void checkHover(int x, int y);
 	

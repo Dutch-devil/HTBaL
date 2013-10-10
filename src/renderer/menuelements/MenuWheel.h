@@ -4,12 +4,13 @@
 #define WHEEL_ANGLE (MATH_PI / 6)		// what is the angle of a part of the wheel?
 #define INNER_DIST ((float)2 / 4)				// what part of the inner side of the wheel shouldn't count?
 
+class MenuWheel;
+
 #include "gameplay.h"
 #include <vector>
 #include <cmath>
-#include "MaterialManager.h"
+#include "../Renderer.h"
 #include "MenuWheelPart.h"
-#include "Renderer.h"
 
 using namespace gameplay;
 using namespace std;

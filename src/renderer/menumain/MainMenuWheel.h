@@ -2,7 +2,7 @@
 #define MainMenuWheel_H_
 
 #include "gameplay.h"
-#include "MenuWheel.h"
+#include "../Renderer.h"
 
 using namespace gameplay;
 

@@ -1,8 +1,4 @@
 #include "HouseRenderer.h"
-#include "Floor.h"
-#include "MaterialManager.h"
-#include "Wall.h"
-#include <cmath>
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport), initialTranslate(NULL) {
     initialize();
@@ -64,8 +60,7 @@ void HouseRenderer::initialize() {
 	roomTypesNode->translateZ(10);
 	cameraNode->addChild(roomTypesNode);
 
-    createHouse(false);
-    createRoom();
+    createHouse(false, true);
 }
 
 void HouseRenderer::resize() {
@@ -115,26 +110,28 @@ void HouseRenderer::createMenu(float menuWidth) {
     clearButton->setWidth(menuWidth);
 }
 
-void HouseRenderer::createHouse(bool random) {
+void HouseRenderer::createHouse(bool random, bool rooms) {
     prevHover = false;
-    if (random) {
-        house = new House(rand() % 11 + 5, rand() % 11 + 5);
-    } else {
-        house = new House(5, 5);
-    }
     float screenSize = 100;
-
-    house->addFloor(scene, screenSize);
+	if (rooms) {
+		if (random) {
+			house = HouseFactory::createRandomHouse(scene, screenSize);
+		} else {
+			house = HouseFactory::createRandomHouse(scene, screenSize, 5, 5);
+		}
+	}else {
+		if (random) {
+			house = HouseFactory::createHouse(scene, screenSize);
+		} else {
+			house = HouseFactory::createHouse(scene, screenSize, 5, 5);
+		}
+	}
 }
 
 void HouseRenderer::removeHouse() {
 	SAFE_DELETE(house);
 	prevRoom = hoverRoom = NULL;
     prevFloor = NULL;
-}
-
-void HouseRenderer::createRoom() {
-    house->addRandomRooms(scene);
 }
 
 bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked) {
@@ -297,7 +294,7 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {
                     roomTiles.push_back(house->getFloorTile(i));
                 }
             }
-            house->addRoom(Room::createRoomFromFloor(scene, house, roomTiles));
+            house->addRoom(RoomFactory::createRoomFromFloor(scene, house, roomTiles));
         }
     }
 }
@@ -376,11 +373,10 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
         nextRenderer = MAIN_MENU;
     } else if (!strcmp("refreshButton", control->getId())) {
 		removeHouse();
-        createHouse(true);
-        createRoom();
+        createHouse(true, true);
     } else if (!strcmp("clearButton", control->getId())) {
 		removeHouse();
-        createHouse(true);
+        createHouse(true, false);
     }
     control->setState(Control::State::NORMAL);
 }

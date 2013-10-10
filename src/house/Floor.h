@@ -23,37 +23,29 @@
 #define FLOOR_HALL FLOOR_BLUE
 #define FLOOR_ROOM FLOOR_TEAL
 
-class Floor;
-
 #include <list>
 #include "gameplay.h"
+#include "../Flags.h"
+#include "../MaterialManager.h"
 #include "Wall.h"
-#include "Flags.h"
 
 using namespace gameplay;
 using namespace std;
- 
-enum Direction {
-	TOP = 1,	// y - 1
-	LEFT = 2,	// x - 1
-	BOTTOM = 3, // y + 1
-	RIGHT = 4,	// x + 1
-	NONE = 5	// no wall
-
-	//Direction invert(Direction dir) {
-	//	return (dir + 2) % 4;
-	//}
-};
-
-struct WalledTile {
-	WalledTile(int id): id(id), dir(NONE) {}
-	WalledTile(int id, Direction dir): id(id), dir(dir) {}
-	int id;
-	Direction dir;
-};
 
 class Floor {
-public:
+public: 
+	enum Direction {
+		TOP = 1,	// y - 1
+		LEFT = 2,	// x - 1
+		BOTTOM = 3, // y + 1
+		RIGHT = 4,	// x + 1
+		NONE = 5	// no wall
+
+		//Direction invert(Direction dir) {
+		//	return (dir + 2) % 4;
+		//}
+	};
+
 	Floor(int id);
     ~Floor();
 

@@ -13,8 +13,10 @@
 
 #define MENU_WHEEL_HOVER MENU_WHEEL_GREEN
 
+class MenuWheelPart;
+
 #include "gameplay.h"
-#include "MaterialManager.h"
+#include "MenuWheel.h"
 
 using namespace gameplay;
 

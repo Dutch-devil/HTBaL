@@ -5,17 +5,26 @@
     </Filter>
     <Filter Include="src">
     </Filter>
+    <Filter Include="src\Factories">
+      <UniqueIdentifier>{94c1735b-dbd9-4af0-b555-7616a850476f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer">
+      <UniqueIdentifier>{f2b45dcf-201e-4b58-ab6f-a7808ea72443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\House">
+      <UniqueIdentifier>{9485808c-40be-4226-b8a4-a22576a94643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\MenuElements">
+      <UniqueIdentifier>{a8e583ce-e221-4c36-994d-04529fcf9547}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\MenuMain">
+      <UniqueIdentifier>{de31a484-22df-4267-a435-2e63e3990753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Renderer\Map">
+      <UniqueIdentifier>{0f6fd7a6-fb2c-4b12-a00f-aece09f65461}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\House">
-      <UniqueIdentifier>{3bd47eda-c920-484a-a9d0-07f48407d503}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Menu">
-      <UniqueIdentifier>{f6f81e83-ceeb-46b9-998f-e6667e3a6256}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Menu\Main">
-      <UniqueIdentifier>{097c1b92-39f5-4fe6-b6ab-594b626be2da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\Menu\House">
-      <UniqueIdentifier>{f71258b5-b493-4334-9648-b7f3f17fbf83}</UniqueIdentifier>
+      <UniqueIdentifier>{2536aa43-7541-4756-bb01-195822ff3bc1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,103 +49,115 @@
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\factories\HouseFactory.cpp">
+      <Filter>src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\factories\RoomFactory.cpp">
+      <Filter>src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Flags.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\HTBaL.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MapRenderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\House.cpp">
-      <Filter>src\House</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Floor.cpp">
-      <Filter>src\House</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Wall.cpp">
-      <Filter>src\House</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Room.cpp">
-      <Filter>src\House</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MaterialManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\KeyFlags.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Flags.cpp">
+    <ClCompile Include="src\MaterialManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuMainRenderer.cpp">
-      <Filter>src\Menu\Main</Filter>
+    <ClCompile Include="src\renderer\Renderer.cpp">
+      <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuWheel.cpp">
-      <Filter>src\Menu</Filter>
+    <ClCompile Include="src\renderer\house\HouseMenuWheel.cpp">
+      <Filter>src\Renderer\House</Filter>
     </ClCompile>
-    <ClCompile Include="src\MenuWheelPart.cpp">
-      <Filter>src\Menu</Filter>
+    <ClCompile Include="src\renderer\house\HouseRenderer.cpp">
+      <Filter>src\Renderer\House</Filter>
     </ClCompile>
-    <ClCompile Include="src\HouseRenderer.cpp">
-      <Filter>src\Menu\House</Filter>
+    <ClCompile Include="src\renderer\menuelements\MenuWheel.cpp">
+      <Filter>src\Renderer\MenuElements</Filter>
     </ClCompile>
-    <ClCompile Include="src\HouseMenuWheel.cpp">
-      <Filter>src\Menu\House</Filter>
+    <ClCompile Include="src\renderer\menuelements\MenuWheelPart.cpp">
+      <Filter>src\Renderer\MenuElements</Filter>
     </ClCompile>
-    <ClCompile Include="src\MainMenuWheel.cpp">
-      <Filter>src\Menu\Main</Filter>
+    <ClCompile Include="src\renderer\menumain\MainMenuWheel.cpp">
+      <Filter>src\Renderer\MenuMain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\menumain\MenuMainRenderer.cpp">
+      <Filter>src\Renderer\MenuMain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\map\MapRenderer.cpp">
+      <Filter>src\Renderer\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="src\house\Floor.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\house\House.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\house\Room.cpp">
+      <Filter>src\House</Filter>
+    </ClCompile>
+    <ClCompile Include="src\house\Wall.cpp">
+      <Filter>src\House</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\factories\HouseFactory.h">
+      <Filter>src\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factories\RoomFactory.h">
+      <Filter>src\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Flags.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\HTBaL.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MapRenderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Renderer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\House.h">
-      <Filter>src\House</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Floor.h">
-      <Filter>src\House</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Wall.h">
-      <Filter>src\House</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Room.h">
-      <Filter>src\House</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MaterialManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\KeyFlags.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Flags.h">
+    <ClInclude Include="src\MaterialManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\MenuMainRenderer.h">
-      <Filter>src\Menu\Main</Filter>
+    <ClInclude Include="src\renderer\Renderer.h">
+      <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\MenuWheel.h">
-      <Filter>src\Menu</Filter>
+    <ClInclude Include="src\renderer\house\HouseMenuWheel.h">
+      <Filter>src\Renderer\House</Filter>
     </ClInclude>
-    <ClInclude Include="src\MenuWheelPart.h">
-      <Filter>src\Menu</Filter>
+    <ClInclude Include="src\renderer\house\HouseRenderer.h">
+      <Filter>src\Renderer\House</Filter>
     </ClInclude>
-    <ClInclude Include="src\HouseRenderer.h">
-      <Filter>src\Menu\House</Filter>
+    <ClInclude Include="src\renderer\menuelements\MenuWheel.h">
+      <Filter>src\Renderer\MenuElements</Filter>
     </ClInclude>
-    <ClInclude Include="src\HouseMenuWheel.h">
-      <Filter>src\Menu\House</Filter>
+    <ClInclude Include="src\renderer\menuelements\MenuWheelPart.h">
+      <Filter>src\Renderer\MenuElements</Filter>
     </ClInclude>
-    <ClInclude Include="src\MainMenuWheel.h">
-      <Filter>src\Menu\Main</Filter>
+    <ClInclude Include="src\renderer\menumain\MainMenuWheel.h">
+      <Filter>src\Renderer\MenuMain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\menumain\MenuMainRenderer.h">
+      <Filter>src\Renderer\MenuMain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\map\MapRenderer.h">
+      <Filter>src\Renderer\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="src\house\Floor.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\house\House.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\house\Room.h">
+      <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\house\Wall.h">
+      <Filter>src\House</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,4 @@
 #include "Wall.h"
-#include "MaterialManager.h"
 
 
 Mesh* Wall::mesh = NULL;

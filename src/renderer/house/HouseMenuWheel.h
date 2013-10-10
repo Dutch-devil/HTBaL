@@ -2,8 +2,8 @@
 #define HouseMenuWheel_H_
 
 #include "gameplay.h"
-#include "MenuWheel.h"
-#include "Room.h"
+#include "../Renderer.h"
+#include "../../house/House.h"
 
 using namespace gameplay;
 

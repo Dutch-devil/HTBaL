@@ -6,7 +6,6 @@ class Room;
 #include <list>
 #include "gameplay.h"
 #include "Floor.h"
-#include "Wall.h"
 #include "House.h"
 
 using namespace std;
@@ -56,11 +55,8 @@ public:
 	int getMaxLine();
 
 	list<Floor*> getCorners();
-	list<Floor*> getLine(Floor* startTile, Direction dir);
-	list<Floor*> getLine(Floor* startTile, Direction dir, unsigned int maxLength);
-	
-	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
-	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, Room::Type roomType);
+	list<Floor*> getLine(Floor* startTile, Floor::Direction dir);
+	list<Floor*> getLine(Floor* startTile, Floor::Direction dir, unsigned int maxLength);
 
 protected:
 	House* house;
@@ -68,11 +64,9 @@ protected:
 	list<Floor*> floor;
 	list<Wall*> walls;
 	
-	static Wall* createWall(Scene* scene, Floor* floorTile, Direction dir);
 	Room(int, int, list<Wall*>, Scene* scene);
 
 
-	static Wall* createWall(bool door, Scene* scene, float x, float y, float rot);
 };
 
 #endif

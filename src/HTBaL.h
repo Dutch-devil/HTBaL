@@ -4,7 +4,7 @@
 class HTBaL;
 
 #include "gameplay.h"
-#include "Renderer.h"
+#include "renderer/Renderer.h"
 
 using namespace gameplay;
 

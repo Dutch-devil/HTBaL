@@ -10,7 +10,9 @@ enum Renderers {
 	MAP
 };
 
-#include "KeyFlags.h"
+#include "../MaterialManager.h"
+#include "../KeyFlags.h"
+#include "menuelements/MenuWheel.h"
 #include "gameplay.h"
 
 using namespace gameplay;

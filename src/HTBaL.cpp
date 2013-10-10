@@ -3,9 +3,9 @@
 #include <crtdbg.h> 
 
 #include "HTBaL.h"
-#include "MenuMainRenderer.h"
-#include "HouseRenderer.h"
-#include "MapRenderer.h"
+#include "renderer/menumain/MenuMainRenderer.h"
+#include "renderer/house/HouseRenderer.h"
+#include "renderer/map/MapRenderer.h"
 
 // Declare our game instance
 HTBaL game;

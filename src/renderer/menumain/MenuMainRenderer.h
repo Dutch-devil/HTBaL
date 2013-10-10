@@ -4,7 +4,7 @@
 class MenuMainRenderer;
 
 #include "gameplay.h"
-#include "Renderer.h"
+#include "../Renderer.h"
 #include "MainMenuWheel.h"
 
 using namespace gameplay;

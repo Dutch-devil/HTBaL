@@ -1,6 +1,5 @@
 
 #include "Floor.h"
-#include "MaterialManager.h"
 
 
 float Floor::width, Floor::height;

@@ -1,10 +1,12 @@
 #ifndef Wall_H_
 #define Wall_H_
 
+class Wall;
+
 #include "gameplay.h"
+#include "Floor.h"
 
 using namespace gameplay;
-#include "Floor.h"
 
 class Wall {
 public:
