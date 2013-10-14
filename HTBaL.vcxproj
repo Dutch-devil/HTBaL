@@ -196,7 +196,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;GAMEPLAY_MEM_LEAK_DETECTION;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../GamePlay/external-deps/lua/include;../GamePlay/external-deps/bullet/include;../GamePlay/gameplay/src;../GamePlay/external-deps/openal/include/AL;../GamePlay/external-deps/oggvorbis/include;../GamePlay/external-deps/libpng/include;../GamePlay/external-deps/zlib/include;../GamePlay/external-deps/glew/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../GamePlay/external-deps/lua/include;../GamePlay/external-deps/bullet/include;../GamePlay/gameplay/src;../GamePlay/external-deps/openal/include/AL;../GamePlay/external-deps/oggvorbis/include;../GamePlay/external-deps/libpng/include;../GamePlay/external-deps/zlib/include;../GamePlay/external-deps/glew/include;../RapidXml</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessToFile>false</PreprocessToFile>
@@ -350,6 +350,10 @@
     <ClCompile Include="src\renderer\menumain\MainMenuWheel.cpp" />
     <ClCompile Include="src\renderer\menumain\MenuMainRenderer.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
+    <ClCompile Include="src\triggercore\StateListener.cpp" />
+    <ClCompile Include="src\triggercore\StateManager.cpp" />
+    <ClCompile Include="src\triggercore\StateTrigger.cpp" />
+    <ClCompile Include="src\triggercore\Value.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\factories\HouseFactory.h" />
@@ -370,6 +374,10 @@
     <ClInclude Include="src\renderer\menumain\MainMenuWheel.h" />
     <ClInclude Include="src\renderer\menumain\MenuMainRenderer.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
+    <ClInclude Include="src\triggercore\StateListener.h" />
+    <ClInclude Include="src\triggercore\StateManager.h" />
+    <ClInclude Include="src\triggercore\StateTrigger.h" />
+    <ClInclude Include="src\triggercore\Value.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

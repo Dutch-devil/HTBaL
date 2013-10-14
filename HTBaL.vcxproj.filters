@@ -26,6 +26,15 @@
     <Filter Include="src\House">
       <UniqueIdentifier>{2536aa43-7541-4756-bb01-195822ff3bc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\TriggerCore">
+      <UniqueIdentifier>{5efdf78f-7bf5-4131-8941-0e17377f1e9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TriggerCore\StateListener">
+      <UniqueIdentifier>{88de8ff4-d36d-443b-9a3b-92ac07342a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\TriggerCore\StateTrigger">
+      <UniqueIdentifier>{ad6d88d6-651c-425a-a072-24c940ae2621}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="game.config" />
@@ -103,6 +112,18 @@
     <ClCompile Include="src\house\Wall.cpp">
       <Filter>src\House</Filter>
     </ClCompile>
+    <ClCompile Include="src\triggercore\StateManager.cpp">
+      <Filter>src\TriggerCore</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\StateTrigger.cpp">
+      <Filter>src\TriggerCore</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\StateListener.cpp">
+      <Filter>src\TriggerCore</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\Value.cpp">
+      <Filter>src\TriggerCore</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\factories\HouseFactory.h">
@@ -158,6 +179,18 @@
     </ClInclude>
     <ClInclude Include="src\house\Wall.h">
       <Filter>src\House</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\StateManager.h">
+      <Filter>src\TriggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\StateTrigger.h">
+      <Filter>src\TriggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\StateListener.h">
+      <Filter>src\TriggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\Value.h">
+      <Filter>src\TriggerCore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

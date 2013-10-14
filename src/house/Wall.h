@@ -10,23 +10,23 @@ using namespace gameplay;
 
 class Wall {
 public:
-	Wall(bool inverted);
-	Wall(bool inverted, bool door);
+    Wall(bool inverted);
+    Wall(bool inverted, bool door);
     ~Wall();
-
-	static void calculateMesh();
-	static void finalize();
-
-	Node* getNode();
-	Mesh* getMesh();
-	Model* getModel();
-	
-	static void releaseMesh();
-
+    
+    static void calculateMesh();
+    static void finalize();
+    
+    Node* getNode();
+    Mesh* getMesh();
+    Model* getModel();
+    
+    static void releaseMesh();
+    
 protected:
-	static Mesh* mesh, *mesh_inv;
-	bool inverted, door;
-	Model* model;
+    static Mesh* mesh, *mesh_inv;
+    bool inverted, door;
+    Model* model;
 };
 
 #endif
