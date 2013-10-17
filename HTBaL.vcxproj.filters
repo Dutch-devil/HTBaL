@@ -124,6 +124,9 @@
     <ClCompile Include="src\triggercore\Value.cpp">
       <Filter>src\TriggerCore</Filter>
     </ClCompile>
+    <ClCompile Include="src\statelistener\AchievementStateListener.cpp">
+      <Filter>src\TriggerCore\StateListener</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\factories\HouseFactory.h">

@@ -5,11 +5,11 @@
 
 class RoomFactory {
 public:
-	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
-	static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, Room::Type roomType);
-
+    static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles);
+    static Room* createRoomFromFloor(Scene* scene, House* house, list<Floor*> roomTiles, Room::Type roomType);
+    
 protected:
-	static Wall* createWall(Scene* scene, Floor* floorTile, Floor::Direction dir);
+    static Wall* createWall(Scene* scene, Floor* floorTile, FloorDirection::Direction dir);
 };
 
 #endif

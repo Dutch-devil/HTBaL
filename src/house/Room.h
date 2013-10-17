@@ -13,60 +13,64 @@ using namespace gameplay;
 
 class Room {
 public:
-	enum Type {
-		LIVING_QUARTERS,
-		BEDROOM,
-		DINING_ROOM,
-		STORAGE_ROOM,
-		LIBARY,
-		LABORATORIUM,
-		ARBORETUM,
-		WORKSHOP,
-		SMITHY,
-		STINKY_SEWERS,
-		DIRTPLOT,
-		STABLES,
-		ARSENAL_ROOM,
-		AVIARY,
-		POOL,
-		ART_ROOM,
-		BALLROOM,
-		ENTRANCE,
-		HALL,
-		ROOM_EMPTY,
-		NONE,
-	};
-	Room(House* house, list<Floor*> floor, list<Wall*> walls);
-	Room(House* house, list<Floor*> floor, list<Wall*> walls, Room::Type roomType);
+    enum Type {
+        LIVING_QUARTERS,
+        BEDROOM,
+        DINING_ROOM,
+        STORAGE_ROOM,
+        LIBARY,
+        LABORATORIUM,
+        ARBORETUM,
+        WORKSHOP,
+        SMITHY,
+        STINKY_SEWERS,
+        DIRTPLOT,
+        STABLES,
+        ARSENAL_ROOM,
+        AVIARY,
+        POOL,
+        ART_ROOM,
+        BALLROOM,
+        ENTRANCE,
+        STAIR_UP,
+        STAIR_DOWN,
+        STAIR_UP_DOWN,
+        HALL,
+        ROOM_EMPTY,
+        NONE,
+    };
+    Room(House* house, list<Floor*> floor, list<Wall*> walls);
+    Room(House* house, list<Floor*> floor, list<Wall*> walls, Room::Type roomType);
     ~Room();
-
-	Room::Type getRoomType();
-	void setRoomType(Room::Type roomType);
-	const char* getRoomTypeString();
-	static const char* getRoomTypeString(Room::Type roomType);
-
-	list<Floor*> getFloor();
-	list<Wall*> getWalls();
-
-	bool contains(Floor* floorTile);
-
-	int getSize();
-	int getMaxRectangle();
-	int getMaxLine();
-
-	list<Floor*> getCorners();
-	list<Floor*> getLine(Floor* startTile, Floor::Direction dir);
-	list<Floor*> getLine(Floor* startTile, Floor::Direction dir, unsigned int maxLength);
-
+    
+    Room::Type getRoomType();
+    void setRoomType(Room::Type roomType);
+    const char* getRoomTypeString();
+    static const char* getRoomTypeString(Room::Type roomType);
+    
+    list<Floor*> getFloor();
+    void setFloor(list<Floor*> floor);
+    list<Wall*> getWalls();
+    
+    bool contains(Floor* floorTile);
+    
+    int getSize();
+    int getMaxRectangle();
+    int getMaxLine();
+    
+    list<Floor*> getCorners();
+    list<Floor*> getLine(Floor* startTile, FloorDirection::Direction dir);
+    list<Floor*> getLine(Floor* startTile, FloorDirection::Direction dir, unsigned int maxLength);
+    
 protected:
-	House* house;
-	Room::Type roomType;
-	list<Floor*> floor;
-	list<Wall*> walls;
-	
-	Room(int, int, list<Wall*>, Scene* scene);
-
-
+    House* house;
+    Room::Type roomType;
+    list<Floor*> floor;
+    list<Wall*> walls;
+    
+    Room(int, int, list<Wall*>, Scene* scene);
+    
+    
 };
 
 #endif

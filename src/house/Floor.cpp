@@ -5,83 +5,97 @@
 float Floor::width, Floor::height;
 Mesh* Floor::mesh = NULL;
 
-Floor::Floor(int id): id(id) {
+FloorDirection::Direction FloorDirection::invert(FloorDirection::Direction dir) {
+    return (FloorDirection::Direction)(((int)dir + 2) % 4);
+}
+
+Floor::Floor(int id): id(id), room(NULL) {
     this->model = Model::create(getMesh());
-	this->walls = new Flags(4);
-	this->doors = new Flags(5);
-
-    realColor = FLOOR_UNSELECTED;
-	color = FLOOR_UNSELECTED;
+    this->walls = new Flags(4);
+    this->doors = new Flags(5);
+    
+    materialColor = NULL;
+    overlayColor = FLOOR_UNSELECTED;
     hover = selected = false;
-
-	Material* material = MaterialManager::getMaterial(FLOOR);
+    
+    Material* material = MaterialManager::getMaterial(FLOOR);
     model->setMaterial(material);
-	SAFE_RELEASE(material);
-    updateColor();
+    SAFE_RELEASE(material);
+    updateMaterial();
 }
 
 Floor::~Floor() {
-	SAFE_DELETE(walls);
-	SAFE_DELETE(doors);
-	SAFE_DELETE(color);
-	SAFE_DELETE(realColor);
-	SAFE_RELEASE(model);
+    SAFE_DELETE(walls);
+    SAFE_DELETE(doors);
+    SAFE_DELETE(overlayColor);
+    SAFE_DELETE(materialColor);
+    SAFE_RELEASE(model);
 }
 
 void Floor::finalize() {
-	SAFE_RELEASE(mesh);
-} 
+    SAFE_RELEASE(mesh);
+}
 
 void Floor::calculateMesh() {
-	SAFE_RELEASE(mesh);
-	mesh = Mesh::createQuad(Vector3(-Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
-						Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
-						Vector3(-Floor::getWidth() / 2, Floor::getHeight() / 2, 0),
-						Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, 0));
+    SAFE_RELEASE(mesh);
+    mesh = Mesh::createQuad(Vector3(-Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
+                            Vector3(Floor::getWidth() / 2, -Floor::getHeight() / 2, 0),
+                            Vector3(-Floor::getWidth() / 2, Floor::getHeight() / 2, 0),
+                            Vector3(Floor::getWidth() / 2, Floor::getHeight() / 2, 0));
 }
- 
+
 Mesh* Floor::getMesh() {
-	if (mesh == NULL) {
-		calculateMesh();
-	}
-	return mesh;
+    if (mesh == NULL) {
+        calculateMesh();
+    }
+    return mesh;
 }
 
 void Floor::setHeightWidth(float height, float width) {
-	Floor::height = height;
-	Floor::width = width;
-	calculateMesh();
-	Wall::calculateMesh();
+    Floor::height = height;
+    Floor::width = width;
+    calculateMesh();
+    Wall::calculateMesh();
 }
 
 float Floor::getHeight() {
-	return height;
+    return height;
 }
 
 float Floor::getWidth() {
-	return width;
+    return width;
 }
 
-Floor* Floor::setWall(Direction dir, bool wall) {
-	walls->forceFlag(dir, wall);
-	return this;
+Floor* Floor::setWall(FloorDirection::Direction dir, bool wall) {
+    walls->forceFlag(dir, wall);
+    return this;
 }
 
-bool Floor::getWall(Direction dir) {
-	return walls->getFlag(dir);
+bool Floor::getWall(FloorDirection::Direction dir) {
+    return walls->getFlag(dir);
 }
 
-Floor* Floor::setDoor(Direction dir, bool door) {
-	doors->forceFlag(dir, door);
-	return this;
+Floor* Floor::setDoor(FloorDirection::Direction dir, bool door) {
+    doors->forceFlag(dir, door);
+    return this;
 }
 
-bool Floor::getDoor(Direction dir) {
-	return doors->getFlag(dir);
+bool Floor::getDoor(FloorDirection::Direction dir) {
+    return doors->getFlag(dir);
+}
+
+Floor* Floor::setRoom(Room* room) {
+    this->room = room;
+    updateMaterial();
+    return this;
+}
+
+Room* Floor::getRoom() {
+    return room;
 }
 
 int Floor::getId() {
-	return id;
+    return id;
 }
 
 Model* Floor::getModel() {
@@ -89,65 +103,95 @@ Model* Floor::getModel() {
 }
 
 Vector3* Floor::getColor() {
-    return color;
+    return overlayColor;
 }
 
 bool Floor::isColor(Vector3* other) {
-    return realColor->x == other->x && realColor->y == other->y && realColor->z == other->z;
+    return materialColor->x == other->x && materialColor->y == other->y && materialColor->z == other->z;
 }
 
-Floor* Floor::setColor(Vector3* color) {
-	SAFE_DELETE(this->realColor);
-    this->realColor = color;
-	updateColor();
-	return this;
-}
-
-void Floor::updateColor() {
-	SAFE_DELETE(color);
-	if (selected && hover) {
-        color = FLOOR_HOVER_SELECTED;
+void Floor::updateOverlayColor() {
+    SAFE_DELETE(overlayColor);
+    if (selected && hover) {
+        overlayColor = FLOOR_HOVER_SELECTED;
     } else if (selected) {
-		color = FLOOR_SELECTED;
-	}else if (hover) {
-		color = FLOOR_HOVER;
-	}else {
-        color = new Vector3(*realColor);
+        overlayColor = FLOOR_SELECTED;
+    } else if (hover) {
+        overlayColor = FLOOR_HOVER;
+    } else {
+        overlayColor = new Vector3(*materialColor);
     }
-    model->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(blendColors(color, realColor));
+    model->getMaterial()->getTechnique()->getPass("0")->getParameter("u_ambientColor")->setVector3(blendColors(overlayColor, materialColor));
+}
+
+void Floor::updateMaterial() {
+    SAFE_DELETE(materialColor);
+    if (getRoom()) {
+        switch (getRoom()->getRoomType()) {
+            case Room::Type::LIVING_QUARTERS:
+            case Room::Type::BEDROOM:
+            case Room::Type::DINING_ROOM:
+            case Room::Type::STORAGE_ROOM:
+            case Room::Type::LIBARY:
+            case Room::Type::LABORATORIUM:
+            case Room::Type::ARBORETUM:
+            case Room::Type::WORKSHOP:
+            case Room::Type::SMITHY:
+            case Room::Type::STINKY_SEWERS:
+            case Room::Type::DIRTPLOT:
+            case Room::Type::STABLES:
+            case Room::Type::ARSENAL_ROOM:
+            case Room::Type::AVIARY:
+            case Room::Type::POOL:
+            case Room::Type::ART_ROOM:
+            case Room::Type::BALLROOM:
+                materialColor = FLOOR_ROOM;
+                break;
+            case Room::Type::ENTRANCE:
+                materialColor = FLOOR_ENTRANCE;
+                break;
+            case Room::Type::STAIR_UP:
+            case Room::Type::STAIR_DOWN:
+            case Room::Type::STAIR_UP_DOWN:
+                materialColor = FLOOR_STAIR;
+                break;
+            case Room::Type::HALL:
+                materialColor = FLOOR_HALL;
+                break;
+            case Room::Type::ROOM_EMPTY:
+                materialColor = FLOOR_EMPTY;
+                break;
+            default:
+                materialColor = FLOOR_NONE;
+        }
+    } else {
+        materialColor = FLOOR_NONE;
+    }
+    updateOverlayColor();
 }
 
 Vector3 Floor::blendColors(Vector3* color1, Vector3* color2) {
     return .5 * (*color1) + .5 * (*color2);
 }
 
-void Floor::toggleColor(Vector3* first, Vector3* second) {
-    // toggle the color
-    if (!this->isColor(first)) {
-        this->setColor(first);
-    } else {
-        this->setColor(second);
-    }
-}
-
 bool Floor::getSelected() {
-	return selected;
+    return selected;
 }
 
 Floor* Floor::setSelected(bool selected) {
-	this->selected = selected;
-	updateColor();
-	return this;
+    this->selected = selected;
+    updateOverlayColor();
+    return this;
 }
 
 Floor* Floor::toggleSelect() {
     selected = !selected;
-	updateColor();
-	return this;
+    updateOverlayColor();
+    return this;
 }
 
 Floor* Floor::setHover(bool hover) {
-	this->hover = hover;
-	updateColor();
-	return this;
+    this->hover = hover;
+    updateOverlayColor();
+    return this;
 }

@@ -26,4 +26,10 @@ form houseRenderer {
     button clearButton : mainMenuButton {
 		text = Clear
 	}
+    button floorUpButton : mainMenuButton {
+		text = Floor up
+	}
+    button floorDownButton : mainMenuButton {
+		text = Floor down
+	}
 }

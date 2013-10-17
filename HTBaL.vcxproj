@@ -350,6 +350,7 @@
     <ClCompile Include="src\renderer\menumain\MainMenuWheel.cpp" />
     <ClCompile Include="src\renderer\menumain\MenuMainRenderer.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
+    <ClCompile Include="src\statelistener\AchievementStateListener.cpp" />
     <ClCompile Include="src\triggercore\StateListener.cpp" />
     <ClCompile Include="src\triggercore\StateManager.cpp" />
     <ClCompile Include="src\triggercore\StateTrigger.cpp" />
