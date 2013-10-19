@@ -39,6 +39,13 @@ public:
         ROOM_EMPTY,
         NONE,
     };
+
+	enum Direction {
+		UNDEF,
+		XDIR,
+		YDIR
+	};
+
     Room(House* house, list<Floor*> floor, list<Wall*> walls);
     Room(House* house, list<Floor*> floor, list<Wall*> walls, Room::Type roomType);
     ~Room();
@@ -55,8 +62,13 @@ public:
     bool contains(Floor* floorTile);
     
     int getSize();
-    int getMaxRectangle();
-    int getMaxLine();
+    
+	int getMaxLine();
+	int getMaxSquareId();
+	int getMaxRectangleId();
+	int getMaxAreaSquare();
+	int getMaxAreaRect();
+	Direction getMaxRectDir();
     
     list<Floor*> getCorners();
     list<Floor*> getLine(Floor* startTile, FloorDirection::Direction dir);
@@ -67,10 +79,16 @@ protected:
     Room::Type roomType;
     list<Floor*> floor;
     list<Wall*> walls;
+
+	int maxLine;
+	int maxSquareId;
+	int maxRectangleId;
+	int maxAreaSquare;
+	int maxAreaRect;
+	Direction maxRectDir;
     
     Room(int, int, list<Wall*>, Scene* scene);
-    
-    
+	void calculateSize();
 };
 
 #endif
