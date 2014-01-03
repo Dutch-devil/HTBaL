@@ -35,6 +35,12 @@ public:
     void trigger(unsigned char stateId);
     
     /**
+     * Get an event for this trigger by the event state name. Just converts the
+     * string and creates the event from it.
+     */
+    StateTriggerEvent getEvent(const char* stateName);
+    
+    /**
      * Function for getting the actual value of a trigger. Will always be called after
      * a trigger event has been sent. May also be called when a new listener is added
      * to the list for updating it's values
@@ -69,6 +75,7 @@ private:
      * The unique id of this trigger. For the stateManager to index it in an array.
      */
     unsigned short triggerId;
+    
 };
 
 #endif

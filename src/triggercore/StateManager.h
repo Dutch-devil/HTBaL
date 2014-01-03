@@ -8,11 +8,9 @@ class StateManager;
 
 #include <vector>
 #include "gameplay.h"
-//#include "rapidxml.hpp"
 
 using namespace std;
 using namespace gameplay;
-//using namespace rapidxml;
 
 class StateManager {
     // so stateTrigger can register itself
@@ -27,16 +25,24 @@ public:
     StateManager();
     
     /**
-     * Create a new stateManager from a config file at path.
-     * Triggers should still be added manually.
+     * Use the list of triggers to initialize all variables
      */
-    StateManager(const char* path);
+    StateManager(list<StateTrigger*> triggers);
+    
     ~StateManager();
+    
+    /**
+     * Unregisters all triggers. Their name will still
+     * be kept for future references (from listeners)
+     */
+    void unregisterTriggers();
     
     /**
      * Add a new listener to this stateManager.
      */
     void addListener(StateListener* listener);
+    
+    StateTrigger* getTrigger(const char* triggerName);
     
 private:
     /**

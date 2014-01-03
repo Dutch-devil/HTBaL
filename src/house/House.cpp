@@ -113,6 +113,9 @@ void House::removeFloorBottom() {
 
 void House::addRoom(Room* room) {
     rooms[floorIndex].push_back(room);
+    
+    roomCount = rooms[floorIndex].size();
+    trigger(ROOM_COUNT);
 }
 
 int House::getWidth() {

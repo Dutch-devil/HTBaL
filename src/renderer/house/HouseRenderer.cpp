@@ -375,13 +375,13 @@ void HouseRenderer::render(float elapsedTime) {
             sprintf(buf, "Room size: %d", hoverRoom->getSize());
             drawText(Vector4(1, 1, 1, 1), 5, 65, buf);
             
-            sprintf(buf, "Max sized rectangle: %d m2, at tile %d,%d in the %s direction.", 
-				hoverRoom->getMaxAreaRect(), house->getXById(hoverRoom->getMaxRectangleId()), 
-				house->getYById(hoverRoom->getMaxRectangleId()), (hoverRoom->getMaxRectDir() == Room::XDIR)?"X":"Y");
+            sprintf(buf, "Max sized rectangle: %d m2, at tile %d,%d in the %s direction.",
+                    hoverRoom->getMaxAreaRect(), house->getXById(hoverRoom->getMaxRectangleId()),
+                    house->getYById(hoverRoom->getMaxRectangleId()), (hoverRoom->getMaxRectDir() == Room::XDIR) ? "X" : "Y");
             drawText(Vector4(1, 1, 1, 1), 5, 80, buf);
-
+            
             sprintf(buf, "Max sized square: %d m2, at tile %d,%d\n",
-				hoverRoom->getMaxAreaSquare(), house->getXById(hoverRoom->getMaxSquareId()), house->getYById(hoverRoom->getMaxSquareId()));
+                    hoverRoom->getMaxAreaSquare(), house->getXById(hoverRoom->getMaxSquareId()), house->getYById(hoverRoom->getMaxSquareId()));
             drawText(Vector4(1, 1, 1, 1), 5, 95, buf);
             
             sprintf(buf, "Max line: %d", hoverRoom->getMaxLine());

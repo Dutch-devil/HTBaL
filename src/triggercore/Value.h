@@ -17,6 +17,8 @@ public:
     Value(const char*);
     ~Value();
     
+    static Value parseValue(const char*);
+    
     ValueType getValueType();
     int getIntValue();
     float getFloatValue();

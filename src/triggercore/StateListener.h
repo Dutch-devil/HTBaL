@@ -22,7 +22,7 @@ public:
         CompareType compareType;
         Value value;
         
-        Condition(CompareType type, Value val);
+        Condition(StateTriggerEvent trigger, CompareType type, Value val);
         ~Condition();
         
         StateTriggerEvent getTrigger();
@@ -31,6 +31,11 @@ public:
     
     StateListener(StateManager* stateManager);
     ~StateListener();
+    
+    /**
+     * Add a new condition to the list to check for before unlocking
+     */
+    void addCondition(Condition condition);
     
     /**
      * Locks the stateListener toLock. toLock won't ever be triggered until this
@@ -51,12 +56,6 @@ public:
      */
     void registerListeners();
     
-    
-    /**
-     * Function for registering ths triggers name. Should return a unique name which
-     * can be used in config files. Only called once when reading config.
-     */
-    virtual const char* getTriggerName() = 0;
     
     /**
      * Function for handling all specific things when this listener is done.

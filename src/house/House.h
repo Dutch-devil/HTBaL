@@ -3,16 +3,18 @@
 
 class House;
 
-#include "Floor.h"
 #include <list>
 #include <cmath>
 #include "../MaterialManager.h"
 #include "Wall.h"
 #include "Room.h"
+#include "Floor.h"
+
+#include "../triggercore/statetrigger/HouseStateTrigger.h"
 
 using namespace std;
 
-class House {
+class House : public HouseStateTrigger {
 public:
     House(int, int, float);
     ~House(void);

@@ -17,7 +17,14 @@ StateTrigger::~StateTrigger() {
 }
 
 void StateTrigger::trigger(unsigned char stateId) {
+    if (!stateManager) {
+        throw "No statemanager was set";
+    }
     stateManager->trigger(StateTriggerEvent(triggerId, stateId));
+}
+
+StateTriggerEvent StateTrigger::getEvent(const char* stateName) {
+    return StateTriggerEvent(triggerId, getStateId(stateName));
 }
 
 void StateTrigger::setStateManager(StateManager* stateManager) {

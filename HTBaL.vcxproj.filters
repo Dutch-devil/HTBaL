@@ -124,8 +124,17 @@
     <ClCompile Include="src\triggercore\Value.cpp">
       <Filter>src\TriggerCore</Filter>
     </ClCompile>
-    <ClCompile Include="src\statelistener\AchievementStateListener.cpp">
+    <ClCompile Include="src\factories\StateManagerFactory.cpp">
+      <Filter>src\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\statelistener\AchievementStateListener.cpp">
       <Filter>src\TriggerCore\StateListener</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\TriggerLoader.cpp">
+      <Filter>src\TriggerCore</Filter>
+    </ClCompile>
+    <ClCompile Include="src\triggercore\statetrigger\HouseStateTrigger.cpp">
+      <Filter>src\TriggerCore\StateTrigger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +203,18 @@
     </ClInclude>
     <ClInclude Include="src\triggercore\Value.h">
       <Filter>src\TriggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\factories\StateManagerFactory.h">
+      <Filter>src\Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\statelistener\AchievementStateListener.h">
+      <Filter>src\TriggerCore\StateListener</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\TriggerLoader.h">
+      <Filter>src\TriggerCore</Filter>
+    </ClInclude>
+    <ClInclude Include="src\triggercore\statetrigger\HouseStateTrigger.h">
+      <Filter>src\TriggerCore\StateTrigger</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

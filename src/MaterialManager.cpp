@@ -47,8 +47,10 @@ Properties* MaterialManager::fixProperties(Properties* properties) {
 
 void MaterialManager::finalize() {
     SAFE_RELEASE(stateBlock);
-    for (int i = 0; i < COUNT; i++) {
-        SAFE_DELETE(propertiesArray[i]);
+    if (propertiesArray) {
+        for (int i = 0; i < COUNT; i++) {
+            SAFE_DELETE(propertiesArray[i]);
+        }
+        SAFE_DELETE_ARRAY(propertiesArray);
     }
-    SAFE_DELETE_ARRAY(propertiesArray);
 }

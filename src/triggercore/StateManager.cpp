@@ -1,19 +1,37 @@
 
 #include "StateManager.h"
 
-StateManager::StateManager() {
+StateManager::StateManager() {}
 
+StateManager::StateManager(list<StateTrigger*> triggers) {
+    while (!triggers.empty()) {
+        StateTrigger* trigger = triggers.back();
+        triggers.pop_back();
+        
+        // register and unregister the trigger
+        // this way it's name will be saved
+        trigger->setStateManager(this);
+    }
 }
 
-StateManager::StateManager(const char* path) {
-    char* text = FileSystem::readAll(path);
-    //xml_document<> doc;
-    //doc.parse<0>(text);
-    
-    SAFE_DELETE_ARRAY(text);
+StateManager::~StateManager() {
+    unregisterTriggers();
+    for (vector<list<StateListener*>> triggerListeners : listeners) {
+        for (list<StateListener*> eventListeners : triggerListeners) {
+            for (StateListener * listener : eventListeners) {
+                SAFE_DELETE(listener);
+            }
+        }
+    }
 }
 
-StateManager::~StateManager() {}
+void StateManager::unregisterTriggers() {
+    for (StateTrigger * trigger : triggers) {
+        if (trigger) {
+            unregisterTrigger(registerTrigger(trigger));
+        }
+    }
+}
 
 
 
@@ -22,18 +40,27 @@ unsigned short StateManager::registerTrigger(StateTrigger* trigger) {
     
     // Check if the trigger name was registered before. If so, take that id.
     // Else make a new id for it.
-    unsigned short triggerId;
+    unsigned short triggerId = 0;
     for (vector<const char*>::iterator itr = triggerNames.begin(); itr != triggerNames.end(); itr++) {
         if (!strcmp(triggerName, *itr)) {
             triggerId = itr - triggerNames.begin();
             triggers[triggerId] = trigger;
-            listeners[triggerId] = vector<list<StateListener*>>(trigger->getStateCount());
             return triggerId;
         }
     }
     triggerNames.push_back(triggerName);
     triggers.push_back(trigger);
+    listeners.push_back(vector<list<StateListener*>>(trigger->getStateCount()));
     return triggers.size() - 1;
+}
+
+StateTrigger* StateManager::getTrigger(const char* triggerName) {
+    for (vector<const char*>::iterator itr = triggerNames.begin(); itr != triggerNames.end(); itr++) {
+        if (!strcmp(triggerName, *itr)) {
+            return triggers[itr - triggerNames.begin()];
+        }
+    }
+    return NULL;
 }
 
 void StateManager::unregisterTrigger(unsigned short triggerId) {

@@ -40,6 +40,29 @@ Value::~Value() {
     type = NONE;
 }
 
+Value Value::parseValue(const char* toParse) {
+    int parsed;
+    char overflow;
+    int intValue;
+    parsed = sscanf_s(toParse, "%d%c", &intValue, &overflow);
+    if (parsed == 1) {
+        // no more characters after matching, must be an integer
+        return Value(intValue);
+    }
+    float floatValue;
+    parsed = sscanf_s(toParse, "%f%c", &floatValue, &overflow);
+    if (parsed == 1) {
+        return Value(floatValue);
+    }
+    char charValue;
+    parsed = sscanf_s(toParse, "%c%c", &charValue, &overflow);
+    if (parsed == 1) {
+        return Value(charValue);
+    }
+    // just return the whole string
+    return Value(toParse);
+}
+
 
 
 Value::ValueType Value::getValueType() {

@@ -1,7 +1,7 @@
 
 #include "StateListener.h"
 
-StateListener::Condition::Condition(CompareType type, Value val): compareType(type), value(val) {}
+StateListener::Condition::Condition(StateTriggerEvent trigger, CompareType type, Value val): trigger(trigger), compareType(type), value(val) {}
 StateListener::Condition::~Condition() {}
 
 StateTriggerEvent StateListener::Condition::getTrigger() {
@@ -23,6 +23,10 @@ bool StateListener::Condition::compare(Value other) {
 
 StateListener::StateListener(StateManager* stateManager): stateManager(stateManager) {}
 StateListener::~StateListener() {}
+
+void StateListener::addCondition(Condition condition) {
+    conditions.push_back(condition);
+}
 
 void StateListener::lock(StateListener* toLock) {
     toLock->setLock(this);
@@ -47,8 +51,10 @@ bool StateListener::conditionMet(StateTriggerEvent trigger, Value val) {
 
 void StateListener::registerListeners() {
     if (locks.empty()) {
-        for (Condition condition : conditions) {
-            stateManager->registerListener(this, condition.getTrigger());
+        // TODO:
+        // normale foreach loop geeft corruption?
+        for (list<Condition>::iterator itr = conditions.begin(); itr != conditions.end(); itr++) {
+            stateManager->registerListener(this, itr->getTrigger());
         }
     }
 }
