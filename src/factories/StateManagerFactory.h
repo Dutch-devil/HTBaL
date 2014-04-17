@@ -4,10 +4,11 @@
 #include "../triggercore/StateManager.h"
 #include "../triggercore/statelistener/AchievementStateListener.h"
 #include "../triggercore/TriggerLoader.h"
-#include "pugiconfig.hpp"
+
+#include "tinyxml2.h"
 #include <unordered_map>
 
-using namespace pugi;
+using namespace tinyxml2;
 using namespace std;
 
 class StateManagerFactory {

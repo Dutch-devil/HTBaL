@@ -3,7 +3,7 @@
 
 Value::Value(int ivalue) {
     type = INTEGER;
-    value = &ivalue;
+	value = &ivalue;
 }
 
 Value::Value(float fvalue) {
@@ -24,7 +24,7 @@ Value::Value(const char* svalue) {
 Value::~Value() {
     switch (type) {
         case INTEGER:
-            delete (int*)value;
+            //delete (int*)value;
             break;
         case FLOAT:
             delete (float*)value;

@@ -18,7 +18,6 @@ form houseRenderer {
 		group = formSelection
 		height = 60
 		alignment              = ALIGN_RIGHT
-		consumeInputEvents = false
 	}
     button refreshButton : mainMenuButton {
 		text = Refresh

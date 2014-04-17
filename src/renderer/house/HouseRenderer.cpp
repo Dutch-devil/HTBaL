@@ -1,7 +1,7 @@
 #include "HouseRenderer.h"
 
 HouseRenderer::HouseRenderer(Rectangle viewport) : Renderer(viewport), initialTranslate(NULL) {
-    initialize();
+	initialize();
 }
 
 HouseRenderer::~HouseRenderer() {
@@ -29,6 +29,19 @@ HouseRenderer::~HouseRenderer() {
 }
 
 void HouseRenderer::initialize() {
+	houseRendererForm = Form::create("res/menu/houseRenderer.form");
+	//houseRendererForm->updateState(Control::State::NORMAL);
+	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
+	mainMenuButton->addListener(this, Control::Listener::CLICK);
+	Control* refreshButton = houseRendererForm->getControl("refreshButton");
+	refreshButton->addListener(this, Control::Listener::CLICK);
+	Control* clearButton = houseRendererForm->getControl("clearButton");
+	clearButton->addListener(this, Control::Listener::CLICK);
+	Control* floorUpButton = houseRendererForm->getControl("floorUpButton");
+	floorUpButton->addListener(this, Control::Listener::CLICK);
+	Control* floorDownButton = houseRendererForm->getControl("floorDownButton");
+	floorDownButton->addListener(this, Control::Listener::CLICK);
+
     scene = Scene::create("HouseScene");
     zoomLevel = 1;
     curTranslate = new Vector3();
@@ -37,25 +50,13 @@ void HouseRenderer::initialize() {
     
     Node* cameraNode = scene->addNode();
     cameraNode->setCamera(camera);
-    scene->setActiveCamera(camera);
+	scene->setActiveCamera(camera);
+	cameraNode->translateForward(-100);
     
     SAFE_RELEASE(camera);
     
     cameraNode->rotateZ(MATH_PI / 4);
     cameraNode->rotateX(MATH_PI / 4);
-    
-    houseRendererForm = Form::create("res/menu/houseRenderer.form");
-    houseRendererForm->setState(Control::State::NORMAL);
-    Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
-    mainMenuButton->addListener(this, Control::Listener::CLICK);
-    Control* refreshButton = houseRendererForm->getControl("refreshButton");
-    refreshButton->addListener(this, Control::Listener::CLICK);
-    Control* clearButton = houseRendererForm->getControl("clearButton");
-    clearButton->addListener(this, Control::Listener::CLICK);
-    Control* floorUpButton = houseRendererForm->getControl("floorUpButton");
-    floorUpButton->addListener(this, Control::Listener::CLICK);
-    Control* floorDownButton = houseRendererForm->getControl("floorDownButton");
-    floorDownButton->addListener(this, Control::Listener::CLICK);
     
     resize();
     
@@ -184,7 +185,7 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
     } else {
         // Clicked any button on the mouse
         if (evt == Mouse::MouseEvent::MOUSE_RELEASE_LEFT_BUTTON) {
-            houseRendererForm->setState(Control::State::NORMAL);
+            //houseRendererForm->setState(Control::State::NORMAL);
         }
         
         if (evt == Mouse::MOUSE_PRESS_LEFT_BUTTON && prevHover != NULL) {
@@ -319,9 +320,9 @@ void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
 }
 
 void HouseRenderer::update(float elapsedTime) {
+	houseRendererForm->update(elapsedTime);
     float translation = SCROLL_SPEED * elapsedTime * zoomLevel;
     
-    houseRendererForm->update(elapsedTime);
     bool changed = false;
     if (getKeyFlags()->getFlag('w') || getKeyFlags()->getFlag(Keyboard::Key::KEY_UP_ARROW)) {
         scene->getActiveCamera()->getNode()->translateUp(translation);
@@ -341,7 +342,7 @@ void HouseRenderer::update(float elapsedTime) {
     }
     if (changed) {
         Vector3::subtract(scene->getActiveCamera()->getNode()->getTranslation(), *initialTranslate, curTranslate);
-    }
+	}
 }
 
 Renderers HouseRenderer::getNextRenderer() {
@@ -362,7 +363,6 @@ void HouseRenderer::render(float elapsedTime) {
             wall->getModel()->draw();
         }
     }
-    houseRendererForm->draw();
     roomTypes->draw(elapsedTime);
     
     if (prevHover) {
@@ -388,7 +388,8 @@ void HouseRenderer::render(float elapsedTime) {
             drawText(Vector4(1, 1, 1, 1), 5, 110, buf);
             delete[] buf;
         }
-    }
+	}
+	houseRendererForm->draw();
 }
 
 void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType evt) {
@@ -407,7 +408,7 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
         house->floorDown();
         //house->addFloorBottom(scene);
     }
-    control->setState(Control::State::NORMAL);
+    //control->setState(Control::State::NORMAL);
 }
 
 

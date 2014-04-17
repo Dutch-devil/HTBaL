@@ -14,8 +14,8 @@ void HTBaL::initialize() {
     StateManagerFactory::initialize();
     deleting = false;
     activeRenderer = NULL;
-    //setActiveRenderer(HOUSE);
-    this->exit();
+    setActiveRenderer(MAIN_MENU);
+    //this->exit();
 }
 
 // We don't have to do anything when the game closes;

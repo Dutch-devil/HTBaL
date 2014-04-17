@@ -5,6 +5,7 @@ form main {
     autoHeight             = true
     style                  = title
 	layout = LAYOUT_VERTICAL
+	consumeInputEvents = false
 	
 
     // All the Controls within this Form.
