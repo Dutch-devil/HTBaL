@@ -28,6 +28,10 @@ void StateListener::addCondition(Condition condition) {
     conditions.push_back(condition);
 }
 
+list<StateListener::Condition> StateListener::getConditions() {
+	return conditions;
+}
+
 void StateListener::lock(StateListener* toLock) {
     toLock->setLock(this);
     unlocks.push_back(toLock);
@@ -36,27 +40,38 @@ void StateListener::lock(StateListener* toLock) {
 bool StateListener::conditionMet(StateTriggerEvent trigger, Value val) {
     // check all conditions
     for (list<Condition>::iterator itr = conditions.begin(); itr != conditions.end(); itr++) {
-        if ((*itr).getTrigger() == trigger && (*itr).compare(val)) {
+		if ((*itr).getTrigger() == trigger && (*itr).compare(val)) {
             // condition is met, remove it from the list
             conditions.erase(itr);
-            if (conditions.empty()) {
-                // all conditions are met, trigger done event
-                done();
-            }
             return true;
         }
     }
     return false;
 }
 
-void StateListener::registerListeners() {
+list<StateListener*> StateListener::checkDone() {
+	list<StateListener*> doneList;
+	if (conditions.empty()) {
+		// all conditions are met, trigger done event
+		doneList.push_back(this);
+		doneList.merge(done());
+	}
+	return doneList;
+}
+
+list<StateListener*> StateListener::registerListeners() {
+	list<StateListener*> doneList;
     if (locks.empty()) {
-        // TODO:
-        // normale foreach loop geeft corruption?
-        for (list<Condition>::iterator itr = conditions.begin(); itr != conditions.end(); itr++) {
-            stateManager->registerListener(this, itr->getTrigger());
-        }
-    }
+		doneList.merge(checkDone());
+		if (doneList.empty()) {
+			// TODO:
+			// normale foreach loop geeft corruption?
+			for (list<Condition>::iterator itr = conditions.begin(); itr != conditions.end(); itr++) {
+				stateManager->registerListener(this, itr->getTrigger());
+			}
+		}
+	}
+	return doneList;
 }
 
 
@@ -64,13 +79,21 @@ void StateListener::setLock(StateListener* locker) {
     locks.push_back(locker);
 }
 
-void StateListener::removeLock(StateListener* locker) {
+list<StateListener*> StateListener::removeLock(StateListener* locker) {
     locks.remove(locker);
-    registerListeners();
+    return registerListeners();
 }
 
-void StateListener::done() {
+list<StateListener*> StateListener::done() {
+	list<StateListener*> doneList;
+	// TODO: handleDone moet ook listeners kunnen returnen?
+	handleDone();
     for (StateListener * unlock : unlocks) {
-        unlock->removeLock(this);
+        doneList.merge(unlock->removeLock(this));
     }
+	return doneList;
+}
+
+const char* StateListener::getListenerName() {
+	return "Unnamed";
 }

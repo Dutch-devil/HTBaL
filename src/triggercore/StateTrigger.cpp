@@ -20,7 +20,17 @@ void StateTrigger::trigger(unsigned char stateId) {
     if (!stateManager) {
         throw "No statemanager was set";
     }
-    stateManager->trigger(StateTriggerEvent(triggerId, stateId));
+	if (!triggerPaused) {
+		stateManager->trigger(StateTriggerEvent(triggerId, stateId));
+	}
+}
+
+void StateTrigger::pauseTrigger() {
+	triggerPaused = true;
+}
+
+void StateTrigger::resumeTrigger() {
+	triggerPaused = false;
 }
 
 StateTriggerEvent StateTrigger::getEvent(const char* stateName) {

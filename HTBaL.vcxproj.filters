@@ -29,11 +29,14 @@
     <Filter Include="src\TriggerCore">
       <UniqueIdentifier>{5efdf78f-7bf5-4131-8941-0e17377f1e9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\TriggerCore\StateListener">
-      <UniqueIdentifier>{88de8ff4-d36d-443b-9a3b-92ac07342a38}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\TriggerCore\StateTrigger">
       <UniqueIdentifier>{ad6d88d6-651c-425a-a072-24c940ae2621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Achievements">
+      <UniqueIdentifier>{5d4810bf-5dd3-4b54-a697-45143d629a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Achievements\StateListener">
+      <UniqueIdentifier>{88de8ff4-d36d-443b-9a3b-92ac07342a38}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -128,13 +131,16 @@
       <Filter>src\Factories</Filter>
     </ClCompile>
     <ClCompile Include="src\triggercore\statelistener\AchievementStateListener.cpp">
-      <Filter>src\TriggerCore\StateListener</Filter>
+      <Filter>src\Achievements\StateListener</Filter>
     </ClCompile>
     <ClCompile Include="src\triggercore\TriggerLoader.cpp">
       <Filter>src\TriggerCore</Filter>
     </ClCompile>
     <ClCompile Include="src\triggercore\statetrigger\HouseStateTrigger.cpp">
       <Filter>src\TriggerCore\StateTrigger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\achievements\AchievementRenderer.cpp">
+      <Filter>src\Achievements</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,13 +214,16 @@
       <Filter>src\Factories</Filter>
     </ClInclude>
     <ClInclude Include="src\triggercore\statelistener\AchievementStateListener.h">
-      <Filter>src\TriggerCore\StateListener</Filter>
+      <Filter>src\Achievements\StateListener</Filter>
     </ClInclude>
     <ClInclude Include="src\triggercore\TriggerLoader.h">
       <Filter>src\TriggerCore</Filter>
     </ClInclude>
     <ClInclude Include="src\triggercore\statetrigger\HouseStateTrigger.h">
       <Filter>src\TriggerCore\StateTrigger</Filter>
+    </ClInclude>
+    <ClInclude Include="src\achievements\AchievementRenderer.h">
+      <Filter>src\Achievements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

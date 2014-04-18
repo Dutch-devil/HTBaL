@@ -63,6 +63,21 @@ StateTrigger* StateManager::getTrigger(const char* triggerName) {
     return NULL;
 }
 
+StateListener* StateManager::getDoneListener() {
+	if (doneListeners.empty()) {
+		return NULL;
+	}
+	StateListener* first = doneListeners.front();
+	doneListeners.pop_front();
+	return first;
+}
+
+list<StateListener*> StateManager::getAllDoneListeners() {
+	list<StateListener*> copy = list<StateListener*>(doneListeners);
+	doneListeners.clear();
+	return copy;
+}
+
 void StateManager::unregisterTrigger(unsigned short triggerId) {
     triggers[triggerId] = NULL;
 }
@@ -75,17 +90,50 @@ void StateManager::trigger(StateTriggerEvent evt) {
     if (triggers[evt.triggerId]) {
         // check if the value even exists or this is a false positive event.
         Value value = triggers[evt.triggerId]->getStateValue(evt.stateId);
-        if (value.getValueType() == Value::ValueType::NONE) {
+        if (value.getValueType() != Value::ValueType::NONE) {
             // loop over all listeners registered to this event.
             list<StateListener*> listenerList = listeners[evt.triggerId][evt.stateId];
             for (list<StateListener*>::iterator itr = listenerList.begin(); itr != listenerList.end();) {
                 // if the condition is met on the listener, unregister it automagically.
                 if ((*itr)->conditionMet(evt, value)) {
-                    itr = listenerList.erase(itr);
+					list<StateListener*> doneList = (*itr)->checkDone();
+					doneListeners.merge(doneList);
+					itr = listenerList.erase(itr);
                 } else {
                     itr++;
                 }
             }
         }
     }
+}
+
+void StateManager::display() {
+	print("\n\nTriggers:\n");
+	for (int i = 0; i < triggers.size(); i++) {
+		StateTrigger* trigger = triggers[0];
+		if (trigger != 0) {
+			print(" - %s with %d states\n", trigger->getTriggerName(), listeners[i].size());
+			for (int j = 0; j < listeners[i].size(); i++) {
+				print("   - state %s with %d listeners\n", trigger->getStateName(j), listeners[i][j].size());
+				for (StateListener* listener : listeners[i][j]) {
+					print("     - listener %s\n", listener->getListenerName());
+					for (StateListener::Condition condition : listener->getConditions()) {
+						print("       Must be ");
+						switch (condition.compareType) {
+							case StateListener::Condition::SMALLER: print("smaller than "); break;
+							case StateListener::Condition::EQUAL: print("equal to "); break;
+							case StateListener::Condition::GREATER: print("greater than "); break;
+						}
+						switch (condition.value.getValueType()) {
+							case Value::INTEGER: print("%d\n", condition.value.getIntValue()); break;
+							case Value::FLOAT: print("%f\n", condition.value.getIntValue()); break;
+							case Value::CHARACTER: print("%c\n", condition.value.getCharValue()); break;
+							case Value::STRING: print("%s\n", condition.value.getStringValue()); break;
+						}
+					}
+				}
+			}
+		}
+		print("\n");
+	}
 }

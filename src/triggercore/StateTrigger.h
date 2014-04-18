@@ -33,6 +33,17 @@ public:
      * to specify a state.
      */
     void trigger(unsigned char stateId);
+
+	/**
+	 * Pause this trigger. Won't fire any trigger events until resumeTriggers()
+	 * is called.
+	 */
+	void pauseTrigger();
+
+	/**
+	 * Resume triggering events after a pauseTrigger() call.
+	 */
+	void resumeTrigger();
     
     /**
      * Get an event for this trigger by the event state name. Just converts the
@@ -64,7 +75,13 @@ public:
      * enum value by their string for using in config files. Only called once when
      * reading config files.
      */
-    virtual unsigned char getStateId(const char*) = 0;
+	virtual unsigned char getStateId(const char*) = 0;
+
+	/**
+	* Get the state name belonging to an id.
+	* The inverse function of getStateId
+	*/
+	virtual const char* getStateName(unsigned char stateId) = 0;
     
 private:
     /**
@@ -75,6 +92,10 @@ private:
      * The unique id of this trigger. For the stateManager to index it in an array.
      */
     unsigned short triggerId;
+	/**
+	 * Is this trigger paused? Won't fire any trigger events if it is.
+	 */
+	bool triggerPaused;
     
 };
 

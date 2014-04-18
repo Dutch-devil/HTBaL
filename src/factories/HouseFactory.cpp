@@ -6,7 +6,9 @@ House* HouseFactory::createHouse(Scene* scene, float screenSize) {
 
 House* HouseFactory::createHouse(Scene* scene, float screenSize, unsigned int width, unsigned int height) {
     House* house = new House(width, height, screenSize);
+	house->pauseTrigger();
     house->addFloorTop(scene);
+	house->resumeTrigger();
     return house;
 }
 
@@ -16,6 +18,7 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize) {
 
 House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned int width, unsigned int height) {
     House* house = createHouse(scene, screenSize, width, height);
+	house->pauseTrigger();
     
     vector<WalledTile>* hallPossibilities = new vector<WalledTile>();   // list of all possible hall places
     vector<WalledTile>* roomStartPosibilities = new vector<WalledTile>();   // all possible starts for new rooms
@@ -223,8 +226,10 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
             roomTiles.merge(gaps);
             
             if (roomTiles.size() >= 4) {
-                setDoor(house, hallTiles, startTile);
-                house->addRoom(RoomFactory::createRoomFromFloor(scene, house, roomTiles));
+				setDoor(house, hallTiles, startTile);
+				house->resumeTrigger();
+				house->addRoom(RoomFactory::createRoomFromFloor(scene, house, roomTiles));
+				house->pauseTrigger();
             } else {
                 for (Floor * roomTile : roomTiles) {
                     roomTile->setSelected(false);
@@ -232,9 +237,11 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
                 }
             }
         }
-        
+
+		house->resumeTrigger();
         house->addRoom(RoomFactory::createRoomFromFloor(scene, house, entranceTiles, floorIndex ? (floorIndex > max / 2 ? Room::STAIR_UP : Room::STAIR_DOWN) : Room::ENTRANCE));
         house->addRoom(RoomFactory::createRoomFromFloor(scene, house, hallTiles, Room::HALL));
+		house->pauseTrigger();
         
         // reset all floor tiles to default state
         for (int i = 0; i < house->getWidth() * house->getHeight(); i++) {
@@ -266,7 +273,9 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
                 // and create a new room with just the stair tile
                 erasedFloor = list<Floor*>();
                 erasedFloor.push_back(tile);
+				house->resumeTrigger();
                 house->addRoom(RoomFactory::createRoomFromFloor(scene, house, erasedFloor, floorIndex > max / 2 ? Room::STAIR_DOWN : Room::STAIR_UP));
+				house->pauseTrigger();
             }
             tile->updateMaterial();
         }
@@ -291,6 +300,7 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
     SAFE_DELETE(roomStartPosibilities);
     SAFE_DELETE(roomPossibilities);
     house->setFloorMiddle();
+	house->resumeTrigger();
     return house;
 }
 

@@ -13,14 +13,17 @@ using namespace std;
 
 class StateManagerFactory {
 public:
-    static void StateManagerFactory::initialize();
-    static void StateManagerFactory::finalize();
-    static StateManager* StateManagerFactory::getAchievementStateManager();
+    static void initialize();
+    static void finalize();
+
+	static StateManager* getAchievementManager();
     
 private:
-    static StateManager* achievementStateManager;
-    
-    static StateManager* createStateManagerFromXml(const char* xmlName, list<StateTrigger*> triggers);
+    static StateManager* achievementManager;
+
+	static StateManager* StateManagerFactory::createAchievementManager();
+
+    static StateManager* fillStateManagerFromXml(const char* xmlName, StateManager* stateManager);
     static StateTriggerEvent parseTriggerEvent(StateManager* stateManager, const char* trigger);
     
     static void strToLower(char* str);

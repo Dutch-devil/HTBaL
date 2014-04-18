@@ -1,36 +1,42 @@
 
 #include "StateManagerFactory.h"
 
-StateManager* StateManagerFactory::achievementStateManager = NULL;
+StateManager* StateManagerFactory::achievementManager = NULL;
 
 void StateManagerFactory::initialize() {
-    list<StateTrigger*> triggers = TriggerLoader::getAchievementTriggers();
-    achievementStateManager = StateManagerFactory::createStateManagerFromXml("res/core/achievements", triggers);
-    for (StateTrigger * trigger : triggers) {
-        SAFE_DELETE(trigger);
-    }
+    achievementManager = StateManagerFactory::createAchievementManager();
 }
 
 void StateManagerFactory::finalize() {
-    SAFE_DELETE(achievementStateManager);
+    SAFE_DELETE(achievementManager);
 }
 
-StateManager* StateManagerFactory::getAchievementStateManager() {
-    if (!achievementStateManager) {
-        throw "Not initialized yet";
-    }
-    return achievementStateManager;
+StateManager* StateManagerFactory::getAchievementManager() {
+	if (achievementManager == NULL) {
+		throw "Not initalized yet";
+	}
+	return achievementManager;
 }
 
-StateManager* StateManagerFactory::createStateManagerFromXml(const char* xmlName, list<StateTrigger*> triggers) {
+StateManager* StateManagerFactory::createAchievementManager() {
+	list<StateTrigger*> triggers = TriggerLoader::getAchievementTriggers();
+	StateManager* achievementManager = new StateManager(triggers);
+	StateManagerFactory::fillStateManagerFromXml("res/core/achievements", achievementManager);
+	achievementManager->display();
+	achievementManager->unregisterTriggers();
+	for (StateTrigger * trigger : triggers) {
+		SAFE_DELETE(trigger);
+	}
+    return achievementManager;
+}
+
+StateManager* StateManagerFactory::fillStateManagerFromXml(const char* xmlName, StateManager* stateManager) {
 	XMLDocument doc;
 	doc.LoadFile(xmlName);
 	if (doc.ErrorID()) {
 		printf("XML parse error with id: %d\n", doc.ErrorID());
         throw "Unsuccessfull parse of xml document";
     }
-    
-    StateManager* stateManager = new StateManager(triggers);
 
 	// skip violet specific data
 	XMLNode* content = doc.FirstChild()->NextSibling()->FirstChild();
@@ -39,6 +45,7 @@ StateManager* StateManagerFactory::createStateManagerFromXml(const char* xmlName
 
 	unordered_map<const char*, StateTriggerEvent> triggerEventsById;
 	unordered_map<const char*, StateListener*> listenersById;
+	unordered_map<const char*, const char*> listenerConnects;
 
 	// loop all functions
 	for (XMLNode* methodNode = content->FirstChild(); methodNode; methodNode = methodNode->NextSibling()) {
@@ -53,7 +60,8 @@ StateManager* StateManagerFactory::createStateManagerFromXml(const char* xmlName
 			}else if (!strcmp(nodeName, "com.horstmann.violet.StateNode")) {
 				// listenener node
 				// TODO: meerdere soorten listeners en hun data mee kunnen geven
-				StateListener* listener = new AchievementStateListener(stateManager);
+				const char* stateName = nodeType->FirstChild()->FirstChild()->FirstChildElement()->GetText();
+				StateListener* listener = AchievementStateListener::createFromName(stateName, stateManager);
 				listenersById.insert(pair<const char*, StateListener*>(nodeId, listener));
 			}else if (!strcmp(nodeName, "com.horstmann.violet.NoteNode")) {
 				// trigger node name
@@ -77,9 +85,10 @@ StateManager* StateManagerFactory::createStateManagerFromXml(const char* xmlName
 				}
 				else {
 					// connection doesn't have label, must be listener-listener connection
+					XMLNode* fromId = connectType->NextSibling();
+					listenerConnects.insert(pair<const char*, const char*>(fromId->ToElement()->Attribute("idref"), fromId->NextSiblingElement()->Attribute("idref")));
 				}
-			}
-			else if (!strcmp(connectName, "com.horstmann.violet.NoteEdge")) {
+			} else if (!strcmp(connectName, "com.horstmann.violet.NoteEdge")) {
 				// connection between trigger and it's name
 				XMLNode* noteId = connectType->NextSibling();
 				unordered_map<const char*, StateTriggerEvent>::iterator itr;
@@ -149,7 +158,26 @@ StateManager* StateManagerFactory::createStateManagerFromXml(const char* xmlName
 		listener->addCondition(StateListener::Condition(triggerEvent, compareType, value));
 		listenerList.insert(listener);
 	}
-	stateManager->unregisterTriggers();
+	unordered_map<const char*, const char*>::iterator itr;
+	for (itr = listenerConnects.begin(); itr != listenerConnects.end(); itr++) {
+		// lock listener with id itr->second by listener with id itr->first
+		StateListener* listenerFrom = NULL, *listenerTo = NULL;
+		unordered_map<const char*, StateListener*>::iterator itr2;
+		for (itr2 = listenersById.begin(); itr2 != listenersById.end(); itr2++) {
+			if (!strcmp(itr2->first, itr->first)) {
+				listenerFrom = itr2->second;
+			} else if (!strcmp(itr2->first, itr->second)) {
+				listenerTo = itr2->second;
+			}
+			if (listenerFrom != NULL && listenerTo != NULL) {
+				break;
+			}
+		}
+		if (listenerFrom == NULL || listenerTo == NULL) {
+			throw "Listener lock not found";
+		}
+		listenerFrom->lock(listenerTo);
+	}
 
 	for (StateListener * listener : listenerList) {
 		listener->registerListeners();

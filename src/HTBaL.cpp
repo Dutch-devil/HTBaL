@@ -12,16 +12,19 @@ HTBaL::~HTBaL() {}
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {
     StateManagerFactory::initialize();
-    deleting = false;
+	achievementRenderer = new AchievementRenderer();
+
+	deleting = false;
     activeRenderer = NULL;
-    setActiveRenderer(MAIN_MENU);
+	setActiveRenderer(MAIN_MENU);
     //this->exit();
 }
 
 // We don't have to do anything when the game closes;
 void HTBaL::finalize() {
     deleting = true;
-    SAFE_DELETE(activeRenderer);
+	SAFE_DELETE(activeRenderer);
+	SAFE_DELETE(achievementRenderer);
     Renderer::finalize();
     MaterialManager::finalize();
     StateManagerFactory::finalize();
@@ -68,6 +71,7 @@ void HTBaL::render(float elapsedTime) {
     
     // We let the active renderer update
     activeRenderer->render(elapsedTime);
+	achievementRenderer->render(elapsedTime);
     
     // Draw the fps
     drawFrameRate(Vector4(0, 0.5f, 1, 1), 5, 1, getFrameRate());

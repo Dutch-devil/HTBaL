@@ -117,6 +117,87 @@
     </void>
    </object>
   </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.StateNode" id="StateNode1">
+    <void property="name">
+     <void property="text">
+      <string>Mamas floor</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double4">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double4"/>
+      <double>648.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double4"/>
+      <double>359.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>648.0</double>
+     <double>359.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.CircularStateNode" id="CircularInitialStateNode1"/>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double5">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double5"/>
+      <double>733.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double5"/>
+      <double>145.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>733.0</double>
+     <double>145.0</double>
+    </void>
+   </object>
+  </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.NoteNode" id="NoteNode1">
+    <void property="text">
+     <void property="text">
+      <string>House:Currentfloor</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double6">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double6"/>
+      <double>788.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double6"/>
+      <double>139.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>788.0</double>
+     <double>139.0</double>
+    </void>
+   </object>
+  </void>
   <void method="connect">
    <object class="com.horstmann.violet.NoteEdge"/>
    <object idref="CircularInitialStateNode0"/>
@@ -130,6 +211,25 @@
    </object>
    <object idref="CircularInitialStateNode0"/>
    <object idref="StateNode0"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.StateTransitionEdge"/>
+   <object idref="StateNode0"/>
+   <object idref="StateNode1"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.StateTransitionEdge">
+    <void property="label">
+     <string>=2</string>
+    </void>
+   </object>
+   <object idref="CircularInitialStateNode1"/>
+   <object idref="StateNode1"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.NoteEdge"/>
+   <object idref="CircularInitialStateNode1"/>
+   <object idref="NoteNode1"/>
   </void>
  </object>
 </java>

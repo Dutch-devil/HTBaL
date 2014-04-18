@@ -57,6 +57,9 @@ protected:
     vector<list<Room*>> rooms;
     
     void addFloor(Scene* scene, Floor** refFloor);
+
+	int getRoomCount();
+	int getCurrentFloor();
 };
 
 #endif

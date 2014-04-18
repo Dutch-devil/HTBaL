@@ -40,6 +40,7 @@ bool House::setFloor(unsigned int floorIndex) {
     if (floorIndex < floors.size()) {
         this->floorIndex = floorIndex;
         floorTiles = floors[floorIndex];
+		trigger(CURRENT_FLOOR);
     }
     return false;
 }
@@ -114,7 +115,6 @@ void House::removeFloorBottom() {
 void House::addRoom(Room* room) {
     rooms[floorIndex].push_back(room);
     
-    roomCount = rooms[floorIndex].size();
     trigger(ROOM_COUNT);
 }
 
@@ -201,4 +201,14 @@ int House::getXById(int id) {
 
 int House::getYById(int id) {
     return id / width;
+}
+
+
+
+int House::getRoomCount() {
+	return rooms[floorIndex].size();
+}
+
+int House::getCurrentFloor() {
+	return floorIndex;
 }

@@ -9,6 +9,7 @@ class HTBaL;
 #include "renderer/menumain/MenuMainRenderer.h"
 #include "renderer/house/HouseRenderer.h"
 #include "renderer/map/MapRenderer.h"
+#include "achievements/AchievementRenderer.h"
 
 using namespace gameplay;
 
@@ -97,6 +98,7 @@ protected:
 private:
     bool deleting;
     Renderer* activeRenderer;           /// The active renderer.
+	AchievementRenderer* achievementRenderer;
 };
 
 #endif

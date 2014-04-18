@@ -43,6 +43,24 @@ public:
     void addListener(StateListener* listener);
     
     StateTrigger* getTrigger(const char* triggerName);
+
+	/**
+	 * Get the next listener in the done listeners list.
+	 * Removes it from the list and will be lost from this manager.
+	 */
+	StateListener* getDoneListener();
+
+	/**
+	 * Get the whole list of done listeners.
+	 * Clears the list and will be lost from this manager.
+	 */
+	list<StateListener*> getAllDoneListeners();
+
+	/**
+	 * Display some information about this state manager
+	 * for testing purposes only.
+	 */
+	void display();
     
 private:
     /**
@@ -59,6 +77,12 @@ private:
      * All listeners ordered by the triggerEvent indices.
      */
     vector<vector<list<StateListener*>>> listeners;
+
+	/**
+	 * All listeners done in previous check. Will be
+	 * reset when retrieved.
+	 */
+	list<StateListener*> doneListeners;
     
     /**
      * Registers a new trigger to this stateManager. Will

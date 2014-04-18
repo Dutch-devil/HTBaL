@@ -38,14 +38,22 @@ public:
      * reading config files.
      */
     unsigned char getStateId(const char*);
+
+	/** 
+	 * Get the state name belonging to an id.
+	 * The inverse function of getStateId
+	 */
+	const char* getStateName(unsigned char stateId);
     
 protected:
     enum HouseStates {
-        ROOM_COUNT,
+		ROOM_COUNT,
+		CURRENT_FLOOR,
         COUNT
     };
     
-    int roomCount;
+	virtual int getRoomCount();
+	virtual int getCurrentFloor();
 };
 
 #endif

@@ -36,6 +36,11 @@ public:
      * Add a new condition to the list to check for before unlocking
      */
     void addCondition(Condition condition);
+
+	/**
+	 * All the conditions that have to be met before this triggers
+	 */
+	list<Condition> getConditions();
     
     /**
      * Locks the stateListener toLock. toLock won't ever be triggered until this
@@ -48,19 +53,32 @@ public:
      * If true is returned, this condition won't be fired again.
      */
     bool conditionMet(StateTriggerEvent trigger, Value val);
+
+	/**
+	 * Check if this listener is done. It is, when all conditions are met.
+	 * automatically triggers done().
+	 * Returns true if it is actually done.
+	 */
+	list<StateListener*> checkDone();
     
     /**
      * Set all listeners for conditions on stateManager. Function will only
      * work when this listener has no locks. Should be called once after
      * creating all stateListeners.
      */
-    void registerListeners();
+    list<StateListener*> registerListeners();
     
     
     /**
      * Function for handling all specific things when this listener is done.
      */
     virtual void handleDone() = 0;
+
+	/**
+	 * Get a name for this listener.
+	 * For displaying on screen.
+	 */
+	virtual const char* getListenerName();
     
 private:
     /**
@@ -91,12 +109,12 @@ private:
     /**
      * Unlock the lock set by lock.
      */
-    void removeLock(StateListener* locker);
+    list<StateListener*> removeLock(StateListener* locker);
     
     /**
      * triggered when this listener is done. All it's locks will be released
      */
-    void done();
+    list<StateListener*> done();
 };
 
 #endif

@@ -3,22 +3,27 @@
 
 Value::Value(int ivalue) {
     type = INTEGER;
-	value = &ivalue;
+	value = new int*();
+	*((int*)value) = ivalue;
 }
 
 Value::Value(float fvalue) {
     type = FLOAT;
-    value = &fvalue;
+	value = new float*();
+	*((float*)value) = fvalue;
 }
 
 Value::Value(char cvalue) {
     type = CHARACTER;
-    value = &cvalue;
+	value = new char*();
+	*((char*)value) = cvalue;
 }
 
 Value::Value(const char* svalue) {
     type = STRING;
-    value = &svalue;
+	rsize_t len = strlen(svalue) + 1;
+	value = new char[len];
+	strcpy_s(((char*)value), len, svalue);
 }
 
 Value::~Value() {

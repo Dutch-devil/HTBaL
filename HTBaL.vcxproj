@@ -333,6 +333,7 @@
     <None Include="res\colored.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\achievements\AchievementRenderer.cpp" />
     <ClCompile Include="src\factories\HouseFactory.cpp" />
     <ClCompile Include="src\factories\RoomFactory.cpp" />
     <ClCompile Include="src\factories\StateManagerFactory.cpp" />
@@ -361,6 +362,7 @@
     <ClCompile Include="src\triggercore\Value.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\achievements\AchievementRenderer.h" />
     <ClInclude Include="src\factories\HouseFactory.h" />
     <ClInclude Include="src\factories\RoomFactory.h" />
     <ClInclude Include="src\factories\StateManagerFactory.h" />
