@@ -60,14 +60,8 @@ void HouseRenderer::initialize() {
     
     resize();
     
-    MenuWheelPart::setSize(renderHeight);
-    roomTypes = HouseMenuWheel::create(scene, viewport);
+    roomTypes = HouseMenuWheel::create(viewport);
     roomTypes->addListener(this);
-    Node* roomTypesNode = roomTypes->getNode();
-    roomTypesNode->translateX(aspectRatio * renderHeight / 2);
-    roomTypesNode->translateY(-renderHeight / 2);
-    roomTypesNode->translateZ(10);
-    cameraNode->addChild(roomTypesNode);
     
     createHouse(false, true);
 }
@@ -314,8 +308,10 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {
         }
     }
 }
+
 void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
     Renderer::resizeEvent(width, height);
+	roomTypes->resizeEvent(width, height);
     resize();
 }
 

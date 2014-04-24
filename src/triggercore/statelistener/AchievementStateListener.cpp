@@ -28,9 +28,10 @@ void AchievementStateListener::handleDone() {
 }
 
 const char* AchievementStateListener::getListenerName() {
-	char* listenerName = new char[100];
-	sprintf(listenerName, "Achievement State Listener %s", achievementName);
-	return listenerName;
+	//char* listenerName = new char[100];
+	//sprintf(listenerName, "Achievement State Listener %s", achievementName);
+	//return listenerName;
+	return "Achievement State Listener";
 }
 
 unsigned short AchievementStateListener::getAchievementIndex() {

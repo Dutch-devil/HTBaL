@@ -23,8 +23,7 @@ void MenuMainRenderer::initialize() {
 
 	SAFE_RELEASE(camera);
 
-	MenuWheelPart::setSize(viewport.height);
-	menuWheel = MainMenuWheel::create(scene, viewport);
+	menuWheel = MainMenuWheel::create();
 }
 
 MenuMainRenderer::~MenuMainRenderer() {
@@ -33,6 +32,11 @@ MenuMainRenderer::~MenuMainRenderer() {
 	SAFE_RELEASE(mainMenuForm);
 	SAFE_DELETE(menuWheel);
 	SAFE_RELEASE(scene);
+}
+
+void MenuMainRenderer::resizeEvent(unsigned int width, unsigned int height) {
+	Renderer::resizeEvent(width, height);
+	menuWheel->resizeEvent(width, height);
 }
 
 void MenuMainRenderer::update(float elapsedTime) {

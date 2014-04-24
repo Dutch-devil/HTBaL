@@ -1,6 +1,6 @@
 #include "MainMenuWheel.h"
 
-MainMenuWheel::MainMenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts, float initAngle): MenuWheel(scene, viewport, middle, parts, initAngle) {
+MainMenuWheel::MainMenuWheel(Vector2 middle, vector<MenuWheelPart*> parts, float radius, float initAngle): MenuWheel(middle, parts, radius, initAngle) {
 	this->addListener(this);
 	nextRenderer = KEEP;
 }
@@ -23,14 +23,14 @@ void MainMenuWheel::draw(float elapsedTime) {
 	}
 }
 
-MainMenuWheel* MainMenuWheel::create(Scene* scene, Rectangle viewport) {
+MainMenuWheel* MainMenuWheel::create() {
 	vector<MenuWheelPart*> parts = vector<MenuWheelPart*>(5);
 	for (unsigned int i = 0; i < parts.size(); i++) {
 		parts[i] = new MenuWheelPart();
 		parts[i]->setId(i);
 		parts[i]->setTitle(roomNames[i]);
 	}
-	return new MainMenuWheel(scene, viewport, Vector2::zero(), parts, 0);
+	return new MainMenuWheel(Vector2::zero(), parts, 300, 0);
 }
 
 

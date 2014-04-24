@@ -8,14 +8,14 @@ using namespace gameplay;
 
 class MainMenuWheel : public MenuWheel, MenuWheel::Listener {
 public:
-	MainMenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts, float initAngle);
+	MainMenuWheel(Vector2 middle, vector<MenuWheelPart*> parts, float radius, float initAngle);
 	
 	Renderers getNextRenderer();
 
 	void menuWheelEvent(MenuWheelPart* clickedPart);
 	void draw(float elapsedTime);
 
-	static MainMenuWheel* create(Scene* scene, Rectangle viewport);
+	static MainMenuWheel* create();
 
 protected:
 	Renderers nextRenderer;

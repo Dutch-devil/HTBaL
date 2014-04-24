@@ -1,43 +1,45 @@
 #include "MenuWheel.h"
 
-MenuWheel::MenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts): viewport(viewport), middle(middle), wheelParts(parts), initAngle(0) {
-	initialize(scene);
+MenuWheel::MenuWheel(Vector2 middle, vector<MenuWheelPart*> parts, float radius) : middle(middle), wheelParts(parts) {
+	initialize(radius);
 }
 
-MenuWheel::MenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts, float initAngle): viewport(viewport), middle(middle), wheelParts(parts), initAngle(initAngle) {
-	initialize(scene);
+MenuWheel::MenuWheel(Vector2 middle, vector<MenuWheelPart*> parts, float radius, float initAngle): middle(middle), wheelParts(parts), initAngle(initAngle) {
+	initialize(radius);
 }
 
 MenuWheel::~MenuWheel() {
 	for (MenuWheelPart* part : wheelParts) {
 		SAFE_DELETE(part);
 	}
-	MenuWheelPart::releaseMesh();
+	SAFE_DELETE(spriteBatch);
 }
 
-void MenuWheel::initialize(Scene* scene) {
-	node = scene->addNode();
+void MenuWheel::initialize(float radius) {
+	spriteBatch = SpriteBatch::create("res/img/MenuWheelPart.png");
 	for (unsigned int i = 0; i < wheelParts.size(); i++) {
-		Node* partNode = scene->addNode();
-		node->addChild(partNode);
-		partNode->setModel(wheelParts[i]->getModel());
-		partNode->rotateZ(WHEEL_ANGLE * i);
-		partNode->translateZ(i);
+		wheelParts[i]->rotate(WHEEL_ANGLE * i);
 	}
 
 	prevPart = NULL;
-	rotation = initAngle - .5 * wheelParts.size() * WHEEL_ANGLE + MATH_PI / 4;
-	node->rotateZ(rotation);
-	startAngle = -1;
-	minRotation = -WHEEL_ANGLE * wheelParts.size() + MATH_PI / 2 + initAngle;
+	startAngle = 0;
+	minRotation = -MATH_PI / 6 * (wheelParts.size() - 1) + initAngle;
+	maxRotation = -MATH_PI / 3 + initAngle;
+	rotation = (minRotation + maxRotation) / 2;
+
+	scale = radius / MESH_HEIGHT;
+	width = MESH_WIDTH * scale;
+	height = MESH_HEIGHT * scale;
 }
 
 void MenuWheel::addListener(Listener* listener) {
 	this->listeners.push_back(listener);
 }
 
-Node* MenuWheel::getNode() {
-	return node;
+void MenuWheel::resizeEvent(unsigned int width, unsigned int height) {
+	Matrix projectionMatrix;
+	Matrix::createOrthographicOffCenter(0, width, height, 0, 0, 1, &projectionMatrix);
+	spriteBatch->setProjectionMatrix(projectionMatrix);
 }
 
 void MenuWheel::update(float elapsedTime) {
@@ -45,18 +47,19 @@ void MenuWheel::update(float elapsedTime) {
 }
 
 void MenuWheel::draw(float elapsedTime) {
-	int startIndex = min((unsigned int)((-(rotation - initAngle)) / WHEEL_ANGLE), (unsigned int)wheelParts.size() - 1);
-	for (int index = startIndex; index <= min(startIndex + 3, (int)wheelParts.size() - 1); index++) {
-		wheelParts[index]->getModel()->draw();
+	int startIndex = min((unsigned int)((-(rotation - maxRotation)) / WHEEL_ANGLE), (unsigned int)wheelParts.size() - 1);
+	spriteBatch->start();
+	for (int index = min(startIndex + 3, (int) wheelParts.size() - 1); index >= startIndex; index--) {
+		spriteBatch->draw(middle.x, middle.y, 0, width, height, 0, 0, 1, 1, wheelParts[index]->getColor(), Vector2::zero(), wheelParts[index]->getRotation() + rotation);
 	}
+	spriteBatch->finish();
 }
 
 bool MenuWheel::hover(int x, int y) {
 	startAngle = atan((float)(middle.x - x) / (middle.y - y));
-	float meshHeight = MenuWheelPart::getMeshSize(viewport.height);
 	float dist = middle.distanceSquared(Vector2(x, y));
-	if (x < middle.x - meshHeight || y < middle.y - meshHeight || x > middle.x + meshHeight || y > middle.y + meshHeight || 
-				dist > meshHeight * meshHeight  || dist < INNER_DIST * meshHeight * meshHeight) {
+	if (x < middle.x - height || y < middle.y - height || x > middle.x + height || y > middle.y + height ||
+		dist > height * height || dist < INNER_DIST * height * height) {
 		// outside wheel, stop here
 		if (prevPart != NULL) {
 			prevPart->setHover(false);
@@ -64,7 +67,7 @@ bool MenuWheel::hover(int x, int y) {
 		}
 		return false;
 	}
-	unsigned int partIndex = (int)((startAngle - (rotation - initAngle)) / WHEEL_ANGLE);
+	unsigned int partIndex = wheelParts.size() + (int) ((minRotation + maxRotation - startAngle - rotation - initAngle) / WHEEL_ANGLE) + 1;
 	if (partIndex < wheelParts.size() && prevPart != wheelParts[partIndex]) {
 		// other part hover, make it hovered
 		if (prevPart != NULL) {
@@ -82,8 +85,7 @@ bool MenuWheel::drag(int x, int y) {
 		return false;
 	}
 	float newAngle = atan((float)(middle.x - x) / (middle.y - y));
-	rotation = max(min(initAngle, rotation + newAngle - startAngle), minRotation);
-	node->setRotation(Vector3(0, 0, 1), rotation);
+	rotation = max(min(maxRotation, rotation - newAngle + startAngle), minRotation);
 	startAngle = newAngle;
 	return true;
 }
@@ -96,4 +98,9 @@ bool MenuWheel::click(int x, int y) {
 		return true;
 	}
 	return false;
+}
+
+void MenuWheel::translate(float x, float y) {
+	middle.x += x;
+	middle.y += y;
 }

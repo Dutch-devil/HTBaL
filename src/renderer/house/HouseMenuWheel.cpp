@@ -1,6 +1,6 @@
 #include "HouseMenuWheel.h"
 
-HouseMenuWheel::HouseMenuWheel(Scene* scene, Rectangle viewport, Vector2 middle, vector<MenuWheelPart*> parts, float initAngle): MenuWheel(scene, viewport, middle, parts, initAngle) {
+HouseMenuWheel::HouseMenuWheel(Vector2 middle, vector<MenuWheelPart*> parts, float radius, float initAngle): MenuWheel(middle, parts, radius, initAngle) {
 	//this->addListener(this);
 }
 
@@ -16,7 +16,7 @@ void HouseMenuWheel::draw(float elapsedTime) {
 	}
 }
 
-HouseMenuWheel* HouseMenuWheel::create(Scene* scene, Rectangle viewport) {
+HouseMenuWheel* HouseMenuWheel::create(Rectangle viewport) {
 	unsigned int size = Room::NONE;
 	vector<MenuWheelPart*> parts = vector<MenuWheelPart*>(size);
 	for (unsigned int i = 0; i < parts.size(); i++) {
@@ -25,6 +25,6 @@ HouseMenuWheel* HouseMenuWheel::create(Scene* scene, Rectangle viewport) {
 		parts[i]->setId(index >= 0?index:-index - 1);
 		parts[i]->setTitle(Room::getRoomTypeString((Room::Type)(parts[i]->getId())));
 	}
-	return new HouseMenuWheel(scene, viewport, Vector2(viewport.width, viewport.height), parts, MATH_PI);
+	return new HouseMenuWheel(Vector2(viewport.width, viewport.height), parts, 300, MATH_PI);
 }
 

@@ -26,12 +26,12 @@ public:
     ~MenuWheelPart();
 	
 	static void setSize(float size);
-	static Mesh* getMesh();
-	static void releaseMesh();
-	static float getMeshSize(float relativeSize);
+	//static Mesh* getMesh();
+	//static void releaseMesh();
+	//static float getMeshSize(float relativeSize);
 
-	Node* getNode();
-	Model* getModel();
+	//Node* getNode();
+	//Model* getModel();
 	
 	void setHover(bool hover);
 
@@ -40,14 +40,17 @@ public:
 	const char* getTitle();
 	void setTitle(const char* title);
 
-protected:
-	static float size;
-	static Mesh* mesh;
+	void rotate(float angle);
+	float getRotation();
 
-	Model* model;
+	Vector4 getColor();
+
+protected:
 	bool hover;
 
-	Vector3* color;
+	float rotation;
+
+	Vector3 color;
 	Vector3* realColor;
 	void updateColor();
 	Vector3 blendColors(Vector3* color1, Vector3* color2);

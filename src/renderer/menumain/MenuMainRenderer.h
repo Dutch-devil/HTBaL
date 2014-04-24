@@ -13,6 +13,7 @@ class MenuMainRenderer: public Renderer, Control::Listener {
 public:
 	MenuMainRenderer(Rectangle viewport);
 	~MenuMainRenderer();
+	void resizeEvent(unsigned int width, unsigned int height);
 	void update(float elapsedTime);
 	Renderers MenuMainRenderer::getNextRenderer();
 	void render(float elapsedTime);
