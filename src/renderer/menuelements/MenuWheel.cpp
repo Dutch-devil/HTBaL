@@ -23,8 +23,8 @@ void MenuWheel::initialize(float radius) {
 
 	prevPart = NULL;
 	startAngle = 0;
-	minRotation = -MATH_PI / 6 * (wheelParts.size() - 1) + initAngle;
-	maxRotation = -MATH_PI / 3 + initAngle;
+	minRotation = -WHEEL_ANGLE * (wheelParts.size() - 1) + initAngle;
+	maxRotation = -WHEEL_ANGLE * 2 + initAngle;
 	rotation = (minRotation + maxRotation) / 2;
 
 	scale = radius / MESH_HEIGHT;
