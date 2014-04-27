@@ -1,14 +1,16 @@
 #include "MenuWheelPart.h"
 
 
-MenuWheelPart::MenuWheelPart(): title("UNDEFINED"), id(-1) {
+MenuWheelPart::MenuWheelPart(): id(-1) {
 	realColor = MENU_WHEEL_WHITE;
 	color = Vector3(*realColor);
 	rotation = 0;
+	title = NULL;
 }
 
 MenuWheelPart::~MenuWheelPart() {
 	SAFE_DELETE(realColor);
+	SAFE_DELETE(title);
 }
 
 
@@ -43,7 +45,10 @@ const char* MenuWheelPart::getTitle() {
 }
 
 void MenuWheelPart::setTitle(const char* title) {
-	this->title = title;
+	SAFE_DELETE(this->title);
+	int len = strlen(title) + 1;
+	this->title = new char[len];
+	strcpy(this->title, title);
 }
 
 void MenuWheelPart::rotate(float angle) {

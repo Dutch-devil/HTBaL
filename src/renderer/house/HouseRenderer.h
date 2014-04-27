@@ -11,12 +11,11 @@ class HouseRenderer;
 #include "../../house/House.h"
 #include "../../factories/HouseFactory.h"
 #include "../Renderer.h"
-#include "HouseMenuWheel.h"
 
 using namespace gameplay;
 using namespace std;
 
-class HouseRenderer: public Renderer, Control::Listener, MenuWheel::Listener {
+class HouseRenderer: public Renderer, Control::Listener {
 public:
 	HouseRenderer(Rectangle viewport);
 	~HouseRenderer();
@@ -28,11 +27,10 @@ public:
 	void checkHover(int x, int y);
 	
 	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked);
-	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked);
-	void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
+	bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked);
+	bool keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
 	void resizeEvent(unsigned int width, unsigned int height);
 	void controlEvent(Control* control, Control::Listener::EventType evt);
-	void menuWheelEvent(MenuWheelPart* clickedPart);
 
 	void update(float elapsedTime);
 	Renderers getNextRenderer();
@@ -57,8 +55,6 @@ protected:
 
 	Form* houseRendererForm;
 	Renderers nextRenderer;
-
-	HouseMenuWheel* roomTypes;
 	
 	void initialize();
 	void resize();

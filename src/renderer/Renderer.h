@@ -11,13 +11,13 @@ enum Renderers {
 };
 
 #include "../MaterialManager.h"
-#include "../KeyFlags.h"
 #include "menuelements/MenuWheel.h"
+#include "GenericInputListener.h"
 #include "gameplay.h"
 
 using namespace gameplay;
 
-class Renderer {
+class Renderer : public GenericInputListener {
 public:
     Renderer(Rectangle viewport);
     virtual ~Renderer();
@@ -26,16 +26,6 @@ public:
     virtual Renderers getNextRenderer();
     virtual void render(float elapsedTime) = 0;
     
-    bool leftButtonDown();
-    bool rightButtonDown();
-    bool middleButtonDown();
-    
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData);
-    virtual bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked);
-    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex);
-    virtual void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked);
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key);
-    virtual void keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
     virtual void resizeEvent(unsigned int width, unsigned int height);
     
     static void finalize();
@@ -44,17 +34,8 @@ public:
     static void drawText(const Vector4& color, Rectangle rect, const char* text, Font::Justify justify);
 protected:
     Rectangle viewport;
-    short buttonDown;
-    
-    Flags* getMouseFlags();
-    KeyFlags* getKeyFlags();
-    Vector2* getClickStarts();
     
 private:
-    Flags* mouseFlags;
-    KeyFlags* keyFlags;
-    Vector2* clickStarts;
-    
     static Font* font;
     static Font* getFont();
 };

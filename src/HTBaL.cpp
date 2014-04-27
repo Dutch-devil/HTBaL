@@ -11,6 +11,7 @@ HTBaL::~HTBaL() {}
 
 // Initialize by setting the defaultrenderer as active.
 void HTBaL::initialize() {
+	CustomControls::initialize();
     StateManagerFactory::initialize();
 	achievementRenderer = new AchievementRenderer();
 
@@ -28,6 +29,7 @@ void HTBaL::finalize() {
     Renderer::finalize();
     MaterialManager::finalize();
     StateManagerFactory::finalize();
+	CustomControls::finalize();
 }
 
 bool HTBaL::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData) {

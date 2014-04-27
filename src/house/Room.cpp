@@ -57,8 +57,8 @@ const char* Room::getRoomTypeString(Room::Type roomType) {
             return "Storage room";
         case LIBARY:
             return "Library";
-        case LABORATORIUM:
-            return "Laboratorium";
+        case LABORATORY:
+            return "Laboratory";
         case ARBORETUM:
             return "Arboretum";
         case WORKSHOP:
@@ -83,11 +83,11 @@ const char* Room::getRoomTypeString(Room::Type roomType) {
             return "Ballroom";
         case ENTRANCE:
             return "Entrance";
-        case STAIR_UP:
+        case STAIRS_UP:
             return "Stairs up";
-        case STAIR_DOWN:
+        case STAIRS_DOWN:
             return "Stairs down";
-        case STAIR_UP_DOWN:
+        case STAIRS_UP_DOWN:
             return "Stairs up and down";
         case HALL:
             return "Hall";

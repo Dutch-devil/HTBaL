@@ -24,13 +24,10 @@ HouseRenderer::~HouseRenderer() {
     SAFE_RELEASE(scene);
     Floor::finalize();
     Wall::finalize();
-    
-    SAFE_DELETE(roomTypes);
 }
 
 void HouseRenderer::initialize() {
 	houseRendererForm = Form::create("res/menu/houseRenderer.form");
-	//houseRendererForm->updateState(Control::State::NORMAL);
 	Control* mainMenuButton = houseRendererForm->getControl("mainMenuButton");
 	mainMenuButton->addListener(this, Control::Listener::CLICK);
 	Control* refreshButton = houseRendererForm->getControl("refreshButton");
@@ -41,6 +38,8 @@ void HouseRenderer::initialize() {
 	floorUpButton->addListener(this, Control::Listener::CLICK);
 	Control* floorDownButton = houseRendererForm->getControl("floorDownButton");
 	floorDownButton->addListener(this, Control::Listener::CLICK);
+	Control* roomTypesWheel = houseRendererForm->getControl("roomTypesWheel");
+	roomTypesWheel->addListener(this, Control::Listener::CLICK);
 
     scene = Scene::create("HouseScene");
     zoomLevel = 1;
@@ -59,9 +58,6 @@ void HouseRenderer::initialize() {
     cameraNode->rotateX(MATH_PI / 4);
     
     resize();
-    
-    roomTypes = HouseMenuWheel::create(viewport);
-    roomTypes->addListener(this);
     
     createHouse(false, true);
 }
@@ -157,13 +153,7 @@ bool HouseRenderer::mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelDat
     } else if (clicked) {
         // handle in the touchEvent
         return false;
-        //if (roomTypes->click(x, y)) {
-        //  return true;
-        //}
     } else if (evt == Mouse::MOUSE_MOVE) {
-        if (roomTypes->hover(x, y)) {
-            return true;
-        }
         checkHover(x, y);
     } else if (evt == Mouse::MOUSE_WHEEL) {
         // Scrolled the mouse wheel
@@ -212,24 +202,19 @@ void HouseRenderer::checkHover(int x, int y) {
     }
 }
 
-void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked) {
-    if (clicked && roomTypes->click(x, y)) {
-        return;
-    }
-    if (evt == Touch::TOUCH_MOVE && roomTypes->drag(x, y)) {
-        return;
-    }
+bool HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked) {
+
     if (evt == Touch::TouchEvent::TOUCH_RELEASE) {
         // reset last floor on release
         prevFloor = NULL;
         hoverRoom = NULL;
-        return;
+        return false;
     }
     
     int id = getViewTileId(x, y);
     if (id == -1) {
         prevFloor = NULL;
-        return;
+        return false;
     }
     Floor* floor = house->getFloorTile(id);
     
@@ -255,6 +240,7 @@ void HouseRenderer::touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int
         prevFloor = floor;
     }
     prevRoom = hoverRoom;
+	return true;
 }
 
 int HouseRenderer::getViewTileId(int x, int y) {
@@ -293,7 +279,7 @@ int HouseRenderer::getViewTileId(int x, int y) {
     return house->getIdByXY(floorX, floorY);
 }
 
-void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {
+bool HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {
     if (evt == Keyboard::KeyEvent::KEY_RELEASE) {
         if (key == 'r') {
             list<Floor*> roomTiles = list<Floor*>();
@@ -305,13 +291,14 @@ void HouseRenderer::keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags) {
                 }
             }
             house->addRoom(RoomFactory::createRoomFromFloor(scene, house, roomTiles));
+			return true;
         }
     }
+	return false;
 }
 
 void HouseRenderer::resizeEvent(unsigned int width, unsigned int height) {
     Renderer::resizeEvent(width, height);
-	roomTypes->resizeEvent(width, height);
     resize();
 }
 
@@ -359,7 +346,6 @@ void HouseRenderer::render(float elapsedTime) {
             wall->getModel()->draw();
         }
     }
-    roomTypes->draw(elapsedTime);
     
     if (prevHover) {
         Room* hoverRoom = house->getRoom(prevHover);
@@ -399,17 +385,15 @@ void HouseRenderer::controlEvent(Control* control, Control::Listener::EventType 
         createHouse(true, false);
     } else if (!strcmp("floorUpButton", control->getId())) {
         house->floorUp();
-        //house->addFloorTop(scene);
     } else if (!strcmp("floorDownButton", control->getId())) {
         house->floorDown();
-        //house->addFloorBottom(scene);
-    }
-    //control->setState(Control::State::NORMAL);
-}
-
-
-void HouseRenderer::menuWheelEvent(MenuWheelPart* clickedPart) {
-    if (prevRoom != NULL) {
-        prevRoom->setRoomType((Room::Type)clickedPart->getId());
-    }
+	} else if (!strcmpnocase("roomTypesWheel", control->getId())) {
+		if (prevRoom != NULL) {
+			MenuWheel* roomTypesWheel = (MenuWheel*) control;
+			MenuWheelPart* clickedPart = roomTypesWheel->getActivePart();
+			if (clickedPart != NULL) {
+				prevRoom->setRoomType((Room::Type)clickedPart->getId());
+			}
+		}
+	}
 }

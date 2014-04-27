@@ -5,7 +5,6 @@ class MenuMainRenderer;
 
 #include "gameplay.h"
 #include "../Renderer.h"
-#include "MainMenuWheel.h"
 
 using namespace gameplay;
 
@@ -19,7 +18,8 @@ public:
 	void render(float elapsedTime);
 	
 	bool mouseEvent(Mouse::MouseEvent evt, int x, int y, int wheelData, bool dragging, bool clicked);
-	void touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked);
+	bool touchEvent(Touch::TouchEvent evt, int x, int y, unsigned int contactIndex, bool clicked);
+	bool keyEvent(Keyboard::KeyEvent evt, int key, KeyFlags* flags);
 	void controlEvent(Control* control, Control::Listener::EventType evt);
 
 protected:
@@ -28,7 +28,8 @@ protected:
 	Renderers nextRenderer;
 
 	Scene* scene;
-	MainMenuWheel* menuWheel;
+
+	Renderers getRendererFromTitle(const char* title);
 };
 
 

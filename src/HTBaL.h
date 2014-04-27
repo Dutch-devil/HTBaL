@@ -6,6 +6,7 @@ class HTBaL;
 #include "gameplay.h"
 #include "renderer/Renderer.h"
 #include "factories/StateManagerFactory.h"
+#include "renderer/menuelements/CustomControls.h"
 #include "renderer/menumain/MenuMainRenderer.h"
 #include "renderer/house/HouseRenderer.h"
 #include "renderer/map/MapRenderer.h"

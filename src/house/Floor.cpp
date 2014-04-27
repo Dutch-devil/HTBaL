@@ -133,7 +133,7 @@ void Floor::updateMaterial() {
             case Room::Type::DINING_ROOM:
             case Room::Type::STORAGE_ROOM:
             case Room::Type::LIBARY:
-            case Room::Type::LABORATORIUM:
+            case Room::Type::LABORATORY:
             case Room::Type::ARBORETUM:
             case Room::Type::WORKSHOP:
             case Room::Type::SMITHY:
@@ -150,9 +150,9 @@ void Floor::updateMaterial() {
             case Room::Type::ENTRANCE:
                 materialColor = FLOOR_ENTRANCE;
                 break;
-            case Room::Type::STAIR_UP:
-            case Room::Type::STAIR_DOWN:
-            case Room::Type::STAIR_UP_DOWN:
+            case Room::Type::STAIRS_UP:
+            case Room::Type::STAIRS_DOWN:
+            case Room::Type::STAIRS_UP_DOWN:
                 materialColor = FLOOR_STAIR;
                 break;
             case Room::Type::HALL:

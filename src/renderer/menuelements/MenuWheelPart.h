@@ -56,7 +56,7 @@ protected:
 	Vector3 blendColors(Vector3* color1, Vector3* color2);
 
 	int id;
-	const char* title;
+	char* title;
 };
 
 #endif

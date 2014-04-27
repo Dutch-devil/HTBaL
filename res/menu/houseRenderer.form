@@ -31,4 +31,79 @@ form houseRenderer {
     button floorDownButton : mainMenuButton {
 		text = Floor down
 	}
+	
+	menuWheel roomTypesWheel {
+		radius = 300
+		orientation = BOTTOM_RIGHT
+		alignment = ALIGN_BOTTOM_RIGHT
+		wheelpart {
+			title = Living quarters
+		}
+		wheelpart {
+			title = Bedroom
+		}
+		wheelpart {
+			title = Dining room
+		}
+		wheelpart {
+			title = Storage room
+		}
+		wheelpart {
+			title = Library
+		}
+		wheelpart {
+			title = Laboratory
+		}
+		wheelpart {
+			title = Arboretum
+		}
+		wheelpart {
+			title = Workshop
+		}
+		wheelpart {
+			title = Smithy
+		}
+		wheelpart {
+			title = Stinky sewers
+		}
+		wheelpart {
+			title = Dirtplot
+		}
+		wheelpart {
+			title = Stables
+		}
+		wheelpart {
+			title = Arsenal room
+		}
+		wheelpart {
+			title = Aviary
+		}
+		wheelpart {
+			title = Pool
+		}
+		wheelpart {
+			title = Art room
+		}
+		wheelpart {
+			title = Ballroom
+		}
+		wheelpart {
+			title = Entrance
+		}
+		wheelpart {
+			title = Stairs up
+		}
+		wheelpart {
+			title = Stairs down
+		}
+		wheelpart {
+			title = Stairs up and down
+		}
+		wheelpart {
+			title = Hall
+		}
+		wheelpart {
+			title = Empty room
+		}
+	}
 }

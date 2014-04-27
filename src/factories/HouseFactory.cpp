@@ -239,7 +239,7 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
         }
 
 		house->resumeTrigger();
-        house->addRoom(RoomFactory::createRoomFromFloor(scene, house, entranceTiles, floorIndex ? (floorIndex > max / 2 ? Room::STAIR_UP : Room::STAIR_DOWN) : Room::ENTRANCE));
+        house->addRoom(RoomFactory::createRoomFromFloor(scene, house, entranceTiles, floorIndex ? (floorIndex > max / 2 ? Room::STAIRS_UP : Room::STAIRS_DOWN) : Room::ENTRANCE));
         house->addRoom(RoomFactory::createRoomFromFloor(scene, house, hallTiles, Room::HALL));
 		house->pauseTrigger();
         
@@ -261,9 +261,9 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
             
             tile = house->getFloorTile(stairX, stairY);
             Room* stair = tile->getRoom();
-            if (stair->getRoomType() == Room::Type::STAIR_UP || stair->getRoomType() == Room::Type::STAIR_DOWN) {
+            if (stair->getRoomType() == Room::Type::STAIRS_UP || stair->getRoomType() == Room::Type::STAIRS_DOWN) {
                 // change stair to double stair
-                stair->setRoomType(Room::Type::STAIR_UP_DOWN);
+                stair->setRoomType(Room::Type::STAIRS_UP_DOWN);
             } else {
                 // create a new room and make it the right stair
                 // remove stair tile from this room
@@ -274,7 +274,7 @@ House* HouseFactory::createRandomHouse(Scene* scene, float screenSize, unsigned 
                 erasedFloor = list<Floor*>();
                 erasedFloor.push_back(tile);
 				house->resumeTrigger();
-                house->addRoom(RoomFactory::createRoomFromFloor(scene, house, erasedFloor, floorIndex > max / 2 ? Room::STAIR_DOWN : Room::STAIR_UP));
+                house->addRoom(RoomFactory::createRoomFromFloor(scene, house, erasedFloor, floorIndex > max / 2 ? Room::STAIRS_DOWN : Room::STAIRS_UP));
 				house->pauseTrigger();
             }
             tile->updateMaterial();

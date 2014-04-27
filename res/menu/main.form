@@ -1,15 +1,33 @@
 form main {
-    // Form properties.
     theme                  = res/menu/default.theme
     autoWidth              = true
     autoHeight             = true
     style                  = title
-	layout = LAYOUT_VERTICAL
+	layout = LAYOUT_HORIZONTAL
 	consumeInputEvents = false
 	
 
-    // All the Controls within this Form.
-    button roomButton {
+	
+	menuwheel mainMenuWheel {
+		position = 0, 0
+		orientation = TOP_LEFT
+		radius = 200
+		wheelpart {
+			title = World map
+		}
+		wheelpart {
+			title = Findings
+		}
+		wheelpart {
+			title = Homes
+		}
+		wheelpart {
+			title = Achievements
+		}
+		wheelpart {
+		}
+	}
+	button roomButton {
 		style = buttonHover
 		text = View house editor and generator
 		group = formSelection

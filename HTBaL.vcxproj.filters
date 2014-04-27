@@ -82,9 +82,6 @@
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>src\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\house\HouseMenuWheel.cpp">
-      <Filter>src\Renderer\House</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\house\HouseRenderer.cpp">
       <Filter>src\Renderer\House</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
     </ClCompile>
     <ClCompile Include="src\renderer\menuelements\MenuWheelPart.cpp">
       <Filter>src\Renderer\MenuElements</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\menumain\MainMenuWheel.cpp">
-      <Filter>src\Renderer\MenuMain</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\menumain\MenuMainRenderer.cpp">
       <Filter>src\Renderer\MenuMain</Filter>
@@ -142,6 +136,12 @@
     <ClCompile Include="src\achievements\AchievementRenderer.cpp">
       <Filter>src\Achievements</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\GenericInputListener.cpp">
+      <Filter>src\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\menuelements\CustomControls.cpp">
+      <Filter>src\Renderer\MenuElements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\factories\HouseFactory.h">
@@ -165,9 +165,6 @@
     <ClInclude Include="src\renderer\Renderer.h">
       <Filter>src\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\house\HouseMenuWheel.h">
-      <Filter>src\Renderer\House</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\house\HouseRenderer.h">
       <Filter>src\Renderer\House</Filter>
     </ClInclude>
@@ -176,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="src\renderer\menuelements\MenuWheelPart.h">
       <Filter>src\Renderer\MenuElements</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\menumain\MainMenuWheel.h">
-      <Filter>src\Renderer\MenuMain</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\menumain\MenuMainRenderer.h">
       <Filter>src\Renderer\MenuMain</Filter>
@@ -224,6 +218,12 @@
     </ClInclude>
     <ClInclude Include="src\achievements\AchievementRenderer.h">
       <Filter>src\Achievements</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\GenericInputListener.h">
+      <Filter>src\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\menuelements\CustomControls.h">
+      <Filter>src\Renderer\MenuElements</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
